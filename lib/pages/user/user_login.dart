@@ -9,6 +9,9 @@ class UserLogin extends StatefulWidget {
 }
 
 class _UserLoginState extends State<UserLogin> {
+  
+  bool _obscureText = true; // Initially, set to true to obscure the text
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -65,10 +68,23 @@ class _UserLoginState extends State<UserLogin> {
 
                     // password textfield
                     TextFormField(
-                      decoration: const InputDecoration(
-                        hintText: 'Enter your password',
-                        labelText: 'Password',
-                      ),
+                      obscureText: _obscureText,
+                      decoration: InputDecoration(
+                          hintText: 'Enter your password',
+                          labelText: 'Password',
+                          suffixIcon: IconButton(
+                            icon: Icon(
+                              _obscureText
+                                  ? Icons.visibility
+                                  : Icons.visibility_off,
+                              color: Colors.grey,
+                            ),
+                            onPressed: () {
+                              setState(() {
+                                _obscureText = !_obscureText;
+                              });
+                            },
+                          )),
                     ),
                     const SizedBox(
                       height: 15,
@@ -115,9 +131,6 @@ class _UserLoginState extends State<UserLogin> {
                   ],
                 ),
               ),
-
-              
-        
             ],
           )),
         ),
