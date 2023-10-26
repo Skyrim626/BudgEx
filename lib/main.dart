@@ -1,4 +1,5 @@
 import 'package:budgex/pages/user/user_login.dart';
+import 'package:budgex/pages/user/user_signup.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -14,6 +15,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: UserLogin(),
+      /* home: UserSignUp(), */
     );
   }
 

@@ -1,4 +1,8 @@
+import 'package:budgex/pages/user/user_home.dart';
+import 'package:budgex/pages/user/user_signup.dart';
 import 'package:budgex/services/constants.dart';
+import 'package:budgex/widgets/custom_button.dart';
+import 'package:budgex/widgets/custom_textfield.dart';
 import 'package:flutter/material.dart';
 
 class UserLogin extends StatefulWidget {
@@ -10,7 +14,23 @@ class UserLogin extends StatefulWidget {
 
 class _UserLoginState extends State<UserLogin> {
   
-  bool _obscureText = true; // Initially, set to true to obscure the text
+ /*  bool _obscureText = true; */ // Initially, set to true to obscure the text
+
+ // TextField Editing Controllers
+ final usernameController = TextEditingController();
+ final passwordController = TextEditingController();
+
+ // Sign User In (Allows the user to be redirected to their login page if their information are verified)
+ void signUserIn() {
+  /* print("To Home Page"); */
+  Navigator.push(context, MaterialPageRoute(builder: (context) => UserHomepage(),));
+ }
+
+ // Allows the user to redirect to the Sign Up page
+ void signUpUser() {
+  /* print("To Sign Up Page"); */
+  Navigator.push(context, MaterialPageRoute(builder: (context) =>  UserSignUp(),));
+ }
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +38,7 @@ class _UserLoginState extends State<UserLogin> {
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
-            child: (Column(
+            child: Column(
               children: [
                 //logo
                 Image.asset(
@@ -56,20 +76,36 @@ class _UserLoginState extends State<UserLogin> {
                         ],
                       ),
           
-                      // username textfield
-                      TextFormField(
+                      // Username TextField
+                      CustomTextField(
+                        controller: usernameController,
+                        hintText: 'Enter your username',
+                        labelText: 'Username',
+                        obscureText: false,
+                      ),
+
+                      /* TextFormField(
                         autofocus: true,
                         decoration: const InputDecoration(
                           hintText: 'Enter your username',
                           labelText: 'Username',
                         ),
-                      ),
+                      ), */
                       const SizedBox(
                         height: 10,
                       ),
+
+                     
           
-                      // password textfield
-                      TextFormField(
+                      // Password textfield
+                      CustomTextField(
+                        controller: usernameController,
+                        hintText: 'Enter your password',
+                        labelText: 'Password',
+                        obscureText: true,
+                      ),
+
+                      /* TextFormField(
                         autofocus: true,
                         obscureText: _obscureText,
                         decoration: InputDecoration(
@@ -88,11 +124,11 @@ class _UserLoginState extends State<UserLogin> {
                                 });
                               },
                             )),
-                      ),
+                      ), */
                       const SizedBox(
                         height: 15,
                       ),
-                      TextButton(
+                      /* TextButton(
                         style: TextButton.styleFrom(
                           backgroundColor: LIGHT_COLOR_3,
                         ),
@@ -110,7 +146,9 @@ class _UserLoginState extends State<UserLogin> {
                             ),
                           ),
                         ),
-                      ),
+                      ), */
+
+                      CustomButtom(buttonText: "Sign In", onPressed: signUserIn),
                       const SizedBox(
                         height: 15,
                       ),
@@ -124,7 +162,7 @@ class _UserLoginState extends State<UserLogin> {
                                 style: TextStyle(color: Colors.black),
                               )),
                           TextButton(
-                              onPressed: () {},
+                              onPressed: signUpUser,
                               child: Text(
                                 "Sign Up?",
                                 style: TextStyle(color: LIGHT_COLOR_3),
@@ -135,7 +173,7 @@ class _UserLoginState extends State<UserLogin> {
                   ),
                 ),
               ],
-            )),
+            ),
           ),
         ),
       ),
