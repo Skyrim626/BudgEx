@@ -43,7 +43,7 @@ class _UserLoginState extends State<UserLogin> {
                 //logo
                 Image.asset(
                   "../assets/images/logo_light.png",
-                  height: 300,
+                  height: 270,
                 ),
                 /* const SizedBox(height: 5,), */
           
@@ -74,6 +74,10 @@ class _UserLoginState extends State<UserLogin> {
                                 color: LIGHT_COLOR_2),
                           ),
                         ],
+                      ),
+
+                      const SizedBox(
+                        height: 5,
                       ),
           
                       // Username TextField

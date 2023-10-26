@@ -1,5 +1,7 @@
+import 'package:budgex/pages/user/user_done_register.dart';
 import 'package:budgex/pages/user/user_login.dart';
 import 'package:budgex/services/constants.dart';
+import 'package:budgex/widgets/custom_button.dart';
 import 'package:flutter/material.dart';
 
 class UserSignUp extends StatefulWidget {
@@ -18,6 +20,11 @@ class _UserSignUpState extends State<UserSignUp> {
   // Allows the user to return to the login page 
   void returnToLogin() {
     Navigator.push(context, MaterialPageRoute(builder: (context) =>  UserLogin(),));
+  }
+
+  // Allows the user to be redirected to the Signed Up Page(Displays Message)
+  void toUserRegisteredPage() {
+    Navigator.push(context, MaterialPageRoute(builder: (context) =>  UserSignedUp(),));
   }
 
   @override
@@ -124,25 +131,7 @@ class _UserSignUpState extends State<UserSignUp> {
                       height: 10,
                     ),
 
-                    TextButton(
-                      style: TextButton.styleFrom(
-                        backgroundColor: LIGHT_COLOR_3,
-                      ),
-                      onPressed: null,
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 80.0, vertical: 15), // Add padding here
-                        child: Text(
-                          'Sign Up',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontFamily: 'Dosis',
-                            fontWeight: FontWeight.bold,
-                            fontSize: 17,
-                          ),
-                        ),
-                      ),
-                    ),
+                    CustomButtom(buttonText: "Sign Up", onPressed: toUserRegisteredPage),
                   ],
                 ),
               )

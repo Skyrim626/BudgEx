@@ -81,6 +81,9 @@ flutter:
       fonts:
         - asset: fonts/Dosis-Regular.ttf
         - asset: fonts/Dosis-Medium.ttf
+    - family: Poppins
+      fonts:
+        - asset: fonts/Poppins-Regular.ttf
   #         style: italic
   #   - family: Trajan Pro
   #     fonts:

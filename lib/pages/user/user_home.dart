@@ -24,7 +24,7 @@ class _UserHomepageState extends State<UserHomepage> {
         title: Text("Welcome To The HomePage"),
         centerTitle: true,
         actions: [
-          IconButton(onPressed: userLogOut, icon: const Icon(Icons.logout))
+          IconButton(onPressed: userLogOut, icon: const Icon(Icons.logout)),
         ],
       ),
     );
