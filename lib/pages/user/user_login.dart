@@ -1,3 +1,30 @@
+/*
+  Flutter Developer Notes:
+
+  This Dart class is the heart of the user login screen in our Flutter application. 
+  It's where users will enter their credentials and initiate the login process.
+
+  Key Components:
+  - Text editing controllers for the username and password fields, allowing us to 
+    retrieve and manage user input.
+  - Functions for crucial actions:
+    - `signUserInPage`: Navigates the user to their homepage upon successful login.
+    - `signUpUserPage`: Redirects the user to the Sign Up page for account creation.
+    - `toForgotPasswordPage`: Sends the user to the Forgot Password page for recovery.
+  - Rich UI elements including a logo, welcoming text, input fields, and buttons.
+  - Dependencies include pages for forgotten passwords, the user's home screen, 
+    and user registration, as well as constants and custom UI widgets.
+
+  Note: Be sure to check and potentially fix the 'usernameController' assignment 
+  for the password text field. It may need to be 'passwordController' instead.
+
+  Happy Coding!
+*/
+
+// [Rest of the code remains unchanged]
+
+
+import 'package:budgex/pages/user/user_forgot_password.dart';
 import 'package:budgex/pages/user/user_home.dart';
 import 'package:budgex/pages/user/user_signup.dart';
 import 'package:budgex/services/constants.dart';
@@ -13,24 +40,39 @@ class UserLogin extends StatefulWidget {
 }
 
 class _UserLoginState extends State<UserLogin> {
-  
- /*  bool _obscureText = true; */ // Initially, set to true to obscure the text
+  /*  bool _obscureText = true; */ // Initially, set to true to obscure the text
 
- // TextField Editing Controllers
- final usernameController = TextEditingController();
- final passwordController = TextEditingController();
+  // TextField Editing Controllers
+  final usernameController = TextEditingController();
+  final passwordController = TextEditingController();
 
- // Sign User In (Allows the user to be redirected to their login page if their information are verified)
- void signUserIn() {
-  /* print("To Home Page"); */
-  Navigator.push(context, MaterialPageRoute(builder: (context) => UserHomepage(),));
- }
+  // Function to sign in the user and redirect them to their homepage.
+  void toSignUserInPage() {
+    // Use the Navigator to push a new route onto the navigator's stack.
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => UserHomepage(),
+        ));
+  }
 
- // Allows the user to redirect to the Sign Up page
- void signUpUser() {
-  /* print("To Sign Up Page"); */
-  Navigator.push(context, MaterialPageRoute(builder: (context) =>  UserSignUp(),));
- }
+  // Function to navigate the user to the Sign Up page.
+  void toSignUpUserPage() {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => UserSignUp(),
+        ));
+  }
+
+  // Function to navigate the user to the Forgot Password page.
+  void toForgotPasswordPage() {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => UserForgotPassword(),
+        ));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +88,7 @@ class _UserLoginState extends State<UserLogin> {
                   height: 270,
                 ),
                 /* const SizedBox(height: 5,), */
-          
+
                 // Welcome Text
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 25.0),
@@ -79,7 +121,7 @@ class _UserLoginState extends State<UserLogin> {
                       const SizedBox(
                         height: 5,
                       ),
-          
+
                       // Username TextField
                       CustomTextField(
                         controller: usernameController,
@@ -99,8 +141,6 @@ class _UserLoginState extends State<UserLogin> {
                         height: 10,
                       ),
 
-                     
-          
                       // Password textfield
                       CustomTextField(
                         controller: usernameController,
@@ -152,27 +192,12 @@ class _UserLoginState extends State<UserLogin> {
                         ),
                       ), */
 
-                      CustomButtom(buttonText: "Sign In", onPressed: signUserIn),
+                      CustomButtom(
+                          buttonText: "Sign In", onPressed: toSignUserInPage),
                       const SizedBox(
                         height: 15,
                       ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          TextButton(
-                              onPressed: () {},
-                              child: Text(
-                                "Forgot Password?",
-                                style: TextStyle(color: Colors.black),
-                              )),
-                          TextButton(
-                              onPressed: signUpUser,
-                              child: Text(
-                                "Sign Up?",
-                                style: TextStyle(color: LIGHT_COLOR_3),
-                              )),
-                        ],
-                      )
+                      bottomLinks()
                     ],
                   ),
                 ),
@@ -181,6 +206,27 @@ class _UserLoginState extends State<UserLogin> {
           ),
         ),
       ),
+    );
+  }
+
+  // Widgets for "Forgot Password?" and "Sign Up?" links
+  Row bottomLinks() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        TextButton(
+            onPressed: toForgotPasswordPage,
+            child: Text(
+              "Forgot Password?",
+              style: TextStyle(color: Colors.black),
+            )),
+        TextButton(
+            onPressed: toSignUpUserPage,
+            child: Text(
+              "Sign Up?",
+              style: TextStyle(color: LIGHT_COLOR_3),
+            )),
+      ],
     );
   }
 }

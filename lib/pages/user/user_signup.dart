@@ -1,3 +1,26 @@
+/*
+  Flutter Developer Notes:
+
+  This Dart class is responsible for the User Sign Up screen in our Flutter application.
+  It allows new users to provide their information and register for an account.
+
+  Key Components:
+  - Text fields for entering full name, email, username, password, and confirming password.
+  - Functions for crucial actions:
+    - `toLoginPage`: Navigates the user back to the Login page.
+    - `toUserRegisteredPage`: Redirects the user to a 'User Signed Up' page upon successful 
+      form submission.
+  - Rich UI elements including a logo and a button to initiate the sign-up process.
+  - Dependencies include the user login page and a page for confirming successful registration.
+
+  Note: Ensure that the password fields are working as expected, including the visibility toggle.
+
+  Keep up the excellent work!
+*/
+
+// [Rest of the code remains unchanged]
+
+
 import 'package:budgex/pages/user/user_done_register.dart';
 import 'package:budgex/pages/user/user_login.dart';
 import 'package:budgex/services/constants.dart';
@@ -17,12 +40,18 @@ class _UserSignUpState extends State<UserSignUp> {
   bool _confirmPasswordText = true; // Initially, set to true to obscure the text (Confirm Password TextField)
 
   
-  // Allows the user to return to the login page 
-  void returnToLogin() {
+  // Function to navigate the user to the Login page. 
+  void toLoginPage() {
     Navigator.push(context, MaterialPageRoute(builder: (context) =>  UserLogin(),));
   }
 
-  // Allows the user to be redirected to the Signed Up Page(Displays Message)
+  /*
+  Navigates the user to the 'User Signed Up' page upon successful form submission.
+
+  This function handles the redirection logic after the user has successfully filled 
+  out the required details and submitted the form. It should navigate to the page 
+  displaying a success message or confirmation of registration.
+*/
   void toUserRegisteredPage() {
     Navigator.push(context, MaterialPageRoute(builder: (context) =>  UserSignedUp(),));
   }
@@ -32,7 +61,7 @@ class _UserSignUpState extends State<UserSignUp> {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          onPressed: returnToLogin,
+          onPressed: toLoginPage,
           icon: const Icon(Icons.arrow_back),
           color: LIGHT_COLOR_5,
         ),

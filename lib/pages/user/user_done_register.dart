@@ -1,4 +1,23 @@
 
+/*
+  Flutter Developer Notes:
+
+  This Dart class represents the UI for the screen displayed after a user has successfully
+  registered for an account. It provides confirmation and instructions for the next steps.
+
+  Key Components:
+  - A congratulatory message and instructions for using the newly created account.
+  - A button to return to the Sign In page.
+  - Dependencies include the user login page and custom UI widgets.
+
+  Note: Make sure that the navigation to the Sign In page is functioning correctly.
+
+  Great job on creating this user-friendly experience!
+*/
+
+// [Rest of the code remains unchanged]
+
+
 import 'package:budgex/pages/user/user_login.dart';
 import 'package:budgex/services/constants.dart';
 import 'package:budgex/widgets/custom_button.dart';
@@ -14,7 +33,7 @@ class UserSignedUp extends StatefulWidget {
 class _UserSignedUpState extends State<UserSignedUp> {
 
   // Allows the user to return to the login page 
-  void returnToLogin() {
+  void toLoginPage() {
     Navigator.push(context, MaterialPageRoute(builder: (context) =>  UserLogin(),));
   }
 
@@ -55,13 +74,14 @@ class _UserSignedUpState extends State<UserSignedUp> {
                         style: TextStyle(
                           fontFamily: 'Poppins',
                           color: LIGHT_COLOR_2,
+                          fontSize: 14,
                         ),
                         ),
 
                       const SizedBox(
                         height: 35,
                       ),
-                      CustomButtom(buttonText: "Back to Sign In", onPressed: returnToLogin),
+                      CustomButtom(buttonText: "Back to Sign In", onPressed: toLoginPage),
                     ],
                   ),
                 )
