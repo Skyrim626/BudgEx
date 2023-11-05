@@ -109,7 +109,7 @@ class _UserVerifyCodeState extends State<UserVerifyCode> {
     );
   }
 
-  /*
+/*
   Generates a layout for a single pin code input field.
 
   This function creates a styled TextFormField with a width calculated based on the screen size 
