@@ -46,13 +46,21 @@ class _UserForgotPasswordState extends State<UserForgotPassword> {
   their verification code.
 */
   void toVerifyCodePage() {
-    Navigator.push(context, MaterialPageRoute(builder: (context) =>  UserVerifyCode(),));
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => UserVerifyCode(),
+        ));
   }
 
   // Function to navigate the user to the Login page.
   void toLoginPage() {
-    Navigator.push(context, MaterialPageRoute(builder: (context) =>  UserLogin(),));
-  } 
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => UserLogin(),
+        ));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -61,7 +69,7 @@ class _UserForgotPasswordState extends State<UserForgotPassword> {
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: toLoginPage,
-          color: LIGHT_COLOR_5,
+          color: Theme.of(context).colorScheme.tertiary,
         ),
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -87,22 +95,19 @@ class _UserForgotPasswordState extends State<UserForgotPassword> {
                           color: LIGHT_COLOR_2,
                           fontSize: 14),
                     ),
-
                     const SizedBox(
-                        height: 25,
-                      ),
-
+                      height: 25,
+                    ),
                     CustomTextField(
                         controller: emailController,
                         hintText: "Enter your email address",
                         labelText: "Email",
                         obscureText: false),
-
                     const SizedBox(
-                        height: 25,
-                      ),
-
-                    CustomButtom(buttonText: "Continue", onPressed: toVerifyCodePage),
+                      height: 25,
+                    ),
+                    CustomButtom(
+                        buttonText: "Continue", onPressed: toVerifyCodePage),
                   ],
                 ),
               )

@@ -36,7 +36,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
   Widget build(BuildContext context) {
     return Drawer(
       child: Container(
-        color: Colors.white,
+        /* color: Colors.white, */
         child: Column(
           children: [
             // Close Button Icon
@@ -130,7 +130,9 @@ class _CustomDrawerState extends State<CustomDrawer> {
   ListTile listTile(
       {required String iconText, required int iconData, var toPage}) {
     return ListTile(
-      iconColor: LIGHT_COLOR_5,
+      iconColor: Theme.of(context)
+          .colorScheme
+          .primary, // Setting the Navigation Icons Color
       leading: Icon(
         IconData(iconData, fontFamily: 'MaterialIcons'),
         size: 30,
