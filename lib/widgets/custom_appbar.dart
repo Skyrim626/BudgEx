@@ -5,8 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 AppBar customAppBar(BuildContext context) {
-  IconData _iconLight = Icons.sunny;
-  IconData _iconDark = Icons.nights_stay;
+  const IconData _iconLight = Icons.sunny;
+  const IconData _iconDark = Icons.nights_stay;
 
   return AppBar(
     backgroundColor: Colors.transparent,
@@ -20,6 +20,10 @@ AppBar customAppBar(BuildContext context) {
             Provider.of<ThemeProvider>(context, listen: false).toggleTheme();
           },
           icon: Icon(Icons.nights_stay)),
+      IconButton(
+        onPressed: () {},
+        icon: Icon(Icons.notifications),
+      ),
 
       IconButton(
         onPressed: () {},

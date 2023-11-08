@@ -18,8 +18,11 @@
 
 */
 
+import 'package:budgex/pages/user/user_budgeting.dart';
+import 'package:budgex/pages/user/user_expense.dart';
 import 'package:budgex/pages/user/user_home.dart';
 import 'package:budgex/pages/user/user_login.dart';
+import 'package:budgex/pages/user/user_scanner.dart';
 import 'package:budgex/pages/user/user_settings.dart';
 import 'package:budgex/services/constants.dart';
 import 'package:flutter/material.dart';
@@ -32,6 +35,34 @@ class CustomDrawer extends StatefulWidget {
 }
 
 class _CustomDrawerState extends State<CustomDrawer> {
+  List<Map<String, dynamic>> menuItems = [
+    {
+      'iconText': 'Home',
+      'iconData': 0xe318,
+      'toPage': UserHomepage(),
+    },
+    {
+      'iconText': 'Expenses',
+      'iconData': 0xe3f8,
+      'toPage': UserExpense(),
+    },
+    {
+      'iconText': 'Budgeting',
+      'iconData': 0xe0b2,
+      'toPage': UserBudgeting(),
+    },
+    {
+      'iconText': 'Scan Receipt',
+      'iconData': 0xe12f,
+      'toPage': UserScanReceipt(),
+    },
+    {
+      'iconText': 'Settings',
+      'iconData': 0xe062,
+      'toPage': UserSettings(),
+    },
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -59,44 +90,23 @@ class _CustomDrawerState extends State<CustomDrawer> {
               child: Image.asset("../assets/images/logo_light.png"),
             ),
 
-            // List of items with SizedBox in between
+            // List of items with SizedBox in each Column
             Expanded(
-              child: ListView(
-                children: [
-                  /* Container(
-                    color: Colors.amber,
-                    child: ListTile(
-                      iconColor: LIGHT_COLOR_5,
-                      leading: Icon(
-                        Icons.home,
-                        size: 30,
-                      ),
-                      title: Text(
-                        "Sample",
-                        style: const TextStyle(
-                            fontFamily: 'Dosis',
-                            fontWeight: FontWeight.w600,
-                            fontSize: 23),
-                      ),
-                      onTap: () {},
-                    ),
-                  ), */
-                  listTile(
-                      iconText: "Home",
-                      iconData: 0xe318,
-                      toPage: UserHomepage()),
-                  const SizedBox(height: 10),
-                  listTile(iconText: "Expenses", iconData: 0xe3f8),
-                  const SizedBox(height: 10),
-                  listTile(iconText: "Budgeting", iconData: 0xe0b2),
-                  const SizedBox(height: 10),
-                  listTile(iconText: "Scan Receipt", iconData: 0xe12f),
-                  const SizedBox(height: 10),
-                  listTile(
-                      iconText: "Settings",
-                      iconData: 0xe062,
-                      toPage: UserSettings()),
-                ],
+              child: ListView.builder(
+                itemCount: menuItems.length,
+                itemBuilder: (BuildContext context, int index) {
+                  Map<String, dynamic> menuItem = menuItems[index];
+                  return Column(
+                    children: [
+                      // A function that genrates ListTile
+                      listTile(
+                          iconText: menuItem['iconText'],
+                          iconData: menuItem['iconData'],
+                          toPage: menuItem['toPage']),
+                      const SizedBox(height: 10),
+                    ],
+                  );
+                },
               ),
             ),
 
@@ -128,7 +138,10 @@ class _CustomDrawerState extends State<CustomDrawer> {
     A ListTile with the specified icon and text.
 */
   ListTile listTile(
-      {required String iconText, required int iconData, var toPage}) {
+      {required String iconText,
+      required int iconData,
+      required var toPage,
+      bool? isSelected}) {
     return ListTile(
       iconColor: Theme.of(context)
           .colorScheme

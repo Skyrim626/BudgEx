@@ -22,6 +22,7 @@
 
 // [Rest of the code remains unchanged]
 
+import 'package:budgex/pages/user/user_change_password.dart';
 import 'package:budgex/pages/user/user_login.dart';
 import 'package:budgex/services/constants.dart';
 import 'package:budgex/widgets/custom_button.dart';
@@ -46,7 +47,13 @@ class _UserVerifyCodeState extends State<UserVerifyCode> {
   }
 
   // Function to navigate the user to the Change Password page if their code is verified.
-  void toChangingPasswordPage() {}
+  void toChangingPasswordPage() {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => UserChangePassword(),
+        ));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -55,7 +62,7 @@ class _UserVerifyCodeState extends State<UserVerifyCode> {
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: toLoginPage,
-          color: LIGHT_COLOR_5,
+          color: Theme.of(context).colorScheme.tertiary,
         ),
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -98,7 +105,9 @@ class _UserVerifyCodeState extends State<UserVerifyCode> {
                     const SizedBox(
                       height: 25,
                     ),
-                    CustomButtom(buttonText: "Confirm", onPressed: () {}),
+                    CustomButtom(
+                        buttonText: "Confirm",
+                        onPressed: toChangingPasswordPage),
                   ],
                 ),
               )

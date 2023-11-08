@@ -1,5 +1,7 @@
+import 'package:budgex/pages/user/user_change_password.dart';
 import 'package:budgex/pages/user/user_login.dart';
-import 'package:budgex/services/theme.dart';
+import 'package:budgex/pages/user/user_verify_code.dart';
+
 import 'package:budgex/services/theme_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -20,6 +22,9 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       home: UserLogin(),
       theme: Provider.of<ThemeProvider>(context).themeData,
+      /* home: UserSettings(), */
+      /* home: UserChangePassword(), */
+      /* home: UserVerifyCode(), */
       /* theme: lightMode,
       darkTheme: darkMode, */
       /* home: UserSignUp(), */
