@@ -1,4 +1,5 @@
 import 'package:budgex/pages/user/user_change_password.dart';
+import 'package:budgex/pages/user/user_expense.dart';
 import 'package:budgex/pages/user/user_login.dart';
 import 'package:budgex/pages/user/user_verify_code.dart';
 
@@ -20,8 +21,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: UserLogin(),
+      /* home: UserLogin(), */
       theme: Provider.of<ThemeProvider>(context).themeData,
+      home: UserExpense(),
       /* home: UserSettings(), */
       /* home: UserChangePassword(), */
       /* home: UserVerifyCode(), */
