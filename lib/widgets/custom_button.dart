@@ -1,12 +1,29 @@
+/*
+  Flutter Developer Notes:
+
+  This Dart class represents a custom button widget tailored for the application. It's designed 
+  to offer a consistent look and feel across the UI. The button is styled with a background color 
+  defined in LIGHT_COLOR_3, and it accepts an `onPressed` function for handling user interactions. 
+  Additionally, it features customizable text through the `buttonText` parameter.
+
+  Key Components:
+  - TextButton widget with custom styling.
+  - Customizable text, color, font family, font weight, and font size.
+
+  Note: Ensure that the provided `onPressed` function handles user interactions correctly.
+
+  Well done on creating a reusable and visually appealing button component!
+*/
+
 import 'package:budgex/services/constants.dart';
 import 'package:flutter/material.dart';
 
 class CustomButtom extends StatelessWidget {
-
   final String buttonText;
   final Function()? onPressed;
-  
-  const CustomButtom({super.key, required this.buttonText, required this.onPressed});
+
+  const CustomButtom(
+      {super.key, required this.buttonText, required this.onPressed});
 
   @override
   Widget build(BuildContext context) {
