@@ -1,3 +1,4 @@
+import 'package:budgex/model/expense_entry.dart';
 import 'package:budgex/services/constants.dart';
 import 'package:budgex/widgets/custom_appbar.dart';
 import 'package:budgex/widgets/custom_drawer.dart';
@@ -11,34 +12,9 @@ class UserExpense extends StatefulWidget {
 }
 
 class _UserExpenseState extends State<UserExpense> {
-  // This is a sample data only
-  final List<Map<String, String>> expenseEntries = [
-    {
-      "id": "1",
-      "report_date": "2023-05-02",
-      "title": "Jolibee",
-      "amount": "1000"
-    },
-    {
-      "id": "2",
-      "report_date": "2023-05-03",
-      "title": "Greenich",
-      "amount": "5000"
-    },
-    {"id": "3", "report_date": "2023-05-04", "title": "McDo", "amount": "450"},
-    {
-      "id": "4",
-      "report_date": "2023-05-05",
-      "title": "Shakeys",
-      "amount": "300"
-    },
-    {
-      "id": "5",
-      "report_date": "2023-05-06",
-      "title": "Chowking",
-      "amount": "50"
-    },
-  ];
+  // Get all expenses
+  // Dummy Variable
+  final List<Map<String, String>> expenseEntries = ExpenseEntry().listExpenses;
 
   @override
   Widget build(BuildContext context) {
