@@ -18,6 +18,7 @@
 
 */
 
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:budgex/pages/user/user_budgeting.dart';
 import 'package:budgex/pages/user/user_expense.dart';
 import 'package:budgex/pages/user/user_home.dart';
@@ -156,8 +157,29 @@ class _CustomDrawerState extends State<CustomDrawer> {
             fontFamily: 'Dosis', fontWeight: FontWeight.w600, fontSize: 23),
       ),
       onTap: () {
-        Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) => toPage)); // Redirects to the page
+        // An alert box is displayd if the user wants to return to the login screen
+        // Checks if the toPage parameter redirects to the UserLogin (equal to 'UserLogin')
+        if (toPage.toString() == "UserLogin") {
+          // Displays a dialog if the user wants to sign out or not
+          AwesomeDialog(
+            context: context,
+            btnOkColor: LIGHT_COLOR_3,
+            dialogType: DialogType.warning,
+            animType: AnimType.rightSlide,
+            desc: 'Are You Sure You Want to Log Out?',
+            btnCancelOnPress: () {},
+            btnOkOnPress: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => UserLogin(),
+                  ));
+            },
+          ).show();
+        } else {
+          Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => toPage)); // Redirects to the page
+        }
       },
     );
   }

@@ -1,12 +1,30 @@
+/*
+  Flutter Developer Notes:
+
+  This Dart function defines a custom AppBar widget. The AppBar is a crucial element in 
+  the application's UI, providing navigation and actions to the user.
+
+  Key Features:
+  - Transparent Background: The AppBar blends seamlessly with the rest of the UI.
+  - Custom Icons: Includes icons for toggling themes, notifications, and accessing the 
+    camera.
+  - Dynamic Profile Icon: Conditionally displays a profile icon based on the current screen.
+
+  Note: The profile icon display logic is based on the context.widget property, which may 
+  require further review and testing to ensure correct behavior across all screens.
+
+  This custom AppBar enhances the user experience and adds functionality to the application.
+
+*/
+
 import 'package:budgex/pages/user/user_settings.dart';
-import 'package:budgex/services/constants.dart';
 import 'package:budgex/services/theme_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 AppBar customAppBar(BuildContext context) {
-  const IconData _iconLight = Icons.sunny;
-  const IconData _iconDark = Icons.nights_stay;
+  /* const IconData _iconLight = Icons.sunny;
+  const IconData _iconDark = Icons.nights_stay; */
 
   return AppBar(
     backgroundColor: Colors.transparent,

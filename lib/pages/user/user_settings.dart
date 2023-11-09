@@ -1,3 +1,4 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:budgex/pages/user/user_login.dart';
 import 'package:budgex/services/constants.dart';
 import 'package:budgex/widgets/custom_appbar.dart';
@@ -15,11 +16,21 @@ class UserSettings extends StatefulWidget {
 class _UserSettingsState extends State<UserSettings> {
   // Function to navigate the user to the Login page.
   void toLoginPage() {
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => UserLogin(),
-        ));
+    AwesomeDialog(
+      context: context,
+      btnOkColor: LIGHT_COLOR_3,
+      dialogType: DialogType.warning,
+      animType: AnimType.rightSlide,
+      desc: 'Are You Sure You Want to Log Out?',
+      btnCancelOnPress: () {},
+      btnOkOnPress: () {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => UserLogin(),
+            ));
+      },
+    ).show();
   }
 
   @override
