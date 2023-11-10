@@ -20,7 +20,6 @@
 
 // [Rest of the code remains unchanged]
 
-
 import 'package:budgex/pages/user/user_done_register.dart';
 import 'package:budgex/pages/user/user_login.dart';
 import 'package:budgex/services/constants.dart';
@@ -35,14 +34,18 @@ class UserSignUp extends StatefulWidget {
 }
 
 class _UserSignUpState extends State<UserSignUp> {
+  bool _passwordText =
+      true; // Initially, set to true to obscure the text (Password TextField)
+  bool _confirmPasswordText =
+      true; // Initially, set to true to obscure the text (Confirm Password TextField)
 
-  bool _passwordText = true; // Initially, set to true to obscure the text (Password TextField)
-  bool _confirmPasswordText = true; // Initially, set to true to obscure the text (Confirm Password TextField)
-
-  
-  // Function to navigate the user to the Login page. 
+  // Function to navigate the user to the Login page.
   void toLoginPage() {
-    Navigator.push(context, MaterialPageRoute(builder: (context) =>  UserLogin(),));
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => UserLogin(),
+        ));
   }
 
   /*
@@ -53,7 +56,11 @@ class _UserSignUpState extends State<UserSignUp> {
   displaying a success message or confirmation of registration.
 */
   void toUserRegisteredPage() {
-    Navigator.push(context, MaterialPageRoute(builder: (context) =>  UserSignedUp(),));
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => UserSignedUp(),
+        ));
   }
 
   @override
@@ -86,7 +93,6 @@ class _UserSignUpState extends State<UserSignUp> {
                       decoration: const InputDecoration(
                         hintText: 'Enter your full name',
                         labelText: 'Enter your full name',
-                        
                       ),
                     ),
                     const SizedBox(
@@ -113,54 +119,56 @@ class _UserSignUpState extends State<UserSignUp> {
                       height: 10,
                     ),
                     // Password textfield
-                      TextFormField(
-                        obscureText: _passwordText,
-                        decoration: InputDecoration(
-                            hintText: 'Enter your new password',
-                            labelText: 'Password',
-                            suffixIcon: IconButton(
-                              icon: Icon(
-                                _passwordText
-                                    ? Icons.visibility
-                                    : Icons.visibility_off,
-                                color: Colors.grey,
-                              ),
-                              onPressed: () {
-                                setState(() {
-                                  _passwordText = !_passwordText;
-                                });
-                              },
-                            )),
-                      ),
+                    TextFormField(
+                      obscureText: _passwordText,
+                      decoration: InputDecoration(
+                          hintText: 'Enter your new password',
+                          labelText: 'Password',
+                          suffixIcon: IconButton(
+                            icon: Icon(
+                              _passwordText
+                                  ? Icons.visibility
+                                  : Icons.visibility_off,
+                              color: Colors.grey,
+                            ),
+                            onPressed: () {
+                              setState(() {
+                                _passwordText = !_passwordText;
+                              });
+                            },
+                          )),
+                    ),
                     const SizedBox(
                       height: 10,
                     ),
                     // Confirm Password textfield
                     // Password textfield
-                      TextFormField(
-                        obscureText: _confirmPasswordText,
-                        decoration: InputDecoration(
-                            hintText: 'Enter your confirm password',
-                            labelText: 'Password',
-                            suffixIcon: IconButton(
-                              icon: Icon(
-                                _confirmPasswordText
-                                    ? Icons.visibility
-                                    : Icons.visibility_off,
-                                color: Colors.grey,
-                              ),
-                              onPressed: () {
-                                setState(() {
-                                  _confirmPasswordText = !_confirmPasswordText;
-                                });
-                              },
-                            )),
-                      ),
+                    TextFormField(
+                      style: TextStyle(fontFamily: poppins['regular']),
+                      obscureText: _confirmPasswordText,
+                      decoration: InputDecoration(
+                          hintText: 'Enter your confirm password',
+                          labelText: 'Password',
+                          suffixIcon: IconButton(
+                            icon: Icon(
+                              _confirmPasswordText
+                                  ? Icons.visibility
+                                  : Icons.visibility_off,
+                              color: Colors.grey,
+                            ),
+                            onPressed: () {
+                              setState(() {
+                                _confirmPasswordText = !_confirmPasswordText;
+                              });
+                            },
+                          )),
+                    ),
                     const SizedBox(
                       height: 10,
                     ),
 
-                    CustomButtom(buttonText: "Sign Up", onPressed: toUserRegisteredPage),
+                    CustomButtom(
+                        buttonText: "Sign Up", onPressed: toUserRegisteredPage),
                   ],
                 ),
               )

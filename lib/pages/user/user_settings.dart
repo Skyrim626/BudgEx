@@ -89,16 +89,16 @@ class _UserSettingsState extends State<UserSettings> {
                   Text(
                     "John Doe",
                     style: TextStyle(
-                      fontFamily: 'Poppins',
+                      fontFamily: poppins['regular'],
                       letterSpacing: 3,
-                      fontSize: 22,
+                      fontSize: fontSize["h2"],
                     ),
                   ),
                   Text(
                     "johnDoe@gmail.com",
                     style: TextStyle(
-                      fontFamily: 'Dosis',
-                      fontSize: 14,
+                      fontFamily: dosis['regular'],
+                      fontSize: fontSize["h5"],
                     ),
                   ),
 
@@ -181,14 +181,16 @@ class _UserSettingsState extends State<UserSettings> {
       leading: Text(
         formatLeading,
         style: TextStyle(
-          fontFamily: 'Dosis',
-          fontSize: 17,
+          fontFamily: dosis['regular'],
+          fontSize: fontSize["h4"],
         ),
       ),
       title: Text(
         formatTitle,
-        style:
-            TextStyle(fontFamily: 'Dosis', fontSize: 17, color: LIGHT_COLOR_2),
+        style: TextStyle(
+            fontFamily: dosis['regular'],
+            fontSize: fontSize["h4"],
+            color: LIGHT_COLOR_2),
       ),
       trailing: isEditIcon
           ? IconButton(
@@ -203,7 +205,7 @@ class _UserSettingsState extends State<UserSettings> {
   Text customOption({required String title}) {
     return Text(
       title,
-      style: const TextStyle(color: LIGHT_COLOR_3, fontSize: 19),
+      style: TextStyle(color: LIGHT_COLOR_3, fontSize: fontSize["h3"]),
     );
   }
 }

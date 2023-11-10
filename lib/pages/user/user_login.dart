@@ -99,9 +99,8 @@ class _UserLoginState extends State<UserLogin> {
                           Text(
                             "Welcome",
                             style: TextStyle(
-                                fontFamily: 'Dosis',
-                                fontSize: 28,
-                                fontWeight: FontWeight.w600,
+                                fontFamily: dosis["semiBold"],
+                                fontSize: fontSize["h1"],
                                 letterSpacing: 2),
                           ),
                         ],
@@ -111,8 +110,8 @@ class _UserLoginState extends State<UserLogin> {
                           Text(
                             "Sign In",
                             style: TextStyle(
-                                fontFamily: 'Dosis',
-                                fontSize: 15,
+                                fontFamily: dosis["regular"],
+                                fontSize: fontSize['h4'],
                                 color: LIGHT_COLOR_2),
                           ),
                         ],
@@ -172,25 +171,6 @@ class _UserLoginState extends State<UserLogin> {
                       const SizedBox(
                         height: 15,
                       ),
-                      /* TextButton(
-                        style: TextButton.styleFrom(
-                          backgroundColor: LIGHT_COLOR_3,
-                        ),
-                        onPressed: null,
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 80.0, vertical: 15), // Add padding here
-                          child: Text(
-                            'Sign In',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontFamily: 'Dosis',
-                              fontWeight: FontWeight.bold,
-                              fontSize: 17,
-                            ),
-                          ),
-                        ),
-                      ), */
 
                       CustomButtom(
                           buttonText: "Sign In", onPressed: toSignUserInPage),
@@ -210,6 +190,7 @@ class _UserLoginState extends State<UserLogin> {
   }
 
   // Widgets for "Forgot Password?" and "Sign Up?" links
+
   Row bottomLinks() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -218,13 +199,15 @@ class _UserLoginState extends State<UserLogin> {
             onPressed: toForgotPasswordPage,
             child: Text(
               "Forgot Password?",
-              style: TextStyle(color: Colors.black),
+              style: TextStyle(
+                  color: Colors.black, fontFamily: poppins['regular']),
             )),
         TextButton(
             onPressed: toSignUpUserPage,
             child: Text(
               "Sign Up?",
-              style: TextStyle(color: LIGHT_COLOR_3),
+              style: TextStyle(
+                  color: LIGHT_COLOR_3, fontFamily: poppins['poppins']),
             )),
       ],
     );

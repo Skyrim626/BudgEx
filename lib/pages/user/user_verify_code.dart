@@ -84,9 +84,9 @@ class _UserVerifyCodeState extends State<UserVerifyCode> {
                     Text(
                       "Check your email to get your confirmation code. If you need to request a new code, go back and re-enter email.",
                       style: TextStyle(
-                          fontFamily: 'Poppins',
+                          fontFamily: poppins['regular'],
                           color: LIGHT_COLOR_2,
-                          fontSize: 14),
+                          fontSize: fontSize['h5']),
                     ),
                     const SizedBox(
                       height: 25,
@@ -97,9 +97,9 @@ class _UserVerifyCodeState extends State<UserVerifyCode> {
                       child: Text(
                         "Send code again",
                         style: TextStyle(
-                            fontFamily: 'Poppins',
+                            fontFamily: poppins['regular'],
                             color: LIGHT_COLOR_2,
-                            fontSize: 14),
+                            fontSize: fontSize['h5']),
                       ),
                     ),
                     const SizedBox(

@@ -91,9 +91,9 @@ class _UserForgotPasswordState extends State<UserForgotPassword> {
                     Text(
                       "Enter the email address associated with your account and we’ll send you a link to reset your password.",
                       style: TextStyle(
-                          fontFamily: 'Poppins',
+                          fontFamily: poppins['regular'],
                           color: LIGHT_COLOR_2,
-                          fontSize: 14),
+                          fontSize: fontSize["h4"]),
                     ),
                     const SizedBox(
                       height: 25,

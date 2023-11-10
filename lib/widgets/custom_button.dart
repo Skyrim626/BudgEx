@@ -39,9 +39,8 @@ class CustomButtom extends StatelessWidget {
           buttonText,
           style: TextStyle(
             color: Colors.white,
-            fontFamily: 'Dosis',
-            fontWeight: FontWeight.bold,
-            fontSize: 17,
+            fontFamily: dosis['bold'],
+            fontSize: fontSize['h4'],
           ),
         ),
       ),

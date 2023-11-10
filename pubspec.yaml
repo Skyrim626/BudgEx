@@ -87,9 +87,35 @@ flutter:
       fonts:
         - asset: fonts/Dosis-Regular.ttf
         - asset: fonts/Dosis-Medium.ttf
+
+    - family: DosisRegular
+      fonts:
+        - asset: fonts/Dosis-Regular.ttf
+
+    - family: DosisMedium
+      fonts:
+        - asset: fonts/Dosis-Medium.ttf
+
+    - family: DosisSemiBold
+      fonts:
+        - asset: fonts/Dosis-SemiBold.ttf
+    - family: DosisBold
+      fonts:
+        - asset: fonts/Dosis-Bold.ttf
+
     - family: Poppins
       fonts:
         - asset: fonts/Poppins-Regular.ttf
+
+    - family: PoppinsRegular
+      fonts:
+        - asset: fonts/Poppins-Regular.ttf
+    - family: PoppinsSemiBold
+      fonts:
+        - asset: fonts/Poppins-SemiBold.ttf
+    - family: PoppinsBold
+      fonts:
+        - asset: fonts/Poppins-Bold.ttf
   #         style: italic
   #   - family: Trajan Pro
   #     fonts:

@@ -114,9 +114,8 @@ class _UserChangePasswordState extends State<UserChangePassword> {
                         Text(
                           "Create New Password",
                           style: TextStyle(
-                              fontFamily: 'Poppins',
-                              fontWeight: FontWeight.bold,
-                              fontSize: 20),
+                              fontFamily: poppins['bold'],
+                              fontSize: fontSize["h3"]),
                         ),
                       ],
                     ),
@@ -126,9 +125,9 @@ class _UserChangePasswordState extends State<UserChangePassword> {
                     Text(
                       "This password should be different from the previous password.",
                       style: TextStyle(
-                          fontFamily: 'Poppins',
+                          fontFamily: poppins['regular'],
                           color: LIGHT_COLOR_2,
-                          fontSize: 14),
+                          fontSize: fontSize["h4"]),
                     ),
                     const SizedBox(
                       height: 15,
@@ -204,7 +203,9 @@ class _UserChangePasswordState extends State<UserChangePassword> {
         Text(
           text,
           style: TextStyle(
-              color: LIGHT_COLOR_3, fontFamily: 'Poppins', fontSize: 11),
+              color: LIGHT_COLOR_3,
+              fontFamily: poppins['regular'],
+              fontSize: fontSize["h6"]),
         )
       ],
     );

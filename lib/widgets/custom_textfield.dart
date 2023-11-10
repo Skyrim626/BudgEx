@@ -24,6 +24,7 @@
   Excellent work on creating a reusable and configurable text input field component!
 */
 
+import 'package:budgex/services/constants.dart';
 import 'package:flutter/material.dart';
 
 class CustomTextField extends StatelessWidget {
@@ -43,6 +44,9 @@ class CustomTextField extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextFormField(
       obscureText: obscureText,
+      style: TextStyle(
+        fontFamily: poppins['regular'],
+      ),
       decoration: InputDecoration(
         hintText: hintText,
         labelText: labelText,

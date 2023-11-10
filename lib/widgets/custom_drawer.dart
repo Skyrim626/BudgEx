@@ -153,8 +153,8 @@ class _CustomDrawerState extends State<CustomDrawer> {
       ),
       title: Text(
         iconText,
-        style: const TextStyle(
-            fontFamily: 'Dosis', fontWeight: FontWeight.w600, fontSize: 23),
+        style:
+            TextStyle(fontFamily: dosis['semiBold'], fontSize: fontSize['h3']),
       ),
       onTap: () {
         // An alert box is displayd if the user wants to return to the login screen

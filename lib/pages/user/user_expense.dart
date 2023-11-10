@@ -80,23 +80,24 @@ class _UserExpenseState extends State<UserExpense> {
                       children: [
                         Text(
                           "Expense Report: $dateExpend",
-                          style: const TextStyle(
+                          style: TextStyle(
                             color: LIGHT_COLOR_3,
-                            fontFamily: 'Poppins',
-                            fontSize: 10,
+                            fontFamily: poppins['regular'],
+                            fontSize: fontSize["h6"],
                           ),
                         ),
                         Text(
                           title,
-                          style: const TextStyle(
-                              fontFamily: 'Poppins', fontSize: 17),
+                          style: TextStyle(
+                              fontFamily: poppins['regular'],
+                              fontSize: fontSize["h4"]),
                         ),
                         Text(
                           "\$$amount",
-                          style: const TextStyle(
-                              fontFamily: 'Poppins',
-                              fontSize: 17,
-                              fontWeight: FontWeight.bold),
+                          style: TextStyle(
+                            fontFamily: poppins['bold'],
+                            fontSize: fontSize["h4"],
+                          ),
                         ),
                       ],
                     ),
