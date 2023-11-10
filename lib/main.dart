@@ -1,3 +1,4 @@
+import 'package:budgex/pages/user/onboarding_screen.dart';
 import 'package:budgex/pages/user/user_login.dart';
 import 'package:budgex/services/theme_provider.dart';
 import 'package:flutter/material.dart';
@@ -27,7 +28,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: UserLogin(),
+      /* home: UserLogin(), */
+      home: OnBoardingScreen(),
       theme: Provider.of<ThemeProvider>(context).themeData,
       /* home: UserExpense(), */
       /* home: UserSettings(), */
