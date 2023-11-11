@@ -38,8 +38,11 @@ dependencies:
   awesome_dialog: ^3.1.0
   smooth_page_indicator: ^1.0.0
   lottie: ^1.2.1
+  fl_chart: ^0.63.0
 
   provider: 
+  intl: ^0.18.1
+  uuid: ^4.2.1
 
 
 dev_dependencies:

@@ -72,7 +72,7 @@ const Map<String, double> fontSize = {
 const Map<String, String> poppins = {
   "regular": "PoppinsRegular",
   "semiBold": "PoppinsSemiBold",
-  "'bold": "PoppinsBold",
+  "bold": "PoppinsBold",
 };
 
 // Dosis

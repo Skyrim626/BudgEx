@@ -1,8 +1,10 @@
 import 'package:budgex/pages/user/onboarding_screen.dart';
+import 'package:budgex/pages/user/user_budgeting.dart';
 import 'package:budgex/pages/user/user_login.dart';
 import 'package:budgex/services/theme_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
 /* import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart'; */
@@ -29,7 +31,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       /* home: UserLogin(), */
-      home: OnBoardingScreen(),
+      /* home: const OnBoardingScreen(), */
+      home: UserBudgeting(),
       theme: Provider.of<ThemeProvider>(context).themeData,
       /* home: UserExpense(), */
       /* home: UserSettings(), */

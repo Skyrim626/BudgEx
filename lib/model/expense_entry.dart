@@ -1,4 +1,21 @@
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:uuid/uuid.dart';
+
 class ExpenseEntry {
+  Uuid? uuid;
+  String? expenseTitle;
+  String? dateCreated;
+
+  // TO BE ANAYZE
+  String? currency;
+  double? amount;
+  String? description;
+  Image? image;
+  Category? category;
+
+  ExpenseEntry() {}
+
   // This is a sample data only
   final List<Map<String, String>> expenseEntries = [
     {
