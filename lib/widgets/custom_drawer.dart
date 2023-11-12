@@ -63,7 +63,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
       'iconText': 'Settings',
       'iconData': 0xe062,
       'toPage': UserSettings(),
-    },
+    }
   ];
 
   @override
