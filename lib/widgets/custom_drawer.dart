@@ -26,6 +26,8 @@ import 'package:budgex/pages/user/user_login.dart';
 import 'package:budgex/pages/user/user_scanner.dart';
 import 'package:budgex/pages/user/user_settings.dart';
 import 'package:budgex/services/constants.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
 class CustomDrawer extends StatefulWidget {
@@ -171,11 +173,12 @@ class _CustomDrawerState extends State<CustomDrawer> {
             desc: 'Are You Sure You Want to Log Out?',
             btnCancelOnPress: () {},
             btnOkOnPress: () {
-              Navigator.push(
+              /* Navigator.push(
                   context,
                   MaterialPageRoute(
                     builder: (context) => UserLogin(),
-                  ));
+                  )); */
+              FirebaseAuth.instance.signOut();
             },
           ).show();
         } else {

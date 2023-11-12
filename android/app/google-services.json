@@ -1,13 +1,13 @@
 {
   "project_info": {
-    "project_number": "386013695609",
-    "project_id": "budgex-e6e78",
-    "storage_bucket": "budgex-e6e78.appspot.com"
+    "project_number": "308621376439",
+    "project_id": "budgex-ed4be",
+    "storage_bucket": "budgex-ed4be.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:386013695609:android:6a31d4f0e65e7cffb64ea8",
+        "mobilesdk_app_id": "1:308621376439:android:1f7f4e67201bfab254c632",
         "android_client_info": {
           "package_name": "com.example.budgex"
         }
@@ -15,7 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyBZtenFGOXxc0KkMPDM3M_pS9KnAN0ry3w"
+          "current_key": "AIzaSyB1VwUg8q08Y93xwga8vNbaU-r1a__rNBM"
         }
       ],
       "services": {

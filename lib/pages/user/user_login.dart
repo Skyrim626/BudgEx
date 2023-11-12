@@ -5,7 +5,7 @@
   It's where users will enter their credentials and initiate the login process.
 
   Key Components:
-  - Text editing controllers for the username and password fields, allowing us to 
+  - Text editing controllers for the email and password fields, allowing us to 
     retrieve and manage user input.
   - Functions for crucial actions:
     - `signUserInPage`: Navigates the user to their homepage upon successful login.
@@ -15,7 +15,7 @@
   - Dependencies include pages for forgotten passwords, the user's home screen, 
     and user registration, as well as constants and custom UI widgets.
 
-  Note: Be sure to check and potentially fix the 'usernameController' assignment 
+  Note: Be sure to check and potentially fix the 'emailController' assignment 
   for the password text field. It may need to be 'passwordController' instead.
 
   Happy Coding!
@@ -23,12 +23,13 @@
 
 // [Rest of the code remains unchanged]
 
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:budgex/pages/user/user_forgot_password.dart';
-import 'package:budgex/pages/user/user_home.dart';
 import 'package:budgex/pages/user/user_signup.dart';
 import 'package:budgex/services/constants.dart';
 import 'package:budgex/widgets/custom_button.dart';
 import 'package:budgex/widgets/custom_textfield.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:flutter/material.dart';
 
@@ -43,17 +44,56 @@ class _UserLoginState extends State<UserLogin> {
   /*  bool _obscureText = true; */ // Initially, set to true to obscure the text
 
   // TextField Editing Controllers
-  final usernameController = TextEditingController();
+  final emailController = TextEditingController();
   final passwordController = TextEditingController();
 
   // Function to sign in the user and redirect them to their homepage.
-  void toSignUserInPage() {
+  void toSignUserInPage() async {
     // Use the Navigator to push a new route onto the navigator's stack.
-    Navigator.push(
+    /* Navigator.push(
         context,
         MaterialPageRoute(
           builder: (context) => UserHomepage(),
-        ));
+        )); */
+
+    // Show loading circle
+    showDialog(
+      context: context,
+      builder: (context) {
+        return const Center(child: CircularProgressIndicator());
+      },
+    );
+
+    // try sign in
+    // Authentication successful, navigate to the Home screen.
+    try {
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: emailController.text,
+        password: passwordController.text,
+      );
+
+      // pop the loading circle
+      // ignore: use_build_context_synchronously
+      Navigator.pop(context);
+    } on FirebaseAuthException catch (e) {
+      // Handle invalid credentials here
+
+      // pop the loading circle
+      // ignore: use_build_context_synchronously
+      Navigator.pop(context);
+
+      // Show error
+      // Pops a alert dialog if the credentials is invalid
+      // ignore: use_build_context_synchronously
+      AwesomeDialog(
+              context: context,
+              dialogType: DialogType.error,
+              animType: AnimType.rightSlide,
+              desc: 'Invalid Credentials',
+              btnOkOnPress: () {},
+              btnOkColor: LIGHT_COLOR_3)
+          .show();
+    }
   }
 
   // Function to navigate the user to the Sign Up page.
@@ -121,28 +161,21 @@ class _UserLoginState extends State<UserLogin> {
                         height: 5,
                       ),
 
-                      // Username TextField
+                      // Email TextField
                       CustomTextField(
-                        controller: usernameController,
-                        hintText: 'Enter your username',
-                        labelText: 'Username',
+                        controller: emailController,
+                        hintText: 'Enter your email',
+                        labelText: 'Email',
                         obscureText: false,
                       ),
 
-                      /* TextFormField(
-                        autofocus: true,
-                        decoration: const InputDecoration(
-                          hintText: 'Enter your username',
-                          labelText: 'Username',
-                        ),
-                      ), */
                       const SizedBox(
                         height: 10,
                       ),
 
                       // Password textfield
                       CustomTextField(
-                        controller: usernameController,
+                        controller: passwordController,
                         hintText: 'Enter your password',
                         labelText: 'Password',
                         obscureText: true,
