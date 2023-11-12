@@ -1,9 +1,12 @@
-import 'package:budgex/model/category_model.dart';
+import 'package:budgex/model/budget.dart';
+import 'package:budgex/model/budget_dummy.dart';
+import 'package:budgex/model/category_model_dummy.dart';
 import 'package:budgex/services/constants.dart';
 import 'package:budgex/widgets/custom_appbar.dart';
 import 'package:budgex/widgets/custom_button.dart';
 import 'package:budgex/widgets/custom_drawer.dart';
-import 'package:budgex/widgets/pie_chart.dart';
+/* import 'package:budgex/widgets/pie_chart.dart'; */
+import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
 class UserBudgeting extends StatefulWidget {
@@ -14,6 +17,10 @@ class UserBudgeting extends StatefulWidget {
 }
 
 class _UserBudgetingState extends State<UserBudgeting> {
+  // Budget Instance
+  /* Budget sampleBudget = Budget(totalBudget: 10000); */
+  Budget sampleBudget = Budget(budget: 10000);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -66,8 +73,8 @@ class _UserBudgetingState extends State<UserBudgeting> {
                     ...dummyCategories
                         .map((category) => generateCategory(
                               categoryName: category["categoryName"],
-                              leftLimit: 1000,
-                              expenses: 1000,
+                              leftLimit: category["leftLimit"],
+                              expenses: category["expenses"],
                               categoryIconData: category["categoryIconData"],
                             ))
                         .toList(),
@@ -85,70 +92,75 @@ class _UserBudgetingState extends State<UserBudgeting> {
   /// The container includes rounded corners, a background color based on the app theme,
   /// and a circular icon with the specified [categoryIconData], category name, and financial information.
   /// The financial details include the total expenses and the remaining amount, presented with appropriate styles.
-  Container generateCategory(
+  GestureDetector generateCategory(
       {required String categoryName,
       required double leftLimit,
       required double expenses,
       required int categoryIconData}) {
-    return Container(
-        padding: const EdgeInsets.only(left: 20, right: 20),
-        margin: const EdgeInsets.only(bottom: 20),
-        height: 75,
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10),
-            color: Theme.of(context).colorScheme.background,
-            border: Border.all(color: LIGHT_COLOR_5, width: 2.0)),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Row(
-              children: [
-                Container(
-                  width: 45, // Adjust the size as needed
-                  height: 45,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Theme.of(context).colorScheme.primary,
+    return GestureDetector(
+      onTap: () {
+        print("hello 1");
+      },
+      child: Container(
+          padding: const EdgeInsets.only(left: 20, right: 20),
+          margin: const EdgeInsets.only(bottom: 20),
+          height: 75,
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+              color: Theme.of(context).colorScheme.background,
+              border: Border.all(color: LIGHT_COLOR_5, width: 2.0)),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                children: [
+                  Container(
+                    width: 45, // Adjust the size as needed
+                    height: 45,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
+                    child: Icon(
+                      IconData(categoryIconData, fontFamily: "MaterialIcons"),
+                      color: Theme.of(context).colorScheme.background,
+                      size: 30,
+                    ),
                   ),
-                  child: Icon(
-                    IconData(categoryIconData, fontFamily: "MaterialIcons"),
-                    color: Theme.of(context).colorScheme.background,
-                    size: 30,
+                  const SizedBox(
+                    width: 15,
                   ),
-                ),
-                const SizedBox(
-                  width: 15,
-                ),
-                Text(
-                  categoryName,
-                  style: TextStyle(
+                  Text(
+                    categoryName,
+                    style: TextStyle(
+                        fontFamily: poppins['semiBold'],
+                        fontSize: fontSize['h4']),
+                  ),
+                ],
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    "\$ $expenses",
+                    style: TextStyle(
                       fontFamily: poppins['semiBold'],
-                      fontSize: fontSize['h4']),
-                ),
-              ],
-            ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  "\$ $expenses",
-                  style: TextStyle(
-                    fontFamily: poppins['semiBold'],
-                    fontSize: fontSize['h4'],
+                      fontSize: fontSize['h4'],
+                    ),
                   ),
-                ),
-                Text(
-                  "Left: \$ $leftLimit",
-                  style: TextStyle(
-                      fontFamily: poppins['regular'],
-                      fontSize: fontSize['h6'],
-                      color: LIGHT_COLOR_2),
-                )
-              ],
-            )
-          ],
-        ));
+                  Text(
+                    "Left: \$ $leftLimit",
+                    style: TextStyle(
+                        fontFamily: poppins['regular'],
+                        fontSize: fontSize['h6'],
+                        color: LIGHT_COLOR_2),
+                  )
+                ],
+              )
+            ],
+          )),
+    );
   }
 
   Container budgetContainer() {
@@ -167,15 +179,59 @@ class _UserBudgetingState extends State<UserBudgeting> {
             height: 20,
           ),
           // Second Row
-          Center(
-            child: CustomPieChart(),
-          ),
+          containerSecondRow(),
           const SizedBox(
             height: 20,
           ),
           // Third Row
           containerThirdRow(),
         ],
+      ),
+    );
+  }
+
+  Center containerSecondRow() {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double chartSize = screenWidth * 0.8;
+
+    return Center(
+      child: SizedBox(
+        width: chartSize,
+        height: chartSize,
+        child: Stack(
+          alignment: Alignment.center,
+          children: [
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text("Current Budget",
+                    style: TextStyle(
+                        fontFamily: dosis['semiBold'],
+                        fontSize: fontSize['h5'],
+                        color: LIGHT_COLOR_1)),
+                Text("\$ 5000.00",
+                    style: TextStyle(
+                        fontFamily: dosis['semiBold'],
+                        fontSize: 35,
+                        color: Colors.white)),
+              ],
+            ),
+            PieChart(
+              PieChartData(
+                sections: [
+                  PieChartSectionData(
+                      value: 50, color: LIGHT_COLOR_1, showTitle: false),
+                  PieChartSectionData(
+                      value: 20, color: LIGHT_COLOR_2, showTitle: false),
+                  PieChartSectionData(
+                      value: 20, color: LIGHT_COLOR_4, showTitle: false),
+                ],
+              ),
+              swapAnimationDuration: const Duration(milliseconds: 750),
+              swapAnimationCurve: Curves.easeInOutQuint,
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -196,13 +252,13 @@ class _UserBudgetingState extends State<UserBudgeting> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              "\$ 15,000.00",
+              "\$ ${sampleBudget.getBudget}",
               style: TextStyle(
                   color: LIGHT_COLOR_1,
                   fontSize: 11,
                   fontFamily: poppins['regular']),
             ),
-            Text("\$ 5,000.00",
+            Text("\$ ${sampleBudget.getcurrentBudget}",
                 style: TextStyle(
                     color: LIGHT_COLOR_1,
                     fontSize: 11,
@@ -218,7 +274,7 @@ class _UserBudgetingState extends State<UserBudgeting> {
     );
   }
 
-  Widget _buildRowWithCircle(Color color, String text, double fontSize) {
+  Row _buildRowWithCircle(Color color, String text, double fontSize) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [

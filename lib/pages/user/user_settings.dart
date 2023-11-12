@@ -1,4 +1,5 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:budgex/model/user.dart';
 import 'package:budgex/pages/user/user_login.dart';
 import 'package:budgex/services/constants.dart';
 import 'package:budgex/widgets/custom_appbar.dart';
@@ -14,6 +15,9 @@ class UserSettings extends StatefulWidget {
 }
 
 class _UserSettingsState extends State<UserSettings> {
+  // User instance
+  User sampleUser = User();
+
   // Function to navigate the user to the Login page.
   void toLoginPage() {
     AwesomeDialog(
@@ -56,8 +60,8 @@ class _UserSettingsState extends State<UserSettings> {
                             border: Border.all(color: Colors.black, width: 2)),
                         child: ClipOval(
                           child: Image(
-                            image: AssetImage(
-                                "../assets/images/sample_profile.jpg"),
+                            image:
+                                AssetImage("assets/images/sample_profile.jpg"),
                             fit: BoxFit.cover,
                           ),
                         )),
@@ -114,18 +118,18 @@ class _UserSettingsState extends State<UserSettings> {
                 - Email
                 - Username */
                       customOption(title: "Account Information"),
-                      Divider(),
+                      const Divider(),
                       customListTile(
                           formatLeading: "Full Name",
-                          formatTitle: "John Doe",
+                          formatTitle: sampleUser.getFullName,
                           isEditIcon: true),
                       customListTile(
                           formatLeading: "Email",
-                          formatTitle: "johnDoe@gmail.com",
+                          formatTitle: sampleUser.getUserEmail,
                           isEditIcon: true),
                       customListTile(
                           formatLeading: "Username",
-                          formatTitle: "johnDoe123",
+                          formatTitle: sampleUser.getUsername,
                           isEditIcon: true),
                       const SizedBox(
                         height: 15,
@@ -134,7 +138,7 @@ class _UserSettingsState extends State<UserSettings> {
                       /* Privacy
                 - Change Password */
                       customOption(title: "Privacy"),
-                      Divider(),
+                      const Divider(),
                       Center(
                         child: CustomButtom(
                             buttonText: "Change Password", onPressed: () {}),
@@ -146,7 +150,7 @@ class _UserSettingsState extends State<UserSettings> {
                       /* Manage Notifications
                 - Notifications */
                       customOption(title: "Notification"),
-                      Divider(),
+                      const Divider(),
                       customListTile(
                           formatLeading: "Notifications", isEditIcon: false),
                       const SizedBox(

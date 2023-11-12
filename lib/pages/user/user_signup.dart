@@ -80,8 +80,8 @@ class _UserSignUpState extends State<UserSignUp> {
           child: Column(
             children: [
               //logo
-              Image.asset(
-                "../assets/images/logo_light.png",
+              Image(
+                image: AssetImage("assets/images/logo_light.png"),
                 height: 200,
               ),
               Padding(

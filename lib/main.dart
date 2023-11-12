@@ -1,6 +1,7 @@
 import 'package:budgex/pages/user/onboarding_screen.dart';
 import 'package:budgex/pages/user/user_budgeting.dart';
 import 'package:budgex/pages/user/user_login.dart';
+import 'package:budgex/pages/user/user_settings.dart';
 import 'package:budgex/services/theme_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -32,10 +33,10 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       /* home: UserLogin(), */
       /* home: const OnBoardingScreen(), */
-      home: UserBudgeting(),
+      /* home: UserBudgeting(), */
       theme: Provider.of<ThemeProvider>(context).themeData,
       /* home: UserExpense(), */
-      /* home: UserSettings(), */
+      home: UserSettings(),
       /* home: UserChangePassword(), */
       /* home: UserVerifyCode(), */
       /* theme: lightMode,

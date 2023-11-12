@@ -63,17 +63,17 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
             controller: _controller,
             children: [
               IntroPage(
-                  fileName: '../assets/animations/page_1_animation.json',
+                  fileName: 'assets/animations/page_1_animation.json',
                   title: "Sleek and Smart Finance",
                   subTitle:
                       "Welcome to BudgEx – the sleek solution for effortless expense tracking. Scan receipts, set budgets, and gain financial insights with ease."),
               IntroPage(
-                  fileName: '../assets/animations/page_2_animation.json',
+                  fileName: 'assets/animations/page_2_animation.json',
                   title: "Receipts, Redefined",
                   subTitle:
                       "Revolutionize the way you track expenses! BudgEx introduces a seamless receipt scanning experience, making financial management simple and stress-free."),
               IntroPage(
-                  fileName: '../assets/animations/page_3_animation.json',
+                  fileName: 'assets/animations/page_3_animation.json',
                   title: "Your Money, Your Rules",
                   subTitle:
                       "Take charge of your finances with BudgEx. From intuitive expense tracking to powerful receipt scanning, our app adapts to your financial style for a personalized money management experience."),

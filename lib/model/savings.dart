@@ -1,5 +1,6 @@
-import 'package:budgex/model/budget.dart';
-
+import 'package:budgex/model/budget_dummy.dart';
+/* 
 class Savings {
-  Budget? budget;
+/*   Budget? budget;
 }
+ */ */

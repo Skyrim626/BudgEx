@@ -88,7 +88,9 @@ class _CustomDrawerState extends State<CustomDrawer> {
 
             // Header (Logo)
             DrawerHeader(
-              child: Image.asset("../assets/images/logo_light.png"),
+              child: Image(
+                image: AssetImage("assets/images/logo_light.png"),
+              ),
             ),
 
             // List of items with SizedBox in each Column

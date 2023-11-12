@@ -1,65 +1,51 @@
-import 'package:budgex/model/category_model.dart';
-
-import 'package:intl/intl.dart';
+import 'package:budgex/model/expense_category.dart';
 import 'package:uuid/uuid.dart';
 
-/* import 'package:flutter/material.dart'; */
-
 class Budget {
-  // Generates a current date and time
-  DateTime _now = DateTime.now();
-
-  // Unique Identifier for the budget
-  Uuid _uuid = Uuid();
+  // A unique key for Budget
+  String uuid = const Uuid().toString();
 
   // Total Budget
-  double? _totalBudget;
+  double _totalBudget = 0;
 
-  // Total Expenses on the specific Budget
-  double? _totalExpenses;
+  // List of Categories
+  List<ExpenseCategory> expenseCategories = [
+    ExpenseCategory(
+      categoryName: 'Food',
+      iconData: 0xf097,
+      left: 0,
+      limit: 0,
+    ),
+    ExpenseCategory(
+      categoryName: 'Transportation',
+      iconData: 0xf021,
+      left: 0,
+      limit: 0,
+    ),
+    ExpenseCategory(
+      categoryName: 'Bills',
+      iconData: 0xf1e0,
+      left: 0,
+      limit: 0,
+    ),
+  ];
 
-  // Budget Remaining
-  double? _currentBudget;
-  /* List<ExpenseEntry>? _expenses; */
-  final List<CategoryModel> _listCategories = [];
-  String? _dateCreated;
-  String? _timeCreated;
-
-  Budget({required totalBudget}) {
-    // Generate Time
-    _totalBudget = totalBudget;
-    _dateCreated = generateDateNow();
-    _timeCreated = generateTimeNow();
-
-    // GENERATES THE CATEGORIES
-    _generateCategory();
+  // A constructor for Budget Class
+  Budget({required double budget}) {
+    _totalBudget = budget;
   }
 
-  List<CategoryModel> get getAllCategories {
-    return _listCategories;
+  String get categoryName {
+    return "";
   }
 
-  void _generateCategory() {
-    for (var category in allCategories) {
-      String categoryName = category['categoryName'];
-      _listCategories.add(CategoryModel(categoryName: categoryName));
-    }
+  // A function that gets the the budget
+  double get getBudget {
+    return _totalBudget;
   }
 
-  // A function that generates the current date
-  // NOTE: THE DATE FORMAT IS YEAR-MONTH-DAY
-  // RETURNS A STRING OF THE CURRENT DATE
-  get generateDateNow {
-    final DateFormat formatter = DateFormat('yyyy-MM-dd');
-    final String formatted = formatter.format(_now);
-
-    return formatted.toString();
-  }
-
-  /// A function that generates a 12 hour format
-  /// NOTE: THE CURRENT TIME FORMAT IS 24
-  /// RETURNS A STRING of 12 Hour format
-  get generateTimeNow {
-    return DateFormat.jm().format(_now).toString();
+  // A function that gets the the current budget
+  double get getcurrentBudget {
+    return _totalBudget - 1234;
   }
 }

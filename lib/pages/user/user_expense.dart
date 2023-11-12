@@ -1,4 +1,4 @@
-import 'package:budgex/model/expense_entry.dart';
+import 'package:budgex/model/expense_entry_dummy.dart';
 import 'package:budgex/services/constants.dart';
 import 'package:budgex/widgets/custom_appbar.dart';
 import 'package:budgex/widgets/custom_drawer.dart';
@@ -70,7 +70,7 @@ class _UserExpenseState extends State<UserExpense> {
                     height: 120,
                     child: Image(
                         image: AssetImage(
-                            "../assets/images/expense_sample_logo.png")),
+                            "assets/images/expense_sample_logo.png")),
                   ),
                   Container(
                     margin: const EdgeInsets.only(left: 5),
