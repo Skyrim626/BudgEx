@@ -27,6 +27,7 @@ import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:budgex/pages/user/user_forgot_password.dart';
 import 'package:budgex/pages/user/user_signup.dart';
 import 'package:budgex/services/constants.dart';
+import 'package:budgex/services/firebase_auth_service.dart';
 import 'package:budgex/widgets/custom_button.dart';
 import 'package:budgex/widgets/custom_textfield.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -49,13 +50,6 @@ class _UserLoginState extends State<UserLogin> {
 
   // Function to sign in the user and redirect them to their homepage.
   void toSignUserInPage() async {
-    // Use the Navigator to push a new route onto the navigator's stack.
-    /* Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => UserHomepage(),
-        )); */
-
     // Show loading circle
     showDialog(
       context: context,
@@ -66,34 +60,36 @@ class _UserLoginState extends State<UserLogin> {
 
     // try sign in
     // Authentication successful, navigate to the Home screen.
-    try {
-      await FirebaseAuth.instance.signInWithEmailAndPassword(
-        email: emailController.text,
-        password: passwordController.text,
-      );
+    // Open Firebase Authenticaion service
+    // NOTE: This is a User Defined Class
+    final FirebaseAuthService auth = FirebaseAuthService();
 
-      // pop the loading circle
-      // ignore: use_build_context_synchronously
-      Navigator.pop(context);
-    } on FirebaseAuthException catch (e) {
-      // Handle invalid credentials here
-
-      // pop the loading circle
-      // ignore: use_build_context_synchronously
-      Navigator.pop(context);
-
-      // Show error
-      // Pops a alert dialog if the credentials is invalid
-      // ignore: use_build_context_synchronously
-      AwesomeDialog(
-              context: context,
-              dialogType: DialogType.error,
-              animType: AnimType.rightSlide,
-              desc: 'Invalid Credentials',
-              btnOkOnPress: () {},
-              btnOkColor: LIGHT_COLOR_3)
-          .show();
-    }
+    // Checks the credentials
+    auth
+        .signInWithEmailAndPassword(
+            email: emailController.text, password: passwordController.text)
+        .then((isSignedInSuccessfully) => {
+              if (isSignedInSuccessfully ?? false)
+                {
+                  // Sign in was Successful
+                  print("Sign In was successful!")
+                }
+              else
+                {
+                  // A dialog will be displayed if the credentials are invalid.
+                  AwesomeDialog(
+                          context: context,
+                          dialogType: DialogType.error,
+                          animType: AnimType.rightSlide,
+                          desc: 'Invalid Credentials',
+                          btnOkOnPress: () {},
+                          btnOkColor: LIGHT_COLOR_3)
+                      .show()
+                }
+            });
+    // pop the loading circle
+    // ignore: use_build_context_synchronously
+    Navigator.pop(context);
   }
 
   // Function to navigate the user to the Sign Up page.
@@ -181,26 +177,6 @@ class _UserLoginState extends State<UserLogin> {
                         obscureText: true,
                       ),
 
-                      /* TextFormField(
-                        autofocus: true,
-                        obscureText: _obscureText,
-                        decoration: InputDecoration(
-                            hintText: 'Enter your password',
-                            labelText: 'Password',
-                            suffixIcon: IconButton(
-                              icon: Icon(
-                                _obscureText
-                                    ? Icons.visibility
-                                    : Icons.visibility_off,
-                                color: Colors.grey,
-                              ),
-                              onPressed: () {
-                                setState(() {
-                                  _obscureText = !_obscureText;
-                                });
-                              },
-                            )),
-                      ), */
                       const SizedBox(
                         height: 15,
                       ),
