@@ -16,6 +16,7 @@
 
 // [Rest of the code remains unchanged]
 
+import 'package:budgex/pages/other_screens/auth_page.dart';
 import 'package:budgex/pages/user/user_login.dart';
 import 'package:budgex/services/constants.dart';
 import 'package:budgex/widgets/custom_button.dart';
@@ -30,11 +31,11 @@ class UserSignedUp extends StatefulWidget {
 
 class _UserSignedUpState extends State<UserSignedUp> {
   // Allows the user to return to the login page
-  void toLoginPage() {
+  void toHomePage() {
     Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => UserLogin(),
+          builder: (context) => AuthPage(),
         ));
   }
 
@@ -78,7 +79,7 @@ class _UserSignedUpState extends State<UserSignedUp> {
                     height: 35,
                   ),
                   CustomButtom(
-                      buttonText: "Back to Sign In", onPressed: toLoginPage),
+                      buttonText: "To Home Page", onPressed: toHomePage),
                 ],
               ),
             )

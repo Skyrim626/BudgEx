@@ -1,5 +1,5 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 
 class FirebaseAuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -27,7 +27,9 @@ class FirebaseAuthService {
       return true;
     } on FirebaseAuthException catch (e) {
       // If there's an error during sign-in, print the error message
-      print(e);
+      if (kDebugMode) {
+        print(e);
+      }
 
       // Return false to indicate sign-in failure
       return false;
@@ -51,6 +53,7 @@ class FirebaseAuthService {
     return user != null;
   } */
 
+  // A function that gets the current user
   User getCurrentUser() {
     User user = _auth.currentUser!;
     return user;
@@ -69,6 +72,12 @@ class FirebaseAuthService {
       // An error occurred during password reset
       return false;
     }
+  }
+
+  Future<void> createUserEmailAndPassword(
+      {required String email, required String password}) async {
+    await _auth.createUserWithEmailAndPassword(
+        email: email, password: password);
   }
 
   /// Provides a [Stream] that emits changes in the authentication state.

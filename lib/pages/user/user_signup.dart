@@ -23,10 +23,10 @@
 import 'package:budgex/pages/user/user_done_register.dart';
 import 'package:budgex/pages/user/user_login.dart';
 import 'package:budgex/services/constants.dart';
+import 'package:budgex/services/firebase_auth_service.dart';
+import 'package:budgex/services/firebase_firestore_service.dart';
 import 'package:budgex/widgets/custom_button.dart';
 import 'package:budgex/widgets/custom_textfield.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class UserSignUp extends StatefulWidget {
@@ -37,6 +37,13 @@ class UserSignUp extends StatefulWidget {
 }
 
 class _UserSignUpState extends State<UserSignUp> {
+  // Open firestore service
+  final FirebaseFirestoreService _firestoreDatabase =
+      FirebaseFirestoreService();
+
+  // Open firebase authentication service
+  final FirebaseAuthService _auth = FirebaseAuthService();
+
   // Text Editing Controller
   final _fullNameController = TextEditingController();
   final _ageController = TextEditingController();
@@ -89,13 +96,13 @@ class _UserSignUpState extends State<UserSignUp> {
     //authenticate user
     if (passwordConfirmed()) {
       // Create New User
-      await FirebaseAuth.instance.createUserWithEmailAndPassword(
+      _auth.createUserEmailAndPassword(
           email: _emailController.text.trim(),
           password: _passwordController.text.trim());
     }
 
     // Add user details
-    addUserDetails(
+    _firestoreDatabase.addUser(
         fullName: _fullNameController.text.trim(),
         age: int.parse(_ageController.text.trim()),
         email: _emailController.text.trim());
@@ -109,27 +116,6 @@ class _UserSignUpState extends State<UserSignUp> {
         MaterialPageRoute(
           builder: (context) => UserSignedUp(),
         ));
-  }
-
-  // A function that adds the user details to the Firestore database
-  Future addUserDetails(
-      {required String fullName,
-      required int age,
-      required String email}) async {
-    // Create a new user with a first and last name
-    await FirebaseFirestore.instance.collection('users').add({
-      'full_name': fullName,
-      'age': age,
-      'email': email,
-    });
-
-    // For testing purposes
-    /* await FirebaseFirestore.instance.collection("users").add(user);
-    final user = <String, dynamic>{
-      "full_name": "Ada",
-      "age": 15,
-      "email": "ada@email.com"
-    }; */
   }
 
   // A function that checks if the password is matched

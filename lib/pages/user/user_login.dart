@@ -69,7 +69,7 @@ class _UserLoginState extends State<UserLogin> {
         .signInWithEmailAndPassword(
             email: emailController.text, password: passwordController.text)
         .then((isSignedInSuccessfully) => {
-              if (isSignedInSuccessfully ?? false)
+              if (isSignedInSuccessfully)
                 {
                   // Sign in was Successful
                   print("Sign In was successful!")
