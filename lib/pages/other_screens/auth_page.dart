@@ -18,6 +18,8 @@ class AuthPage extends StatelessWidget {
         builder: (context, snapshot) {
           // user is logged in
           if (snapshot.hasData) {
+            /*  User? user = snapshot.data;
+            print(user?.uid); */
             return UserHomepage();
           }
 

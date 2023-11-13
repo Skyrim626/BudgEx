@@ -23,7 +23,6 @@ class FirebaseAuthService {
     try {
       // Attempt to sign in with the provided email and password
       await _auth.signInWithEmailAndPassword(email: email, password: password);
-
       // If sign-in is successful, return true
       return true;
     } on FirebaseAuthException catch (e) {
@@ -51,6 +50,26 @@ class FirebaseAuthService {
     User? user = _auth.currentUser;
     return user != null;
   } */
+
+  User getCurrentUser() {
+    User user = _auth.currentUser!;
+    return user;
+  }
+
+  /// Initiates a password reset process by sending a reset email to the specified [email].
+  /// Returns true if the email is successfully sent, false otherwise.
+  Future<bool> passwordReset({required String email}) async {
+    try {
+      // Send password reset email using Firebase authentication
+      await _auth.sendPasswordResetEmail(email: email);
+
+      // Password reset email sent successfully
+      return true;
+    } on FirebaseAuthException catch (e) {
+      // An error occurred during password reset
+      return false;
+    }
+  }
 
   /// Provides a [Stream] that emits changes in the authentication state.
   ///

@@ -21,9 +21,11 @@
   Keep up the great work!
 */
 
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:budgex/pages/user/user_login.dart';
-import 'package:budgex/pages/user/user_verify_code.dart';
+/* import 'package:budgex/pages/user/user_verify_code.dart'; */
 import 'package:budgex/services/constants.dart';
+import 'package:budgex/services/firebase_auth_service.dart';
 import 'package:budgex/widgets/custom_button.dart';
 import 'package:budgex/widgets/custom_textfield.dart';
 import 'package:flutter/material.dart';
@@ -36,7 +38,13 @@ class UserForgotPassword extends StatefulWidget {
 }
 
 class _UserForgotPasswordState extends State<UserForgotPassword> {
-  final emailController = TextEditingController();
+  final _emailController = TextEditingController();
+
+  @override
+  void dispose() {
+    super.dispose();
+    _emailController.dispose();
+  }
 
   /*
   Navigates the user to the verification code page if their email address exists in the system.
@@ -46,11 +54,61 @@ class _UserForgotPasswordState extends State<UserForgotPassword> {
   their verification code.
 */
   void toVerifyCodePage() {
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => UserVerifyCode(),
-        ));
+    // Open firebase authentication service
+    final FirebaseAuthService auth = FirebaseAuthService();
+
+    // Show loading circle
+    showDialog(
+      context: context,
+      builder: (context) {
+        return const Center(child: CircularProgressIndicator());
+      },
+    );
+
+    // Checks if the email exist (for verification)
+    auth
+        .passwordReset(email: _emailController.text.trim())
+        .then((isEmailExist) => {
+              if (isEmailExist)
+                {
+                  // pop the loading circle
+                  // ignore: use_build_context_synchronously
+                  Navigator.pop(context),
+
+                  // Navigates the user to the Verification code Screen
+                  /* Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => UserVerifyCode(),
+                      )) */
+
+                  // Navigates the user to the Login Screen
+                  AwesomeDialog(
+                      context: context,
+                      dialogType: DialogType.success,
+                      desc: "Password Reset Email Sent.",
+                      btnOkOnPress: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const UserLogin()));
+                      }).show(),
+                }
+              else
+                {
+                  // pop the loading circle
+                  // ignore: use_build_context_synchronously
+                  Navigator.pop(context),
+                  AwesomeDialog(
+                          context: context,
+                          dialogType: DialogType.error,
+                          desc:
+                              "The email you currently inputted does not exist.",
+                          btnOkOnPress: () {},
+                          btnOkColor: LIGHT_COLOR_3)
+                      .show()
+                }
+            });
   }
 
   // Function to navigate the user to the Login page.
@@ -58,7 +116,7 @@ class _UserForgotPasswordState extends State<UserForgotPassword> {
     Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => UserLogin(),
+          builder: (context) => const UserLogin(),
         ));
   }
 
@@ -67,7 +125,7 @@ class _UserForgotPasswordState extends State<UserForgotPassword> {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          icon: Icon(Icons.arrow_back),
+          icon: const Icon(Icons.arrow_back),
           onPressed: toLoginPage,
           color: Theme.of(context).colorScheme.tertiary,
         ),
@@ -80,13 +138,13 @@ class _UserForgotPasswordState extends State<UserForgotPassword> {
             children: [
               //logo
 
-              Image(
+              const Image(
                 image: AssetImage("assets/images/logo_light.png"),
                 height: 200,
               ),
 
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: 25.0),
+                padding: const EdgeInsets.symmetric(horizontal: 25.0),
                 child: Column(
                   children: [
                     Text(
@@ -100,7 +158,7 @@ class _UserForgotPasswordState extends State<UserForgotPassword> {
                       height: 25,
                     ),
                     CustomTextField(
-                        controller: emailController,
+                        controller: _emailController,
                         hintText: "Enter your email address",
                         labelText: "Email",
                         obscureText: false),
