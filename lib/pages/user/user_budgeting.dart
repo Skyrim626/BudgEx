@@ -2,14 +2,17 @@ import 'package:budgex/model/budget.dart';
 
 import 'package:budgex/model/category_model_dummy.dart';
 import 'package:budgex/services/constants.dart';
+import 'package:budgex/services/firebase_auth_service.dart';
 import 'package:budgex/widgets/custom_appbar.dart';
 import 'package:budgex/widgets/custom_button.dart';
 import 'package:budgex/widgets/custom_drawer.dart';
 import 'package:budgex/widgets/custom_dropdown_button.dart';
 import 'package:budgex/widgets/custom_textfield.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 /* import 'package:budgex/widgets/pie_chart.dart'; */
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class UserBudgeting extends StatefulWidget {
   const UserBudgeting({super.key});
@@ -19,6 +22,21 @@ class UserBudgeting extends StatefulWidget {
 }
 
 class _UserBudgetingState extends State<UserBudgeting> {
+  // Create an instance of the FirebaseAuthService to manage authentication.
+  final FirebaseAuthService _auth = FirebaseAuthService();
+
+  // Declare User
+  late User user;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    // Initialize User
+    user = _auth.getCurrentUser();
+  }
+
   // Budget Instance
   /* Budget sampleBudget = Budget(totalBudget: 10000); */
   Budget sampleBudget = Budget(budget: 10000);
@@ -35,6 +53,15 @@ class _UserBudgetingState extends State<UserBudgeting> {
   }
 
   Future _displayBottomSheet(BuildContext context) {
+    // Generate Current Time
+    final DateTime now = DateTime.now();
+
+    // Define the desired date format
+    final String formattedDate = DateFormat('MMMM dd, yyyy').format(now);
+
+    // Define the desired time format with AM/PM
+    final String formattedTime = DateFormat('h:mm a').format(now);
+
     return showModalBottomSheet(
         isScrollControlled: true,
         context: context,
@@ -93,6 +120,22 @@ class _UserBudgetingState extends State<UserBudgeting> {
                               obscureText: false),
                           const SizedBox(
                             height: 8,
+                          ),
+                          const SizedBox(
+                            height: 13,
+                          ),
+                          Text(
+                            "Transaction date and time:",
+                            style: TextStyle(
+                                fontFamily: poppins['semiBold'],
+                                fontSize: fontSize['h4']),
+                          ),
+                          Text(
+                            "$formattedDate | $formattedTime",
+                            style: TextStyle(
+                                color: LIGHT_COLOR_3,
+                                fontFamily: poppins['regular'],
+                                fontSize: fontSize['h5']),
                           ),
                           const SizedBox(
                             height: 13,

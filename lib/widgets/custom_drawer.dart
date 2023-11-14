@@ -19,6 +19,7 @@
 */
 
 import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:budgex/pages/other_screens/auth_page.dart';
 import 'package:budgex/pages/user/user_budgeting.dart';
 import 'package:budgex/pages/user/user_expense.dart';
 import 'package:budgex/pages/user/user_home.dart';
@@ -28,7 +29,6 @@ import 'package:budgex/pages/user/user_settings.dart';
 import 'package:budgex/services/constants.dart';
 import 'package:budgex/services/firebase_auth_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
 class CustomDrawer extends StatefulWidget {
@@ -39,8 +39,20 @@ class CustomDrawer extends StatefulWidget {
 }
 
 class _CustomDrawerState extends State<CustomDrawer> {
-  // Open Firebase Authentication Service
+  // Create an instance of the FirebaseAuthService to manage authentication.
   final FirebaseAuthService _auth = FirebaseAuthService();
+
+  // Declare User
+  late User user;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    // Initialize User
+    user = _auth.getCurrentUser();
+  }
 
   List<Map<String, dynamic>> menuItems = [
     {
@@ -120,11 +132,11 @@ class _CustomDrawerState extends State<CustomDrawer> {
             ),
 
             // Sign Out
-            listTile(
+            /* listTile(
               iconText: "Sign Out",
               iconData: 0xe3b3,
-              toPage: UserLogin(),
-            ),
+              toPage: AuthPage(),
+            ), */
           ],
         ),
       ),
@@ -180,6 +192,8 @@ class _CustomDrawerState extends State<CustomDrawer> {
               // Logs out
               // Allows the user to return to the log in screen
               _auth.signOut();
+              Navigator.of(context)
+                  .push(MaterialPageRoute(builder: (context) => toPage()));
             },
           ).show();
         } else {

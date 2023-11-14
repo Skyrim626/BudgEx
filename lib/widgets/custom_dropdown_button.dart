@@ -23,6 +23,8 @@ class _CustomDropDownButtonState extends State<CustomDropDownButton> {
         list_categories.length, (index) => list_categories[index]['name']);
     selectedCategory = items[0];
     _scrollController = ScrollController();
+
+    // Generate current time
   }
 
   @override

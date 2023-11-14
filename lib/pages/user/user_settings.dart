@@ -1,10 +1,13 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
-import 'package:budgex/model/user.dart';
+import 'package:budgex/pages/other_screens/auth_page.dart';
+/* import 'package:budgex/model/user.dart'; */
 import 'package:budgex/pages/user/user_login.dart';
 import 'package:budgex/services/constants.dart';
+import 'package:budgex/services/firebase_auth_service.dart';
 import 'package:budgex/widgets/custom_appbar.dart';
 import 'package:budgex/widgets/custom_button.dart';
 import 'package:budgex/widgets/custom_drawer.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class UserSettings extends StatefulWidget {
@@ -15,8 +18,23 @@ class UserSettings extends StatefulWidget {
 }
 
 class _UserSettingsState extends State<UserSettings> {
+  // Create an instance of the FirebaseAuthService to manage authentication.
+  final FirebaseAuthService _auth = FirebaseAuthService();
+
+  // Declare User
+  late User user;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    // Initialize User
+    user = _auth.getCurrentUser();
+  }
+
   // User instance
-  User sampleUser = User();
+  /* User sampleUser = User(); */
 
   // Function to navigate the user to the Login page.
   void toLoginPage() {
@@ -28,11 +46,18 @@ class _UserSettingsState extends State<UserSettings> {
       desc: 'Are You Sure You Want to Log Out?',
       btnCancelOnPress: () {},
       btnOkOnPress: () {
-        Navigator.push(
+        _auth.signOut().then((res) {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => AuthPage()),
+          );
+        });
+
+        /*  Navigator.push(
             context,
             MaterialPageRoute(
               builder: (context) => UserLogin(),
-            ));
+            )); */
       },
     ).show();
   }
@@ -121,15 +146,15 @@ class _UserSettingsState extends State<UserSettings> {
                       const Divider(),
                       customListTile(
                           formatLeading: "Full Name",
-                          formatTitle: sampleUser.getFullName,
+                          formatTitle: "sampleUser.getFullName",
                           isEditIcon: true),
                       customListTile(
                           formatLeading: "Email",
-                          formatTitle: sampleUser.getUserEmail,
+                          formatTitle: "sampleUser.getUserEmail",
                           isEditIcon: true),
                       customListTile(
                           formatLeading: "Username",
-                          formatTitle: sampleUser.getUsername,
+                          formatTitle: "sampleUser.getUsername",
                           isEditIcon: true),
                       const SizedBox(
                         height: 15,

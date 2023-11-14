@@ -42,9 +42,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      /* home: AuthPage(), */
+      home: AuthPage(),
       /* home: const OnBoardingScreen(), */
-      home: UserBudgeting(),
+      /* home: UserBudgeting(), */
       theme: Provider.of<ThemeProvider>(context).themeData,
       /* home: UserExpense(), */
       /* home: UserSettings(), */
