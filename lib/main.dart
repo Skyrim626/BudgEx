@@ -1,5 +1,5 @@
-/* import 'package:budgex/pages/user/onboarding_screen.dart';
-import 'package:budgex/pages/user/user_budgeting.dart'; */
+import 'package:budgex/pages/user/onboarding_screen.dart';
+import 'package:budgex/pages/user/user_budgeting.dart';
 import 'package:budgex/pages/other_screens/auth_page.dart';
 import 'package:budgex/pages/user/user_login.dart';
 import 'package:budgex/pages/user/user_settings.dart';
@@ -24,7 +24,7 @@ void main() async {
   );
 
   // Initialize Hive
-  await Hive.initFlutter();
+  /* await Hive.initFlutter(); */
 
   // Open the Box (Local Database is placed in the phone)
   /* var expenseStorage = await Hive.openBox('expenseStorage'); */
@@ -42,9 +42,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: AuthPage(),
+      /* home: AuthPage(), */
       /* home: const OnBoardingScreen(), */
-      /* home: UserBudgeting(), */
+      home: UserBudgeting(),
       theme: Provider.of<ThemeProvider>(context).themeData,
       /* home: UserExpense(), */
       /* home: UserSettings(), */

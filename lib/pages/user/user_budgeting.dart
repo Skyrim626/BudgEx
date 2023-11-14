@@ -1,10 +1,12 @@
 import 'package:budgex/model/budget.dart';
-import 'package:budgex/model/budget_dummy.dart';
+
 import 'package:budgex/model/category_model_dummy.dart';
 import 'package:budgex/services/constants.dart';
 import 'package:budgex/widgets/custom_appbar.dart';
 import 'package:budgex/widgets/custom_button.dart';
 import 'package:budgex/widgets/custom_drawer.dart';
+import 'package:budgex/widgets/custom_dropdown_button.dart';
+import 'package:budgex/widgets/custom_textfield.dart';
 /* import 'package:budgex/widgets/pie_chart.dart'; */
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
@@ -21,13 +23,101 @@ class _UserBudgetingState extends State<UserBudgeting> {
   /* Budget sampleBudget = Budget(totalBudget: 10000); */
   Budget sampleBudget = Budget(budget: 10000);
 
+  // Controllers
+  TextEditingController amountController = TextEditingController();
+  TextEditingController nameController = TextEditingController();
+  TextEditingController descriptionController = TextEditingController();
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+  }
+
+  Future _displayBottomSheet(BuildContext context) {
+    return showModalBottomSheet(
+        isScrollControlled: true,
+        context: context,
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.vertical(top: Radius.circular(30))),
+        builder: (context) {
+          return FractionallySizedBox(
+            heightFactor: 0.9,
+            child: ListView(
+                /* height: 1000, */
+                children: [
+                  Center(
+                    child: Padding(
+                      padding: const EdgeInsets.only(
+                          top: 25, left: 18, right: 18, bottom: 10),
+                      child: Column(
+                        children: [
+                          Text(
+                            "Add Expense",
+                            style: TextStyle(
+                                fontFamily: dosis['semiBold'],
+                                fontSize: fontSize['h3']),
+                          ),
+                          const SizedBox(
+                            height: 20,
+                          ),
+                          CustomButtom(
+                              buttonText: "Scan Receipt", onPressed: () {}),
+                          const SizedBox(
+                            height: 30,
+                          ),
+                          CustomDropDownButton(),
+                          const SizedBox(
+                            height: 8,
+                          ),
+                          CustomTextField(
+                              controller: amountController,
+                              hintText: "Enter amount*",
+                              labelText: "Amount*",
+                              obscureText: false),
+                          const SizedBox(
+                            height: 8,
+                          ),
+                          CustomTextField(
+                              controller: nameController,
+                              hintText: "Enter name*",
+                              labelText: "Name*",
+                              obscureText: false),
+                          const SizedBox(
+                            height: 8,
+                          ),
+                          CustomTextField(
+                              controller: descriptionController,
+                              hintText: "Enter description*",
+                              labelText: "Description*",
+                              obscureText: false),
+                          const SizedBox(
+                            height: 8,
+                          ),
+                          const SizedBox(
+                            height: 13,
+                          ),
+                          CustomButtom(
+                              buttonText: "Add Expense", onPressed: () {}),
+                        ],
+                      ),
+                    ),
+                  ),
+                ]),
+          );
+        });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: customAppBar(context),
       drawer: CustomDrawer(),
-      bottomNavigationBar:
-          CustomButtom(buttonText: "Add Expense", onPressed: () {}),
+      bottomNavigationBar: CustomButtom(
+          buttonText: "Add Expense",
+          onPressed: () {
+            _displayBottomSheet(context);
+          }),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(
@@ -163,6 +253,11 @@ class _UserBudgetingState extends State<UserBudgeting> {
     );
   }
 
+  // A function that returns and displays the budget Container
+  // Inside contains row function (containerFirstRow(), containerSecondRow(), containerThirdRow())
+  // containerFirstRow() = displays the details of the budget (budget period, current budget, date, and edit button)
+  // containerSecondRow() = displays the details of the current budget with a circle chart/chart at the center
+  // containerThirdRow() = displays the color indicators of the budget details and values
   Container budgetContainer() {
     return Container(
       padding: EdgeInsets.all(10),
