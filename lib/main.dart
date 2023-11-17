@@ -1,6 +1,7 @@
 import 'package:budgex/pages/user/onboarding_screen.dart';
 import 'package:budgex/pages/user/user_budgeting.dart';
 import 'package:budgex/pages/other_screens/auth_page.dart';
+import 'package:budgex/pages/user/user_category_expense.dart';
 import 'package:budgex/pages/user/user_login.dart';
 import 'package:budgex/pages/user/user_settings.dart';
 import 'package:budgex/services/theme_provider.dart';
@@ -42,7 +43,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: AuthPage(),
+      /* home: AuthPage(), */
+      home: UserCategoryExpense(),
       /* home: const OnBoardingScreen(), */
       /* home: UserBudgeting(), */
       theme: Provider.of<ThemeProvider>(context).themeData,

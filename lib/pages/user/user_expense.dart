@@ -30,7 +30,7 @@ class _UserExpenseState extends State<UserExpense> {
               String? reportDate = expenseEntries[index]['report_date'] ?? "";
               String? expenseTitle = expenseEntries[index]['title'] ?? "";
               String? amount = expenseEntries[index]['amount'] ?? "";
-              return sampleBox(
+              return expenseBox(
                   dateExpend: reportDate, title: expenseTitle, amount: amount);
             },
           ),
@@ -39,7 +39,7 @@ class _UserExpenseState extends State<UserExpense> {
     );
   }
 
-  Padding sampleBox(
+  Padding expenseBox(
       {required String dateExpend,
       required String title,
       required String amount}) {
