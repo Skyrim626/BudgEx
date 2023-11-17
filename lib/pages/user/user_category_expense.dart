@@ -12,15 +12,22 @@ class UserCategoryExpense extends StatefulWidget {
 }
 
 class _UserCategoryExpenseState extends State<UserCategoryExpense> {
-  final List _posts = [
-    'post 1',
-    'post 2',
-    'post 3',
-    'post 4',
-    'post 5',
-    'post 6',
-    'post 7',
-  ];
+  late List _posts;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _posts = [
+      'post 1',
+      'post 2',
+      'post 3',
+      'post 4',
+      'post 5',
+      'post 6',
+      'post 7',
+    ];
+  }
 
   // A function that allows the user to return to the Budgeting Screen
   void toBudgetingScreen() {
@@ -95,6 +102,11 @@ class _UserCategoryExpenseState extends State<UserCategoryExpense> {
     );
   }
 
+  // A function that retruns a container that for expense entry
+  // Expense Entry Container contains some of this followings:
+  // Gesture Button - (TBD)
+  // Expense Title - Title of your Expense
+  // Date and Time Expended - Date format (MM-DD-YYYY) and Time format (12hr-format), to when it was expended in that certain event
   Padding expenseBox() {
     return Padding(
       padding: const EdgeInsets.all(8.0),

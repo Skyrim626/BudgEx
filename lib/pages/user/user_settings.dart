@@ -149,12 +149,16 @@ class _UserSettingsState extends State<UserSettings> {
                           formatTitle: "sampleUser.getFullName",
                           isEditIcon: true),
                       customListTile(
+                          formatLeading: "Age",
+                          formatTitle: "20",
+                          isEditIcon: false),
+                      customListTile(
                           formatLeading: "Email",
                           formatTitle: "sampleUser.getUserEmail",
                           isEditIcon: true),
                       customListTile(
-                          formatLeading: "Username",
-                          formatTitle: "sampleUser.getUsername",
+                          formatLeading: "Date Birth",
+                          formatTitle: "MM-DD-YYYY",
                           isEditIcon: true),
                       const SizedBox(
                         height: 15,

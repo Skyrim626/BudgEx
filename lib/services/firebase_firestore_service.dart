@@ -6,6 +6,50 @@ import 'package:flutter/foundation.dart';
 class FirebaseFirestoreService {
   final _firestoreDatabase = FirebaseFirestore.instance;
 
+  /* Future<Map<String, dynamic>> getUserDataByEmail(String email) async {
+    try {
+      // Query Firestore to get user data based on email
+      QuerySnapshot querySnapshot = await _firestoreDatabase
+          .collection("users")
+          .where('email', isEqualTo: email)
+          .get();
+
+      if (querySnapshot.docs.isNotEmpty) {
+        // User found, return the data
+        return querySnapshot.docs.first.data() as Map<String, dynamic>;
+      } else {
+        // User not found
+        return {};
+      }
+    } catch (e) {
+      // Handle errors
+      print('Error getting user data by email: $e');
+      return {};
+    }
+  } */
+
+  /* Future<Map<String, dynamic>> getUserDataByEmail(String? email) async {
+    try {
+      // Query Firestore to get user data based on email
+      QuerySnapshot querySnapshot = await _firestoreDatabase
+          .collection("users")
+          .where('email', isEqualTo: email)
+          .get();
+
+      if (querySnapshot.docs.isNotEmpty) {
+        // User found, return the data
+        return querySnapshot.docs.first.data() as Map<String, dynamic>;
+      } else {
+        // User not found
+        return {};
+      }
+    } catch (e) {
+      // Handle errors
+      print('Error getting user data by email: $e');
+      return {};
+    }
+  } */
+
   // Function to add a new user to Firestore
   Future<void> addUser({
     required String fullName, // Full name of the user

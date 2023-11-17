@@ -43,8 +43,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      /* home: AuthPage(), */
-      home: UserCategoryExpense(),
+      home: AuthPage(),
+      /* home: UserCategoryExpense(), */
       /* home: const OnBoardingScreen(), */
       /* home: UserBudgeting(), */
       theme: Provider.of<ThemeProvider>(context).themeData,

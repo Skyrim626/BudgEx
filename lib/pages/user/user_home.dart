@@ -1,11 +1,10 @@
-import 'package:budgex/pages/user/user_login.dart';
+import 'package:budgex/model/expense_users.dart';
 import 'package:budgex/services/firebase_auth_service.dart';
-/* import 'package:budgex/services/theme_provider.dart'; */
+import 'package:budgex/services/firebase_firestore_service.dart';
 import 'package:budgex/widgets/custom_appbar.dart';
 import 'package:budgex/widgets/custom_drawer.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-/* import 'package:provider/provider.dart'; */
 
 class UserHomepage extends StatefulWidget {
   const UserHomepage({super.key});
@@ -18,17 +17,39 @@ class _UserHomepageState extends State<UserHomepage> {
   // Create an instance of the FirebaseAuthService to manage authentication.
   final FirebaseAuthService _auth = FirebaseAuthService();
 
+  final FirebaseFirestoreService _firestoreService = FirebaseFirestoreService();
+
   // Declare User
-  late User user;
+  ExpenseUsers user = ExpenseUsers();
 
   @override
   void initState() {
     // TODO: implement initState
+    // Initialize User data
+    /* _initializeUserData(); */
     super.initState();
 
-    // Initialize User
-    user = _auth.getCurrentUser();
+    /* user = _auth.getCurrentUser(); */
   }
+
+  /* Future<void> _initializeUserData() async {
+    try {
+      // Get the current user
+      User? currentUser = _auth.getCurrentUser();
+
+      // Fetch user data from Firestore based on the email
+      Map<String, dynamic> userData =
+          await _firestoreService.getUserDataByEmail(currentUser.email);
+
+      // Update the user instance with fetched data
+      user = ExpenseUsers.fromMap(userData);
+      /* print(user.getFullName); */
+
+      setState(() {});
+    } catch (e) {
+      print("Error initializing user data: $e");
+    }
+  } */
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +58,7 @@ class _UserHomepageState extends State<UserHomepage> {
       backgroundColor: Theme.of(context).colorScheme.background,
       drawer: CustomDrawer(),
       body: Center(
-        child: Text(user.email ?? "Empty"),
+        child: Column(),
       ),
     );
   }
