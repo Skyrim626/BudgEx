@@ -35,7 +35,7 @@ class _UserSignedUpState extends State<UserSignedUp> {
     Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => AuthPage(),
+          builder: (context) => UserLogin(),
         ));
   }
 

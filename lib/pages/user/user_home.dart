@@ -15,9 +15,9 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class UserHomepage extends StatefulWidget {
-  const UserHomepage({
-    super.key,
-  });
+  EndUser endUser;
+
+  UserHomepage({required this.endUser});
 
   @override
   State<UserHomepage> createState() => _UserHomepageState();
@@ -42,14 +42,16 @@ class _UserHomepageState extends State<UserHomepage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: customAppBar(context),
+      appBar: customAppBar(context: context, endUser: widget.endUser),
       backgroundColor: Theme.of(context).colorScheme.background,
-      drawer: CustomDrawer(),
+      drawer: CustomDrawer(
+        endUser: widget.endUser,
+      ),
       body: SingleChildScrollView(
           child: Column(
         children: [
           Text(
-            "Good day, User!",
+            "Good day, ${widget.endUser.fullName}!",
             style: TextStyle(
                 fontSize: fontSize['h3'], fontFamily: poppins['regular']),
           ),

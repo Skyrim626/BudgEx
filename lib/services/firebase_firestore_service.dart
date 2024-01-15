@@ -1,3 +1,4 @@
+import 'package:budgex/model/end_users.dart';
 import 'package:budgex/services/firebase_auth_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -6,6 +7,31 @@ import 'package:intl/intl.dart';
 
 class FirebaseFirestoreService {
   final _firestoreDatabase = FirebaseFirestore.instance;
+
+  // An instance of the EndUser class to store the retrieved user data.
+  late EndUser endUser;
+
+// A method to fetch user data from Firestore based on the user's email.
+  Future<EndUser> getUserDataByEmail() async {
+    final FirebaseAuthService auth = FirebaseAuthService();
+
+    // Reference to the 'users' collection in Firestore.
+    CollectionReference users = FirebaseFirestore.instance.collection('users');
+
+    // Perform a query to get the user with the specified email
+    QuerySnapshot querySnapshot = await users
+        .where('email', isEqualTo: auth.getCurrentUser().email.toString())
+        .get();
+
+    // Get the first document (assuming there is only one user with the specified email)
+    var userData = querySnapshot.docs.first.data() as Map<String, dynamic>;
+
+    // Convert the retrieved data into an EndUser object
+    endUser = EndUser.fromMap(userData);
+
+    // Return the EndUser object containing user data
+    return endUser;
+  }
 
   // Function to add a new user to Firestore
   Future<void> addUser({
@@ -44,6 +70,8 @@ class FirebaseFirestoreService {
         // User document exists in Firestore
         Map<String, dynamic> userData = userDoc.data() as Map<String, dynamic>;
 
+        print("USER DATA");
+        print(userData);
         return userData;
       } else {
         // User document does not exist in Firestore

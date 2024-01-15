@@ -1,6 +1,7 @@
 import 'package:budgex/model/budget.dart';
 
 import 'package:budgex/model/category_model_dummy.dart';
+import 'package:budgex/model/end_users.dart';
 import 'package:budgex/services/constants.dart';
 import 'package:budgex/services/firebase_auth_service.dart';
 import 'package:budgex/widgets/customDetectorCategory.dart';
@@ -18,7 +19,9 @@ import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 
 class UserBudgeting extends StatefulWidget {
-  const UserBudgeting({super.key});
+  EndUser endUser;
+
+  UserBudgeting({super.key, required this.endUser});
 
   @override
   State<UserBudgeting> createState() => _UserBudgetingState();
@@ -163,8 +166,10 @@ class _UserBudgetingState extends State<UserBudgeting> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: customAppBar(context),
-      drawer: CustomDrawer(),
+      appBar: customAppBar(context: context, endUser: widget.endUser),
+      drawer: CustomDrawer(
+        endUser: widget.endUser,
+      ),
       bottomNavigationBar: CustomButtom(
           buttonText: "Add Expense",
           onPressed: () {

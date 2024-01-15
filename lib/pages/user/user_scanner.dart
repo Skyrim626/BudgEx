@@ -1,9 +1,12 @@
+import 'package:budgex/model/end_users.dart';
 import 'package:budgex/widgets/custom_drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
 class UserScanReceipt extends StatefulWidget {
-  const UserScanReceipt({super.key});
+  EndUser endUser;
+
+  UserScanReceipt({super.key, required this.endUser});
 
   @override
   State<UserScanReceipt> createState() => _UserScanReceiptState();
@@ -16,7 +19,9 @@ class _UserScanReceiptState extends State<UserScanReceipt> {
       appBar: AppBar(
         title: Text("Scanner Receipt"),
       ),
-      drawer: CustomDrawer(),
+      drawer: CustomDrawer(
+        endUser: widget.endUser,
+      ),
     );
   }
 }

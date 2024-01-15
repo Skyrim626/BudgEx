@@ -19,6 +19,7 @@
 */
 
 import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:budgex/model/end_users.dart';
 import 'package:budgex/pages/user/user_budgeting.dart';
 import 'package:budgex/pages/user/user_expense.dart';
 import 'package:budgex/pages/user/user_home.dart';
@@ -29,8 +30,48 @@ import 'package:budgex/services/firebase_auth_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
+List<Map<String, dynamic>> menuItems(EndUser endUser) {
+  return [
+    {
+      'iconText': 'Home',
+      'iconData': 0xe318,
+      'toPage': UserHomepage(endUser: endUser),
+    },
+    {
+      'iconText': 'Expenses',
+      'iconData': 0xe3f8,
+      'toPage': UserExpense(
+        endUser: endUser,
+      ),
+    },
+    {
+      'iconText': 'Budgeting',
+      'iconData': 0xe0b2,
+      'toPage': UserBudgeting(
+        endUser: endUser,
+      ),
+    },
+    {
+      'iconText': 'Scan Receipt',
+      'iconData': 0xe12f,
+      'toPage': UserScanReceipt(
+        endUser: endUser,
+      ),
+    },
+    {
+      'iconText': 'Settings',
+      'iconData': 0xe062,
+      'toPage': UserSettings(
+        endUser: endUser,
+      ),
+    },
+  ];
+}
+
 class CustomDrawer extends StatefulWidget {
-  const CustomDrawer({super.key});
+  EndUser endUser;
+
+  CustomDrawer({super.key, required this.endUser});
 
   @override
   State<CustomDrawer> createState() => _CustomDrawerState();
@@ -39,34 +80,6 @@ class CustomDrawer extends StatefulWidget {
 class _CustomDrawerState extends State<CustomDrawer> {
   // Create an instance of the FirebaseAuthService to manage authentication.
   final FirebaseAuthService _auth = FirebaseAuthService();
-
-  List<Map<String, dynamic>> menuItems = [
-    {
-      'iconText': 'Home',
-      'iconData': 0xe318,
-      'toPage': UserHomepage(),
-    },
-    {
-      'iconText': 'Expenses',
-      'iconData': 0xe3f8,
-      'toPage': UserExpense(),
-    },
-    {
-      'iconText': 'Budgeting',
-      'iconData': 0xe0b2,
-      'toPage': UserBudgeting(),
-    },
-    {
-      'iconText': 'Scan Receipt',
-      'iconData': 0xe12f,
-      'toPage': UserScanReceipt(),
-    },
-    {
-      'iconText': 'Settings',
-      'iconData': 0xe062,
-      'toPage': UserSettings(),
-    }
-  ];
 
   @override
   Widget build(BuildContext context) {
@@ -100,9 +113,10 @@ class _CustomDrawerState extends State<CustomDrawer> {
             // List of items with SizedBox in each Column
             Expanded(
               child: ListView.builder(
-                itemCount: menuItems.length,
+                itemCount: menuItems(widget.endUser).length,
                 itemBuilder: (BuildContext context, int index) {
-                  Map<String, dynamic> menuItem = menuItems[index];
+                  Map<String, dynamic> menuItem =
+                      menuItems(widget.endUser)[index];
                   return Column(
                     children: [
                       // A function that genrates ListTile

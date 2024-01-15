@@ -1,3 +1,4 @@
+import 'package:budgex/model/end_users.dart';
 import 'package:budgex/model/expense_entry_dummy.dart';
 import 'package:budgex/pages/user/user_budgeting.dart';
 import 'package:budgex/services/constants.dart';
@@ -5,7 +6,9 @@ import 'package:budgex/widgets/custom_button.dart';
 import 'package:flutter/material.dart';
 
 class UserCategoryExpense extends StatefulWidget {
-  const UserCategoryExpense({Key? key}) : super(key: key);
+  EndUser endUser;
+
+  UserCategoryExpense({Key? key, required this.endUser}) : super(key: key);
 
   @override
   State<UserCategoryExpense> createState() => _UserCategoryExpenseState();
@@ -34,7 +37,9 @@ class _UserCategoryExpenseState extends State<UserCategoryExpense> {
     Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => UserBudgeting(),
+          builder: (context) => UserBudgeting(
+            endUser: widget.endUser,
+          ),
         ));
   }
 

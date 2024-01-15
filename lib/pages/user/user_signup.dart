@@ -59,25 +59,10 @@ class _UserSignUpState extends State<UserSignUp> {
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
 
-  /*
-  Navigates the user to the 'User Signed Up' page upon successful form submission.
-
-  This function handles the redirection logic after the user has successfully filled 
-  out the required details and submitted the form. It should navigate to the page 
-  displaying a success message or confirmation of registration.
-*/
-  /* void toUserRegisteredPage() {
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => UserSignedUp(),
-        ));
-  } */
-
   // A function that checks the credentials
   // Checks the if the password are matched
   // User redirects to the home screen if the credentials are valid
-  Future toUserRegisteredPage() async {
+  Future<void> toUserRegisteredPage() async {
     // Validate returns true if the form is valid, or false otherwise.
     if (_formKey.currentState!.validate()) {
       // Show loading circle

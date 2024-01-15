@@ -1,4 +1,5 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:budgex/model/end_users.dart';
 import 'package:budgex/pages/user/auth_page.dart';
 /* import 'package:budgex/model/user.dart'; */
 import 'package:budgex/pages/user/user_login.dart';
@@ -11,7 +12,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class UserSettings extends StatefulWidget {
-  const UserSettings({super.key});
+  EndUser endUser;
+
+  UserSettings({super.key, required this.endUser});
 
   @override
   State<UserSettings> createState() => _UserSettingsState();
@@ -65,7 +68,7 @@ class _UserSettingsState extends State<UserSettings> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: customAppBar(context),
+      appBar: customAppBar(context: context, endUser: widget.endUser),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Center(
@@ -116,7 +119,7 @@ class _UserSettingsState extends State<UserSettings> {
 
                   // Name & Email
                   Text(
-                    "John Doe",
+                    widget.endUser.fullName,
                     style: TextStyle(
                       fontFamily: poppins['regular'],
                       letterSpacing: 3,
@@ -124,7 +127,7 @@ class _UserSettingsState extends State<UserSettings> {
                     ),
                   ),
                   Text(
-                    "johnDoe@gmail.com",
+                    widget.endUser.email,
                     style: TextStyle(
                       fontFamily: dosis['regular'],
                       fontSize: fontSize["h5"],
@@ -146,20 +149,20 @@ class _UserSettingsState extends State<UserSettings> {
                       const Divider(),
                       customListTile(
                           formatLeading: "Full Name",
-                          formatTitle: "sampleUser.getFullName",
+                          formatTitle: widget.endUser.fullName,
                           isEditIcon: true),
                       customListTile(
                           formatLeading: "Age",
-                          formatTitle: "20",
+                          formatTitle: widget.endUser.age.toString(),
                           isEditIcon: false),
                       customListTile(
                           formatLeading: "Email",
-                          formatTitle: "sampleUser.getUserEmail",
+                          formatTitle: widget.endUser.email,
                           isEditIcon: true),
-                      customListTile(
+                      /* customListTile(
                           formatLeading: "Date Birth",
                           formatTitle: "MM-DD-YYYY",
-                          isEditIcon: true),
+                          isEditIcon: true), */
                       const SizedBox(
                         height: 15,
                       ),
@@ -201,7 +204,9 @@ class _UserSettingsState extends State<UserSettings> {
           ),
         ),
       ),
-      drawer: CustomDrawer(),
+      drawer: CustomDrawer(
+        endUser: widget.endUser,
+      ),
     );
   }
 
