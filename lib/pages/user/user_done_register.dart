@@ -16,7 +16,7 @@
 
 // [Rest of the code remains unchanged]
 
-import 'package:budgex/pages/other_screens/auth_page.dart';
+import 'package:budgex/pages/user/auth_page.dart';
 import 'package:budgex/pages/user/user_login.dart';
 import 'package:budgex/services/constants.dart';
 import 'package:budgex/widgets/custom_button.dart';

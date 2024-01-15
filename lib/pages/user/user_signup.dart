@@ -37,6 +37,13 @@ class UserSignUp extends StatefulWidget {
 }
 
 class _UserSignUpState extends State<UserSignUp> {
+  // Create a global key that uniquely identifies the Form widget
+  // and allows validation of the form.
+  //
+  // Note: This is a `GlobalKey<FormState>`,
+  // not a GlobalKey<MyCustomFormState>.
+  final _formKey = GlobalKey<FormState>();
+
   // Open firestore service
   final FirebaseFirestoreService _firestoreDatabase =
       FirebaseFirestoreService();
@@ -51,20 +58,6 @@ class _UserSignUpState extends State<UserSignUp> {
   /* final _usernameController = TextEditingController(); */
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
-
-  bool _passwordText =
-      true; // Initially, set to true to obscure the text (Password TextField)
-  bool _confirmPasswordText =
-      true; // Initially, set to true to obscure the text (Confirm Password TextField)
-
-  // Function to navigate the user to the Login page.
-  void toLoginPage() {
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => UserLogin(),
-        ));
-  }
 
   /*
   Navigates the user to the 'User Signed Up' page upon successful form submission.
@@ -85,37 +78,40 @@ class _UserSignUpState extends State<UserSignUp> {
   // Checks the if the password are matched
   // User redirects to the home screen if the credentials are valid
   Future toUserRegisteredPage() async {
-    // Show loading circle
-    showDialog(
-      context: context,
-      builder: (context) {
-        return const Center(child: CircularProgressIndicator());
-      },
-    );
+    // Validate returns true if the form is valid, or false otherwise.
+    if (_formKey.currentState!.validate()) {
+      // Show loading circle
+      showDialog(
+        context: context,
+        builder: (context) {
+          return const Center(child: CircularProgressIndicator());
+        },
+      );
 
-    //authenticate user
-    if (passwordConfirmed()) {
-      // Create New User
-      _auth.createUserEmailAndPassword(
-          email: _emailController.text.trim(),
-          password: _passwordController.text.trim());
+      //authenticate user
+      if (passwordConfirmed()) {
+        // Create New User
+        _auth.createUserEmailAndPassword(
+            email: _emailController.text.trim(),
+            password: _passwordController.text.trim());
+      }
+
+      // Add user details
+      _firestoreDatabase.addUser(
+          fullName: _fullNameController.text.trim(),
+          age: int.parse(_ageController.text.trim()),
+          email: _emailController.text.trim());
+
+      // pop the loading circle
+      // ignore: use_build_context_synchronously
+      Navigator.pop(context);
+      // Redirects the user to a new page named (Registered Page)
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const UserSignedUp(),
+          ));
     }
-
-    // Add user details
-    _firestoreDatabase.addUser(
-        fullName: _fullNameController.text.trim(),
-        age: int.parse(_ageController.text.trim()),
-        email: _emailController.text.trim());
-
-    // pop the loading circle
-    // ignore: use_build_context_synchronously
-    Navigator.pop(context);
-    // Redirects the user to a new page named (Registered Page)
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => UserSignedUp(),
-        ));
   }
 
   // A function that checks if the password is matched
@@ -144,7 +140,14 @@ class _UserSignUpState extends State<UserSignUp> {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          onPressed: toLoginPage,
+          onPressed: () {
+            // Function to navigate the user to the Login page.
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const UserLogin(),
+                ));
+          },
           icon: const Icon(Icons.arrow_back),
           color: LIGHT_COLOR_5,
         ),
@@ -152,115 +155,87 @@ class _UserSignUpState extends State<UserSignUp> {
         elevation: 0,
       ),
       body: SafeArea(
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              //logo
-              Image(
-                image: AssetImage("assets/images/logo_light.png"),
-                height: 200,
-              ),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 25.0),
-                child: Column(
-                  children: [
-                    // Full name textfield
-                    CustomTextField(
+        child: Form(
+          key: _formKey,
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                //logo
+                const Image(
+                  image: AssetImage("assets/images/logo_light.png"),
+                  height: 200,
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                  child: Column(
+                    children: [
+                      // Full name textfield
+                      CustomTextField(
                         controller: _fullNameController,
                         hintText: "Enter your full name",
                         labelText: "Full Name",
-                        obscureText: false),
-                    const SizedBox(
-                      height: 10,
-                    ),
+                        obscureText: false,
+                        validatorText: "Please enter your full name",
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
 
-                    // Age textfield
-                    CustomTextField(
+                      // Age textfield
+                      CustomTextField(
                         controller: _ageController,
                         hintText: "Enter your age",
                         labelText: "Age",
-                        obscureText: false),
-                    const SizedBox(
-                      height: 10,
-                    ),
+                        obscureText: false,
+                        validatorText: "Please enter your age",
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
 
-                    // Email textfield
-                    CustomTextField(
+                      // Email textfield
+                      CustomTextField(
                         controller: _emailController,
                         hintText: "Enter your email",
                         labelText: "Email",
-                        obscureText: false),
-                    const SizedBox(
-                      height: 10,
-                    ),
-
-                    // username textfield
-                    /* TextFormField(
-                      decoration: const InputDecoration(
-                        hintText: 'Enter your username',
-                        labelText: 'Username',
+                        obscureText: false,
+                        validatorText: "Please enter your email",
                       ),
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ), */
-                    // Password textfield
-                    TextFormField(
-                      controller: _passwordController,
-                      obscureText: _passwordText,
-                      decoration: InputDecoration(
-                          hintText: 'Enter your new password',
-                          labelText: 'Password',
-                          suffixIcon: IconButton(
-                            icon: Icon(
-                              _passwordText
-                                  ? Icons.visibility
-                                  : Icons.visibility_off,
-                              color: Colors.grey,
-                            ),
-                            onPressed: () {
-                              setState(() {
-                                _passwordText = !_passwordText;
-                              });
-                            },
-                          )),
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    // Confirm Password textfield
-                    // Password textfield
-                    TextFormField(
-                      controller: _confirmPasswordController,
-                      style: TextStyle(fontFamily: poppins['regular']),
-                      obscureText: _confirmPasswordText,
-                      decoration: InputDecoration(
-                          hintText: 'Enter your confirm password',
-                          labelText: 'Password',
-                          suffixIcon: IconButton(
-                            icon: Icon(
-                              _confirmPasswordText
-                                  ? Icons.visibility
-                                  : Icons.visibility_off,
-                              color: Colors.grey,
-                            ),
-                            onPressed: () {
-                              setState(() {
-                                _confirmPasswordText = !_confirmPasswordText;
-                              });
-                            },
-                          )),
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
+                      const SizedBox(
+                        height: 10,
+                      ),
 
-                    CustomButtom(
-                        buttonText: "Sign Up", onPressed: toUserRegisteredPage),
-                  ],
-                ),
-              )
-            ],
+                      // Password textfield,
+                      CustomTextField(
+                          controller: _passwordController,
+                          hintText: "Enter your new password",
+                          labelText: "Password",
+                          obscureText: true,
+                          validatorText: "Please enter your password"),
+
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      // Confirm Password textfield
+                      CustomTextField(
+                          controller: _confirmPasswordController,
+                          hintText: "Enter your confirm password",
+                          labelText: "Confirm Password",
+                          obscureText: true,
+                          validatorText: "Please enter your confirm password"),
+
+                      const SizedBox(
+                        height: 10,
+                      ),
+
+                      CustomButtom(
+                          buttonText: "Sign Up",
+                          onPressed: toUserRegisteredPage),
+                    ],
+                  ),
+                )
+              ],
+            ),
           ),
         ),
       ),

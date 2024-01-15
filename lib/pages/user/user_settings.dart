@@ -1,5 +1,5 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
-import 'package:budgex/pages/other_screens/auth_page.dart';
+import 'package:budgex/pages/user/auth_page.dart';
 /* import 'package:budgex/model/user.dart'; */
 import 'package:budgex/pages/user/user_login.dart';
 import 'package:budgex/services/constants.dart';

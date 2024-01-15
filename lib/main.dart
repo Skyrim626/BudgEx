@@ -1,6 +1,6 @@
 import 'package:budgex/pages/user/onboarding_screen.dart';
 import 'package:budgex/pages/user/user_budgeting.dart';
-import 'package:budgex/pages/other_screens/auth_page.dart';
+import 'package:budgex/pages/user/auth_page.dart';
 import 'package:budgex/pages/user/user_category_expense.dart';
 import 'package:budgex/pages/user/user_login.dart';
 import 'package:budgex/pages/user/user_settings.dart';
@@ -44,17 +44,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: AuthPage(),
-      /* home: UserCategoryExpense(), */
-      /* home: const OnBoardingScreen(), */
-      /* home: UserBudgeting(), */
       theme: Provider.of<ThemeProvider>(context).themeData,
-      /* home: UserExpense(), */
-      /* home: UserSettings(), */
-      /* home: UserChangePassword(), */
-      /* home: UserVerifyCode(), */
-      /* theme: lightMode,
-      darkTheme: darkMode, */
-      /* home: UserSignUp(), */
     );
   }
 }

@@ -19,7 +19,7 @@
   the core features of BudgEx!
 */
 
-import 'package:budgex/pages/other_screens/intro_page.dart';
+import 'package:budgex/pages/user/intro_page.dart';
 import 'package:budgex/pages/user/user_login.dart';
 import 'package:budgex/services/constants.dart';
 import 'package:flutter/material.dart';

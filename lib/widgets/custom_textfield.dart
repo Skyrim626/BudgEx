@@ -27,30 +27,81 @@
 import 'package:budgex/services/constants.dart';
 import 'package:flutter/material.dart';
 
-class CustomTextField extends StatelessWidget {
-  final controller;
+class CustomTextField extends StatefulWidget {
+  final TextEditingController controller;
   final String hintText;
   final String labelText;
+  final String validatorText;
   final bool obscureText;
 
-  const CustomTextField(
-      {super.key,
-      required this.controller,
-      required this.hintText,
-      required this.labelText,
-      required this.obscureText});
+  const CustomTextField({
+    super.key,
+    required this.controller,
+    required this.hintText,
+    required this.labelText,
+    required this.obscureText,
+    required this.validatorText,
+  });
+
+  @override
+  State<CustomTextField> createState() => _CustomTextFieldState();
+}
+
+class _CustomTextFieldState extends State<CustomTextField> {
+  // boolean variable
+  // Initially, set to true to obscure the text
+  // for checking if the password is shown/hidden
+  bool isObscure = true;
 
   @override
   Widget build(BuildContext context) {
+    return widget.obscureText ? withFieldObscure() : withoutFieldObscure();
+  }
+
+  TextFormField withFieldObscure() {
     return TextFormField(
-      controller: controller,
-      obscureText: obscureText,
+      controller: widget.controller,
+      validator: (value) {
+        if (value == null || value.isEmpty) {
+          return widget.validatorText;
+        }
+      },
+      obscureText: isObscure,
       style: TextStyle(
         fontFamily: poppins['regular'],
       ),
       decoration: InputDecoration(
-        hintText: hintText,
-        labelText: labelText,
+        suffixIcon: IconButton(
+            onPressed: () {
+              setState(() {
+                if (isObscure) {
+                  isObscure = false;
+                } else {
+                  isObscure = true;
+                }
+              });
+            },
+            icon: Icon(isObscure ? Icons.visibility_off : Icons.visibility)),
+        hintText: widget.hintText,
+        labelText: widget.labelText,
+      ),
+    );
+  }
+
+  TextFormField withoutFieldObscure() {
+    return TextFormField(
+      validator: (value) {
+        if (value == null || value.isEmpty) {
+          return widget.validatorText;
+        }
+      },
+      controller: widget.controller,
+      style: TextStyle(
+        fontFamily: poppins['regular'],
+      ),
+      decoration: InputDecoration(
+        hintText: widget.hintText,
+        labelText: widget.labelText,
       ),
     );
   }

@@ -19,11 +19,9 @@
 */
 
 import 'package:awesome_dialog/awesome_dialog.dart';
-import 'package:budgex/pages/other_screens/auth_page.dart';
 import 'package:budgex/pages/user/user_budgeting.dart';
 import 'package:budgex/pages/user/user_expense.dart';
 import 'package:budgex/pages/user/user_home.dart';
-import 'package:budgex/pages/user/user_login.dart';
 import 'package:budgex/pages/user/user_scanner.dart';
 import 'package:budgex/pages/user/user_settings.dart';
 import 'package:budgex/services/constants.dart';
@@ -41,18 +39,6 @@ class CustomDrawer extends StatefulWidget {
 class _CustomDrawerState extends State<CustomDrawer> {
   // Create an instance of the FirebaseAuthService to manage authentication.
   final FirebaseAuthService _auth = FirebaseAuthService();
-
-  // Declare User
-  late User user;
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-
-    // Initialize User
-    user = _auth.getCurrentUser();
-  }
 
   List<Map<String, dynamic>> menuItems = [
     {

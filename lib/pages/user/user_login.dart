@@ -30,7 +30,6 @@ import 'package:budgex/services/constants.dart';
 import 'package:budgex/services/firebase_auth_service.dart';
 import 'package:budgex/widgets/custom_button.dart';
 import 'package:budgex/widgets/custom_textfield.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:flutter/material.dart';
 
@@ -42,7 +41,12 @@ class UserLogin extends StatefulWidget {
 }
 
 class _UserLoginState extends State<UserLogin> {
-  /*  bool _obscureText = true; */ // Initially, set to true to obscure the text
+  // Create a global key that uniquely identifies the Form widget
+  // and allows validation of the form.
+  //
+  // Note: This is a `GlobalKey<FormState>`,
+  // not a GlobalKey<MyCustomFormState>.
+  final _formKey = GlobalKey<FormState>();
 
   // TextField Editing Controllers
   final emailController = TextEditingController();
@@ -50,147 +54,134 @@ class _UserLoginState extends State<UserLogin> {
 
   // Function to sign in the user and redirect them to their homepage.
   void toSignUserInPage() async {
-    // Show loading circle
-    showDialog(
-      context: context,
-      builder: (context) {
-        return const Center(child: CircularProgressIndicator());
-      },
-    );
+    // Validate returns true if the form is valid, or false otherwise.
+    if (_formKey.currentState!.validate()) {
+      // Show loading circle
+      showDialog(
+        context: context,
+        builder: (context) {
+          return const Center(child: CircularProgressIndicator());
+        },
+      );
 
-    // try sign in
-    // Authentication successful, navigate to the Home screen.
-    // Open Firebase Authenticaion service
-    // NOTE: This is a User Defined Class
-    final FirebaseAuthService auth = FirebaseAuthService();
+      // try sign in
+      // Authentication successful, navigate to the Home screen.
+      // Open Firebase Authenticaion service
+      // NOTE: This is a User Defined Class
+      final FirebaseAuthService auth = FirebaseAuthService();
 
-    // Checks the credentials
-    auth
-        .signInWithEmailAndPassword(
-            email: emailController.text, password: passwordController.text)
-        .then((isSignedInSuccessfully) => {
-              if (isSignedInSuccessfully)
-                {
-                  // Sign in was Successful
-                  print("Sign In was successful!")
-                }
-              else
-                {
-                  // A dialog will be displayed if the credentials are invalid.
-                  AwesomeDialog(
-                          context: context,
-                          dialogType: DialogType.error,
-                          animType: AnimType.rightSlide,
-                          desc: 'Invalid Credentials',
-                          btnOkOnPress: () {},
-                          btnOkColor: LIGHT_COLOR_3)
-                      .show()
-                }
-            });
-    // pop the loading circle
-    // ignore: use_build_context_synchronously
-    Navigator.pop(context);
-  }
-
-  // Function to navigate the user to the Sign Up page.
-  void toSignUpUserPage() {
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => UserSignUp(),
-        ));
-  }
-
-  // Function to navigate the user to the Forgot Password page.
-  void toForgotPasswordPage() {
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => UserForgotPassword(),
-        ));
+      // Checks the credentials
+      auth
+          .signInWithEmailAndPassword(
+              email: emailController.text, password: passwordController.text)
+          .then((isSignedInSuccessfully) => {
+                // Check if the user is not signed in
+                // If not signed successfully in then the code inside the if statement will be executed
+                if (!isSignedInSuccessfully)
+                  {
+                    // A dialog will be displayed if the credentials are invalid.
+                    AwesomeDialog(
+                            context: context,
+                            dialogType: DialogType.error,
+                            animType: AnimType.rightSlide,
+                            desc: 'Invalid Credentials',
+                            btnOkOnPress: () {},
+                            btnOkColor: LIGHT_COLOR_3)
+                        .show()
+                  }
+              });
+      // pop the loading circle
+      // ignore: use_build_context_synchronously
+      Navigator.pop(context);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: Center(
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                //logo
-                Image(
-                  image: AssetImage("assets/images/logo_light.png"),
-                  height: 270,
-                ),
-                /* const SizedBox(height: 5,), */
-
-                // Welcome Text
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 25.0),
-                  child: Column(
-                    children: [
-                      Row(
-                        children: [
-                          Text(
-                            "Welcome",
-                            style: TextStyle(
-                                fontFamily: dosis["semiBold"],
-                                fontSize: fontSize["h1"],
-                                letterSpacing: 2),
-                          ),
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          Text(
-                            "Sign In",
-                            style: TextStyle(
-                                fontFamily: dosis["regular"],
-                                fontSize: fontSize['h4'],
-                                color: LIGHT_COLOR_2),
-                          ),
-                        ],
-                      ),
-
-                      const SizedBox(
-                        height: 5,
-                      ),
-
-                      // Email TextField
-                      CustomTextField(
-                        controller: emailController,
-                        hintText: 'Enter your email',
-                        labelText: 'Email',
-                        obscureText: false,
-                      ),
-
-                      const SizedBox(
-                        height: 10,
-                      ),
-
-                      // Password textfield
-                      CustomTextField(
-                        controller: passwordController,
-                        hintText: 'Enter your password',
-                        labelText: 'Password',
-                        obscureText: true,
-                      ),
-
-                      const SizedBox(
-                        height: 15,
-                      ),
-
-                      CustomButtom(
-                          buttonText: "Sign In", onPressed: toSignUserInPage),
-                      const SizedBox(
-                        height: 15,
-                      ),
-                      bottomLinks()
-                    ],
+        child: Form(
+          key: _formKey,
+          child: Center(
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  //logo
+                  const Image(
+                    image: AssetImage("assets/images/logo_light.png"),
+                    height: 270,
                   ),
-                ),
-              ],
+
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                    child: Column(
+                      children: [
+                        Row(
+                          children: [
+                            Text(
+                              "Welcome",
+                              style: TextStyle(
+                                  fontFamily: dosis["semiBold"],
+                                  fontSize: fontSize["h1"],
+                                  letterSpacing: 2),
+                            ),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            Text(
+                              "Sign In",
+                              style: TextStyle(
+                                  fontFamily: dosis["regular"],
+                                  fontSize: fontSize['h4'],
+                                  color: LIGHT_COLOR_2),
+                            ),
+                          ],
+                        ),
+
+                        const SizedBox(
+                          height: 5,
+                        ),
+
+                        // Email TextField
+                        CustomTextField(
+                          controller: emailController,
+                          hintText: 'Enter your email',
+                          labelText: 'Email',
+                          obscureText: false,
+                          validatorText: 'Please Enter your Email',
+                        ),
+
+                        const SizedBox(
+                          height: 10,
+                        ),
+
+                        // Password textfield
+                        CustomTextField(
+                          controller: passwordController,
+                          hintText: 'Enter your password',
+                          labelText: 'Password',
+                          obscureText: true,
+                          validatorText: 'Please Enter your Password',
+                        ),
+
+                        const SizedBox(
+                          height: 15,
+                        ),
+
+                        CustomButtom(
+                            buttonText: "Sign In", onPressed: toSignUserInPage),
+                        const SizedBox(
+                          height: 15,
+                        ),
+
+                        // Creates a widget group for links at the bottom of the Login Page
+                        bottomLinks()
+                      ],
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ),
@@ -199,20 +190,33 @@ class _UserLoginState extends State<UserLogin> {
   }
 
   // Widgets for "Forgot Password?" and "Sign Up?" links
-
   Row bottomLinks() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         TextButton(
-            onPressed: toForgotPasswordPage,
+            onPressed: () {
+              // Function to navigate the user to the Forgot Password page.
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const UserForgotPassword(),
+                  ));
+            },
             child: Text(
               "Forgot Password?",
               style: TextStyle(
                   color: Colors.black, fontFamily: poppins['regular']),
             )),
         TextButton(
-            onPressed: toSignUpUserPage,
+            onPressed: () {
+              // Function to navigate the user to the Sign Up page.
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const UserSignUp(),
+                  ));
+            },
             child: Text(
               "Sign Up?",
               style: TextStyle(
