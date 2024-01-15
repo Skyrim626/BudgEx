@@ -2,6 +2,7 @@ import 'package:budgex/services/firebase_auth_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
+import 'package:intl/intl.dart';
 
 class FirebaseFirestoreService {
   final _firestoreDatabase = FirebaseFirestore.instance;
@@ -12,11 +13,17 @@ class FirebaseFirestoreService {
     required int age, // Age of the user
     required String email, // Email address of the user
   }) async {
+    DateTime dateTime = DateTime(2024, 1, 31, 14, 17, 3);
+
+    String formattedDate =
+        DateFormat('d MMMM y "at" HH:mm:ss "UTC"Z').format(dateTime);
+
     // Using the Firestore database instance to access the "users" collection
     await _firestoreDatabase.collection("users").add({
-      'full_name': fullName, // Storing user's full name in the document
+      'fullName': fullName, // Storing user's full name in the document
       'age': age, // Storing user's age in the document
-      'email': email, // Storing user's email in the document
+      'email': email,
+      'dateRegistered': formattedDate, // Storing user's email in the document
     }).then((DocumentReference doc) =>
         // After the document is successfully added, print a message with the document ID
         {print('DocumentSnapshot added with ID: ${doc.id}')});

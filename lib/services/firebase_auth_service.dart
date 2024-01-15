@@ -74,6 +74,12 @@ class FirebaseAuthService {
     }
   }
 
+  /**
+   * 
+   * Creates a  new account for the new user
+   * Creates a new email and password for authentication
+   * 
+   */
   Future<void> createUserEmailAndPassword(
       {required String email, required String password}) async {
     await _auth.createUserWithEmailAndPassword(
