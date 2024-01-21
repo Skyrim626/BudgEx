@@ -20,58 +20,52 @@
 
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:budgex/model/end_users.dart';
-import 'package:budgex/pages/user/user_budgeting.dart';
-import 'package:budgex/pages/user/user_expense.dart';
-import 'package:budgex/pages/user/user_home.dart';
-import 'package:budgex/pages/user/user_scanner.dart';
-import 'package:budgex/pages/user/user_settings.dart';
-import 'package:budgex/services/constants.dart';
+import 'package:budgex/pages/home/user_budgeting.dart';
+import 'package:budgex/pages/home/user_expense.dart';
+import 'package:budgex/pages/home/user_scanner.dart';
+import 'package:budgex/pages/home/user_settings.dart';
+import 'package:budgex/pages/home/user_budgeting.dart';
+import 'package:budgex/pages/home/user_expense.dart';
+import 'package:budgex/pages/home/user_home.dart';
+import 'package:budgex/pages/home/user_scanner.dart';
+import 'package:budgex/pages/home/user_settings.dart';
+import 'package:budgex/pages/constants/constants.dart';
 import 'package:budgex/services/firebase_auth_service.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-List<Map<String, dynamic>> menuItems(EndUser endUser) {
+List<Map<String, dynamic>> menuItems() {
   return [
     {
       'iconText': 'Home',
       'iconData': 0xe318,
-      'toPage': UserHomepage(endUser: endUser),
+      'toPage': UserHomepage(),
     },
     {
       'iconText': 'Expenses',
       'iconData': 0xe3f8,
-      'toPage': UserExpense(
-        endUser: endUser,
-      ),
+      'toPage': UserExpense(),
     },
     {
       'iconText': 'Budgeting',
       'iconData': 0xe0b2,
-      'toPage': UserBudgeting(
-        endUser: endUser,
-      ),
+      'toPage': UserBudgeting(),
     },
     {
       'iconText': 'Scan Receipt',
       'iconData': 0xe12f,
-      'toPage': UserScanReceipt(
-        endUser: endUser,
-      ),
+      'toPage': UserScanReceipt(),
     },
     {
       'iconText': 'Settings',
       'iconData': 0xe062,
-      'toPage': UserSettings(
-        endUser: endUser,
-      ),
+      'toPage': UserSettings(),
     },
   ];
 }
 
+// ignore: must_be_immutable
 class CustomDrawer extends StatefulWidget {
-  EndUser endUser;
-
-  CustomDrawer({super.key, required this.endUser});
+  const CustomDrawer({super.key});
 
   @override
   State<CustomDrawer> createState() => _CustomDrawerState();
@@ -113,10 +107,9 @@ class _CustomDrawerState extends State<CustomDrawer> {
             // List of items with SizedBox in each Column
             Expanded(
               child: ListView.builder(
-                itemCount: menuItems(widget.endUser).length,
+                itemCount: menuItems().length,
                 itemBuilder: (BuildContext context, int index) {
-                  Map<String, dynamic> menuItem =
-                      menuItems(widget.endUser)[index];
+                  Map<String, dynamic> menuItem = menuItems()[index];
                   return Column(
                     children: [
                       // A function that genrates ListTile

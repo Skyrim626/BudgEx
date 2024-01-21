@@ -26,7 +26,7 @@
   Fantastic job on creating an aesthetically pleasing and informative introductory page!
 */
 
-import 'package:budgex/services/constants.dart';
+import 'package:budgex/pages/constants/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 

@@ -1,9 +1,5 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
-import 'package:budgex/model/end_users.dart';
-import 'package:budgex/pages/user/auth_page.dart';
-/* import 'package:budgex/model/user.dart'; */
-import 'package:budgex/pages/user/user_login.dart';
-import 'package:budgex/services/constants.dart';
+import 'package:budgex/pages/constants/constants.dart';
 import 'package:budgex/services/firebase_auth_service.dart';
 import 'package:budgex/widgets/custom_appbar.dart';
 import 'package:budgex/widgets/custom_button.dart';
@@ -11,10 +7,9 @@ import 'package:budgex/widgets/custom_drawer.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
+// ignore: must_be_immutable
 class UserSettings extends StatefulWidget {
-  EndUser endUser;
-
-  UserSettings({super.key, required this.endUser});
+  UserSettings({super.key});
 
   @override
   State<UserSettings> createState() => _UserSettingsState();
@@ -22,25 +17,10 @@ class UserSettings extends StatefulWidget {
 
 class _UserSettingsState extends State<UserSettings> {
   // Create an instance of the FirebaseAuthService to manage authentication.
-  final FirebaseAuthService _auth = FirebaseAuthService();
-
-  // Declare User
-  late User user;
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-
-    // Initialize User
-    user = _auth.getCurrentUser();
-  }
-
-  // User instance
-  /* User sampleUser = User(); */
+  final FirebaseAuthService _authService = FirebaseAuthService();
 
   // Function to navigate the user to the Login page.
-  void toLoginPage() {
+  void logOut() {
     AwesomeDialog(
       context: context,
       btnOkColor: LIGHT_COLOR_3,
@@ -48,19 +28,8 @@ class _UserSettingsState extends State<UserSettings> {
       animType: AnimType.rightSlide,
       desc: 'Are You Sure You Want to Log Out?',
       btnCancelOnPress: () {},
-      btnOkOnPress: () {
-        _auth.signOut().then((res) {
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (context) => AuthPage()),
-          );
-        });
-
-        /*  Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => UserLogin(),
-            )); */
+      btnOkOnPress: () async {
+        await _authService.signOut();
       },
     ).show();
   }
@@ -68,7 +37,7 @@ class _UserSettingsState extends State<UserSettings> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: customAppBar(context: context, endUser: widget.endUser),
+      appBar: customAppBar(context: context),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Center(
@@ -119,7 +88,7 @@ class _UserSettingsState extends State<UserSettings> {
 
                   // Name & Email
                   Text(
-                    widget.endUser.fullName,
+                    "",
                     style: TextStyle(
                       fontFamily: poppins['regular'],
                       letterSpacing: 3,
@@ -127,7 +96,7 @@ class _UserSettingsState extends State<UserSettings> {
                     ),
                   ),
                   Text(
-                    widget.endUser.email,
+                    "",
                     style: TextStyle(
                       fontFamily: dosis['regular'],
                       fontSize: fontSize["h5"],
@@ -149,20 +118,17 @@ class _UserSettingsState extends State<UserSettings> {
                       const Divider(),
                       customListTile(
                           formatLeading: "Full Name",
-                          formatTitle: widget.endUser.fullName,
+                          formatTitle: "",
                           isEditIcon: true),
                       customListTile(
                           formatLeading: "Age",
-                          formatTitle: widget.endUser.age.toString(),
+                          formatTitle: "",
                           isEditIcon: false),
                       customListTile(
                           formatLeading: "Email",
-                          formatTitle: widget.endUser.email,
+                          formatTitle: "",
                           isEditIcon: true),
-                      /* customListTile(
-                          formatLeading: "Date Birth",
-                          formatTitle: "MM-DD-YYYY",
-                          isEditIcon: true), */
+
                       const SizedBox(
                         height: 15,
                       ),
@@ -192,7 +158,12 @@ class _UserSettingsState extends State<UserSettings> {
                       // Sign Out
                       Center(
                           child: CustomButtom(
-                              buttonText: "Sign Out", onPressed: toLoginPage)),
+                              buttonText: "Sign Out",
+                              onPressed: () async {
+                                /* logOut(); */
+                                print("Logged Out");
+                                await _authService.signOut();
+                              })),
                       const SizedBox(
                         height: 15,
                       ),
@@ -204,9 +175,7 @@ class _UserSettingsState extends State<UserSettings> {
           ),
         ),
       ),
-      drawer: CustomDrawer(
-        endUser: widget.endUser,
-      ),
+      drawer: CustomDrawer(),
     );
   }
 

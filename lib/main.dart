@@ -1,20 +1,11 @@
-import 'package:budgex/pages/user/onboarding_screen.dart';
-import 'package:budgex/pages/user/user_budgeting.dart';
-import 'package:budgex/pages/user/auth_page.dart';
-import 'package:budgex/pages/user/user_category_expense.dart';
-import 'package:budgex/pages/user/user_login.dart';
-import 'package:budgex/pages/user/user_settings.dart';
+import 'package:budgex/model/userModel.dart';
+import 'package:budgex/services/firebase_auth_service.dart';
 import 'package:budgex/services/theme_provider.dart';
+import 'package:budgex/wrapper.dart';
 import 'package:flutter/material.dart';
-import 'package:hive_flutter/adapters.dart';
 import 'package:provider/provider.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
-
-/*  import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'firebase_options.dart';  */
 
 void main() async {
   // Purpose is to access native code
@@ -23,28 +14,27 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-
-  // Initialize Hive
-  /* await Hive.initFlutter(); */
-
-  // Open the Box (Local Database is placed in the phone)
-  /* var expenseStorage = await Hive.openBox('expenseStorage'); */
-
   runApp(ChangeNotifierProvider(
     create: ((context) => ThemeProvider()),
-    child: const MyApp(),
+    child: MyApp(),
   ));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  MyApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: AuthPage(),
-      theme: Provider.of<ThemeProvider>(context).themeData,
+    return StreamProvider<UserModel?>.value(
+      value: FirebaseAuthService().user,
+      initialData: null,
+      builder: (context, snapshot) {
+        return MaterialApp(
+          home: Wrapper(),
+          debugShowCheckedModeBanner: false,
+          theme: Provider.of<ThemeProvider>(context).themeData,
+        );
+      },
     );
   }
 }

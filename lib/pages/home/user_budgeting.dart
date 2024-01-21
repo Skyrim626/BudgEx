@@ -1,8 +1,5 @@
-import 'package:budgex/model/budget.dart';
-
 import 'package:budgex/model/category_model_dummy.dart';
-import 'package:budgex/model/end_users.dart';
-import 'package:budgex/services/constants.dart';
+import 'package:budgex/pages/constants/constants.dart';
 import 'package:budgex/services/firebase_auth_service.dart';
 import 'package:budgex/widgets/customDetectorCategory.dart';
 import 'package:budgex/widgets/custom_appbar.dart';
@@ -12,16 +9,12 @@ import 'package:budgex/widgets/custom_drawer.dart';
 import 'package:budgex/widgets/custom_dropdown_button.dart';
 import 'package:budgex/widgets/custom_textfield.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-/* import 'package:budgex/widgets/pie_chart.dart'; */
-import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 
+// ignore: must_be_immutable
 class UserBudgeting extends StatefulWidget {
-  EndUser endUser;
-
-  UserBudgeting({super.key, required this.endUser});
+  UserBudgeting({super.key});
 
   @override
   State<UserBudgeting> createState() => _UserBudgetingState();
@@ -42,10 +35,6 @@ class _UserBudgetingState extends State<UserBudgeting> {
     // Initialize User
     user = _auth.getCurrentUser();
   }
-
-  // Budget Instance
-  /* Budget sampleBudget = Budget(totalBudget: 10000); */
-  Budget sampleBudget = Budget(budget: 10000);
 
   // Controllers
   TextEditingController amountController = TextEditingController();
@@ -166,10 +155,8 @@ class _UserBudgetingState extends State<UserBudgeting> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: customAppBar(context: context, endUser: widget.endUser),
-      drawer: CustomDrawer(
-        endUser: widget.endUser,
-      ),
+      appBar: customAppBar(context: context),
+      drawer: CustomDrawer(),
       bottomNavigationBar: CustomButtom(
           buttonText: "Add Expense",
           onPressed: () {
@@ -219,13 +206,20 @@ class _UserBudgetingState extends State<UserBudgeting> {
                       height: 10,
                     ),
                     ...dummyCategories
-                        .map((category) => CustomCategoryDetector(
-                              categoryName: category["categoryName"],
-                              leftLimit: category["leftLimit"],
-                              expenses: category["expenses"],
-                              categoryIconData: category["categoryIconData"],
+                        .asMap()
+                        .map((index, category) => MapEntry(
+                              index,
+                              CustomCategoryDetector(
+                                categoryName: category["categoryName"],
+                                leftLimit: category["leftLimit"],
+                                expenses: category["expenses"],
+                                categoryIconData: category["categoryIconData"],
+                                // Other properties...
+                                test: index, // You can now access the index
+                              ),
                             ))
-                        .toList(),
+                        .values
+                        .toList()
                   ],
                 )
               ],
@@ -236,20 +230,28 @@ class _UserBudgetingState extends State<UserBudgeting> {
     );
   }
 
+  // Builds and returns a Row widget representing the first row of a date range display.
   Row firstRow() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
+        // IconButton for navigating to the previous date range
         IconButton(
           onPressed: () {},
           icon: const Icon(Icons.chevron_left_outlined),
           iconSize: 30,
         ),
+
+        // Text widget displaying the current date range
         Text(
           "Oct 29 - Nov 04, 2023",
           style: TextStyle(
-              fontFamily: dosis['semiBold'], fontSize: fontSize['h3']),
+            fontFamily: dosis['semiBold'],
+            fontSize: fontSize['h3'],
+          ),
         ),
+
+        // IconButton for navigating to the next date range
         IconButton(
           onPressed: () {},
           icon: const Icon(Icons.chevron_right_outlined),

@@ -17,13 +17,13 @@
 
 */
 
-import 'package:budgex/model/end_users.dart';
-import 'package:budgex/pages/user/user_settings.dart';
+import 'package:budgex/pages/home/user_settings.dart';
+
 import 'package:budgex/services/theme_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-AppBar customAppBar({required BuildContext context, required EndUser endUser}) {
+AppBar customAppBar({required BuildContext context}) {
   /* const IconData _iconLight = Icons.sunny;
   const IconData _iconDark = Icons.nights_stay; */
 
@@ -59,9 +59,7 @@ AppBar customAppBar({required BuildContext context, required EndUser endUser}) {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => UserSettings(
-                        endUser: endUser,
-                      ),
+                      builder: (context) => UserSettings(),
                     ));
               },
               icon: Container(

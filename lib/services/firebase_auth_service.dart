@@ -1,38 +1,84 @@
+import 'package:budgex/model/userModel.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 
 class FirebaseAuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  /// Attempts to sign in a user with the provided email and password.
-  ///
-  /// If the sign-in is successful, the function returns `true`.
-  /// If there's an error during the sign-in, the function prints the error
-  /// message and returns `false`.
-  ///
-  /// Parameters:
-  ///   - [email]: The email address of the user.
-  ///   - [password]: The password of the user.
-  ///
-  /// Returns:
-  ///   - A [Future<bool>] representing the success or failure of the sign-in.
-  Future<bool> signInWithEmailAndPassword({
-    required String email,
-    required String password,
-  }) async {
-    try {
-      // Attempt to sign in with the provided email and password
-      await _auth.signInWithEmailAndPassword(email: email, password: password);
-      // If sign-in is successful, return true
-      return true;
-    } on FirebaseAuthException catch (e) {
-      // If there's an error during sign-in, print the error message
-      if (kDebugMode) {
-        print(e);
-      }
+  // Creates an userModel object based on Firebase User Object
+  UserModel? _userModelFromFirebase(User? user) {
+    if (user != null) {
+      return UserModel(uid: user.uid);
+    } else {
+      return null;
+    }
+  }
 
-      // Return false to indicate sign-in failure
-      return false;
+  // Method for Sign in anonymously, it's an asynchronous task, it's going to return a future
+  Future<UserModel?> signInAnon() async {
+    try {
+      UserCredential result = await _auth.signInAnonymously();
+      User? user = result.user;
+
+      return _userModelFromFirebase(user);
+    } catch (e) {
+      print(e.toString());
+      return null;
+    }
+  }
+
+  // Method for Auth change user stream
+  Stream<UserModel?> get user {
+    return _auth.authStateChanges().map(_userModelFromFirebase);
+  }
+
+  // Method for register with email and password
+  Future registerWithEmailAndPassword(String email, String password) async {
+    try {
+      UserCredential result = await _auth.createUserWithEmailAndPassword(
+          email: email, password: password);
+
+      // TESTING PURPOSES ONLY
+      // Fetch the user data
+      User? user = result.user;
+
+      print("---------------METHOD AREA---------------");
+      print("registerWithEmailAndPassword output");
+      print(user);
+      print("-----------------------------------------");
+      return user;
+    } catch (e) {
+      print("---------------METHOD ERROR AREA---------------");
+      print("registerWithEmailAndPassword output");
+      print("-----------------------------------------");
+
+      print(e.toString());
+      return null;
+    }
+  }
+
+  // Method for Signing Out
+  Future signUserOut() async {
+    try {
+      return await _auth.signOut();
+    } catch (e) {
+      print("Sign Out Method Error:");
+      print(e.toString());
+      return null;
+    }
+  }
+
+  // Sign in with email & password
+  Future signIn({required String email, required String password}) async {
+    try {
+      UserCredential result = await _auth.signInWithEmailAndPassword(
+          email: email, password: password);
+      User? user = result.user;
+      return _userModelFromFirebase(
+          user); // Changes User to to a UserModel Object for OOP
+    } catch (e) {
+      print(e.toString());
+      return null;
     }
   }
 
@@ -43,9 +89,14 @@ class FirebaseAuthService {
   ///
   /// Returns:
   ///   - A [Future<void>] representing the completion of the sign-out process.
-  Future<void> signOut() async {
+  Future signOut() async {
     // Call the Firebase authentication service to sign out the user
-    await _auth.signOut();
+    try {
+      return await _auth.signOut();
+    } catch (e) {
+      print(e.toString());
+      return null;
+    }
   }
 
   /* Future<bool> isUserLoggedIn() async {
@@ -68,18 +119,14 @@ class FirebaseAuthService {
 
       // Password reset email sent successfully
       return true;
-    } on FirebaseAuthException catch (e) {
+    } on FirebaseAuthException {
       // An error occurred during password reset
       return false;
     }
   }
 
-  /**
-   * 
-   * Creates a  new account for the new user
-   * Creates a new email and password for authentication
-   * 
-   */
+  /// Creates a  new account for the new user
+  /// Creates a new email and password for authentication
   Future<void> createUserEmailAndPassword(
       {required String email, required String password}) async {
     await _auth.createUserWithEmailAndPassword(
@@ -92,5 +139,11 @@ class FirebaseAuthService {
   /// such as when a user signs in or signs out. It emits [User] objects
   /// representing the current authenticated user or `null` if no user is
   /// authenticated.
-  Stream<User?> get authStateChanges => _auth.authStateChanges();
+  // auth change user stream
+  Stream<UserModel?> get onAuthStateChanged {
+    return _auth
+        .authStateChanges()
+        //.map((User? user) => _userModelFromFirebase(user));
+        .map(_userModelFromFirebase);
+  }
 }

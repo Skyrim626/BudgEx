@@ -24,7 +24,7 @@
   Excellent work on creating a reusable and configurable text input field component!
 */
 
-import 'package:budgex/services/constants.dart';
+import 'package:budgex/pages/constants/constants.dart';
 import 'package:flutter/material.dart';
 
 class CustomTextField extends StatefulWidget {
@@ -65,6 +65,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
         if (value == null || value.isEmpty) {
           return widget.validatorText;
         }
+        return null;
       },
       obscureText: isObscure,
       style: TextStyle(
@@ -94,6 +95,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
         if (value == null || value.isEmpty) {
           return widget.validatorText;
         }
+        return null;
       },
       controller: widget.controller,
       style: TextStyle(

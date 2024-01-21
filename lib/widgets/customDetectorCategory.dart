@@ -1,7 +1,7 @@
-import 'package:budgex/services/constants.dart';
-import 'package:flutter/material.dart';
+// ignore_for_file: must_be_immutable
 
-// ignore: must_be_immutable
+import 'package:budgex/pages/constants/constants.dart';
+import 'package:flutter/material.dart';
 
 /// Generates a styled container representing a budget category with customizable details.
 /// The container includes rounded corners, a background color based on the app theme,
@@ -14,12 +14,17 @@ class CustomCategoryDetector extends StatefulWidget {
   double leftLimit;
   double expenses;
 
+  // This is for testing only
+  // Purpose: Creates a screen that provides: category name, expense, left limit, and test
+  final int test;
+
   CustomCategoryDetector(
       {super.key,
       required this.categoryName,
       required this.categoryIconData,
       required this.expenses,
-      required this.leftLimit});
+      required this.leftLimit,
+      required this.test});
 
   @override
   State<CustomCategoryDetector> createState() => _CustomCategoryDetectorState();
@@ -30,7 +35,8 @@ class _CustomCategoryDetectorState extends State<CustomCategoryDetector> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        print("Test");
+        // Prints the index
+        print("Index: ${widget.test}");
       },
       child: Container(
         padding: const EdgeInsets.only(left: 20, right: 20),

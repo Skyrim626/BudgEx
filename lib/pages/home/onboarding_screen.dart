@@ -19,14 +19,16 @@
   the core features of BudgEx!
 */
 
-import 'package:budgex/pages/user/intro_page.dart';
-import 'package:budgex/pages/user/user_login.dart';
-import 'package:budgex/services/constants.dart';
+import 'package:budgex/pages/home/intro_page.dart';
+import 'package:budgex/pages/authenticate/user_login.dart';
+import 'package:budgex/pages/constants/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class OnBoardingScreen extends StatefulWidget {
-  const OnBoardingScreen({super.key});
+  final Function toggleView;
+
+  const OnBoardingScreen({super.key, required this.toggleView});
 
   @override
   State<OnBoardingScreen> createState() => _OnBoardingScreenState();
@@ -44,7 +46,9 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
     Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => const UserLogin(),
+          builder: (context) => UserLogin(
+            toggleView: widget.toggleView,
+          ),
         ));
   }
 

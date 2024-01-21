@@ -1,9 +1,7 @@
-import 'package:budgex/services/constants.dart';
+import 'package:budgex/pages/constants/constants.dart';
 import 'package:fl_chart/fl_chart.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:hive_flutter/adapters.dart';
 
 class CustomCircleChart extends StatefulWidget {
   CustomCircleChart({super.key});

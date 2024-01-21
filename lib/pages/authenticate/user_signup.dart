@@ -20,17 +20,21 @@
 
 // [Rest of the code remains unchanged]
 
-import 'package:budgex/pages/user/user_done_register.dart';
-import 'package:budgex/pages/user/user_login.dart';
-import 'package:budgex/services/constants.dart';
+import 'package:budgex/pages/authenticate/user_login.dart';
+import 'package:budgex/pages/constants/constants.dart';
 import 'package:budgex/services/firebase_auth_service.dart';
 import 'package:budgex/services/firebase_firestore_service.dart';
 import 'package:budgex/widgets/custom_button.dart';
 import 'package:budgex/widgets/custom_textfield.dart';
+import 'package:budgex/wrapper.dart';
 import 'package:flutter/material.dart';
 
 class UserSignUp extends StatefulWidget {
-  const UserSignUp({super.key});
+  // Declaring variable of function type
+  // Variable will be assigned to the button widget for toggling functionality
+  final Function toggleView;
+
+  UserSignUp({super.key, required this.toggleView});
 
   @override
   State<UserSignUp> createState() => _UserSignUpState();
@@ -51,28 +55,22 @@ class _UserSignUpState extends State<UserSignUp> {
   // Open firebase authentication service
   final FirebaseAuthService _auth = FirebaseAuthService();
 
-  // Text Editing Controller
+  // Text Editing Controllers
   final _fullNameController = TextEditingController();
   final _ageController = TextEditingController();
   final _emailController = TextEditingController();
-  /* final _usernameController = TextEditingController(); */
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
+
+  // Loading Screen Checker
+  bool isLoading = false;
 
   // A function that checks the credentials
   // Checks the if the password are matched
   // User redirects to the home screen if the credentials are valid
-  Future<void> toUserRegisteredPage() async {
+  /* Future<void> toUserRegisteredPage() async {
     // Validate returns true if the form is valid, or false otherwise.
     if (_formKey.currentState!.validate()) {
-      // Show loading circle
-      showDialog(
-        context: context,
-        builder: (context) {
-          return const Center(child: CircularProgressIndicator());
-        },
-      );
-
       //authenticate user
       if (passwordConfirmed()) {
         // Create New User
@@ -86,18 +84,15 @@ class _UserSignUpState extends State<UserSignUp> {
           fullName: _fullNameController.text.trim(),
           age: int.parse(_ageController.text.trim()),
           email: _emailController.text.trim());
+      print("Added");
 
-      // pop the loading circle
-      // ignore: use_build_context_synchronously
-      Navigator.pop(context);
-      // Redirects the user to a new page named (Registered Page)
       Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => const UserSignedUp(),
+            builder: (context) => Wrapper(),
           ));
     }
-  }
+  } */
 
   // A function that checks if the password is matched
   bool passwordConfirmed() {
@@ -126,12 +121,8 @@ class _UserSignUpState extends State<UserSignUp> {
       appBar: AppBar(
         leading: IconButton(
           onPressed: () {
-            // Function to navigate the user to the Login page.
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const UserLogin(),
-                ));
+            // A method toggleView is used for switching screen
+            widget.toggleView();
           },
           icon: const Icon(Icons.arrow_back),
           color: LIGHT_COLOR_5,
@@ -215,7 +206,30 @@ class _UserSignUpState extends State<UserSignUp> {
 
                       CustomButtom(
                           buttonText: "Sign Up",
-                          onPressed: toUserRegisteredPage),
+                          onPressed: () async {
+                            // Conditional Statement
+                            // This will evaluate into true or false
+                            // It used for form validation
+                            // If validation is false, then the form is invalid
+                            // Form that is true will be registered
+                            if (_formKey.currentState!.validate()) {
+                              // Loads a Loading Screen
+                              setState(() => isLoading = true);
+                              // 2 TYPES OF DATA TYPE will be returned
+                              // Either null or object type
+                              dynamic result =
+                                  await _auth.registerWithEmailAndPassword(
+                                      _emailController.text,
+                                      _passwordController.text);
+
+                              if (result == null) {
+                                setState(() {
+                                  print('Could not sign up with credentials');
+                                  isLoading = false;
+                                });
+                              }
+                            }
+                          }),
                     ],
                   ),
                 )

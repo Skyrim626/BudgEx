@@ -1,14 +1,13 @@
 import 'package:budgex/model/end_users.dart';
 import 'package:budgex/model/expense_entry_dummy.dart';
-import 'package:budgex/services/constants.dart';
+import 'package:budgex/pages/constants/constants.dart';
 import 'package:budgex/widgets/custom_appbar.dart';
 import 'package:budgex/widgets/custom_drawer.dart';
 import 'package:flutter/material.dart';
 
+// ignore: must_be_immutable
 class UserExpense extends StatefulWidget {
-  EndUser endUser;
-
-  UserExpense({super.key, required this.endUser});
+  UserExpense({super.key});
 
   @override
   State<UserExpense> createState() => _UserExpenseState();
@@ -22,10 +21,8 @@ class _UserExpenseState extends State<UserExpense> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: customAppBar(context: context, endUser: widget.endUser),
-      drawer: CustomDrawer(
-        endUser: widget.endUser,
-      ),
+      appBar: customAppBar(context: context),
+      drawer: CustomDrawer(),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10.0),
