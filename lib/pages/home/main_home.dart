@@ -1,10 +1,8 @@
 import 'package:budgex/model/category_model_dummy.dart';
-import 'package:budgex/model/userBudgetModel.dart';
 import 'package:budgex/model/userModel.dart';
 import 'package:budgex/pages/constants/constants.dart';
 import 'package:budgex/services/firebase_auth_service.dart';
 import 'package:budgex/widgets/customDetectorCategory.dart';
-import 'package:budgex/widgets/custom_button.dart';
 import 'package:budgex/widgets/custom_circle_chart.dart';
 import 'package:budgex/widgets/custom_drawer.dart';
 import 'package:flutter/material.dart';
@@ -70,10 +68,6 @@ class _HomeFeatureState extends State<HomeFeature> {
 
           const SizedBox(
             height: 15,
-          ),
-          CustomButtom(buttonText: "Add Expense", onPressed: () {}),
-          const SizedBox(
-            height: 10,
           ),
           CustomCircleChart(),
           const SizedBox(

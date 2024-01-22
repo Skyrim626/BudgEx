@@ -1,5 +1,6 @@
 import 'package:budgex/model/category_model_dummy.dart';
 import 'package:budgex/pages/constants/constants.dart';
+import 'package:budgex/pages/home/user_scannerMain.dart';
 import 'package:budgex/services/firebase_auth_service.dart';
 import 'package:budgex/widgets/customDetectorCategory.dart';
 import 'package:budgex/widgets/custom_appbar.dart';
@@ -84,7 +85,10 @@ class _UserBudgetingState extends State<UserBudgeting> {
                             height: 20,
                           ),
                           CustomButtom(
-                              buttonText: "Scan Receipt", onPressed: () {}),
+                              buttonText: "Scan Receipt", onPressed: () {
+                                Navigator.push(context, MaterialPageRoute(
+                                    builder: (context) => const MainScanner()));
+                          }),
                           const SizedBox(
                             height: 30,
                           ),
