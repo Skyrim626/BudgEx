@@ -19,16 +19,12 @@
 */
 
 import 'package:awesome_dialog/awesome_dialog.dart';
-import 'package:budgex/model/end_users.dart';
-import 'package:budgex/pages/home/user_budgeting.dart';
-import 'package:budgex/pages/home/user_expense.dart';
-import 'package:budgex/pages/home/user_scanner.dart';
-import 'package:budgex/pages/home/user_settings.dart';
 import 'package:budgex/pages/home/user_budgeting.dart';
 import 'package:budgex/pages/home/user_expense.dart';
 import 'package:budgex/pages/home/user_home.dart';
 import 'package:budgex/pages/home/user_scanner.dart';
 import 'package:budgex/pages/home/user_settings.dart';
+
 import 'package:budgex/pages/constants/constants.dart';
 import 'package:budgex/services/firebase_auth_service.dart';
 import 'package:flutter/material.dart';

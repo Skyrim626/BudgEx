@@ -1,6 +1,7 @@
 import 'package:budgex/model/userModel.dart';
 import 'package:budgex/pages/authenticate/authenticate.dart';
 import 'package:budgex/pages/home/user_home.dart';
+
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 

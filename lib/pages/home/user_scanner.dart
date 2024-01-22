@@ -1,4 +1,3 @@
-import 'package:budgex/model/end_users.dart';
 import 'package:budgex/widgets/custom_drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';

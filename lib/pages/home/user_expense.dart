@@ -1,4 +1,3 @@
-import 'package:budgex/model/end_users.dart';
 import 'package:budgex/model/expense_entry_dummy.dart';
 import 'package:budgex/pages/constants/constants.dart';
 import 'package:budgex/widgets/custom_appbar.dart';

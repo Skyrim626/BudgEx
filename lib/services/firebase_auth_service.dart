@@ -1,4 +1,6 @@
 import 'package:budgex/model/userModel.dart';
+import 'package:budgex/services/firebase_firestore_service.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 
@@ -33,7 +35,8 @@ class FirebaseAuthService {
   }
 
   // Method for register with email and password
-  Future registerWithEmailAndPassword(String email, String password) async {
+  Future registerWithEmailAndPassword(String email, String password,
+      Map<String, dynamic> userInformation) async {
     try {
       UserCredential result = await _auth.createUserWithEmailAndPassword(
           email: email, password: password);
@@ -46,6 +49,13 @@ class FirebaseAuthService {
       print("registerWithEmailAndPassword output");
       print(user);
       print("-----------------------------------------");
+
+      // Create a new document for the user with the uid
+      await FirebaseFirestoreService(uid: user!.uid).updateUserProfileData(
+          userInformation['fullName'],
+          userInformation['age'],
+          userInformation['email']);
+
       return user;
     } catch (e) {
       print("---------------METHOD ERROR AREA---------------");
@@ -53,6 +63,7 @@ class FirebaseAuthService {
       print("-----------------------------------------");
 
       print(e.toString());
+
       return null;
     }
   }

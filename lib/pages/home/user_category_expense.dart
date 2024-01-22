@@ -1,14 +1,12 @@
-import 'package:budgex/model/end_users.dart';
 import 'package:budgex/pages/home/user_budgeting.dart';
+
 import 'package:budgex/pages/constants/constants.dart';
 import 'package:budgex/widgets/custom_button.dart';
 import 'package:flutter/material.dart';
 
 // ignore: must_be_immutable
 class UserCategoryExpense extends StatefulWidget {
-  EndUser endUser;
-
-  UserCategoryExpense({Key? key, required this.endUser}) : super(key: key);
+  UserCategoryExpense({Key? key}) : super(key: key);
 
   @override
   State<UserCategoryExpense> createState() => _UserCategoryExpenseState();

@@ -1,7 +1,10 @@
+import 'package:budgex/model/userModel.dart';
 import 'package:budgex/pages/constants/constants.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:provider/provider.dart';
 
 class CustomCircleChart extends StatefulWidget {
   CustomCircleChart({super.key});
@@ -13,6 +16,8 @@ class CustomCircleChart extends StatefulWidget {
 class _CustomCircleChartState extends State<CustomCircleChart> {
   @override
   Widget build(BuildContext context) {
+    final userData = Provider.of<UserData?>(context);
+
     return Container(
       padding: EdgeInsets.all(10),
       decoration: BoxDecoration(
@@ -27,9 +32,13 @@ class _CustomCircleChartState extends State<CustomCircleChart> {
            */
           containerFirstRow(),
 
-          containerSecondRow(),
+          containerSecondRow(userData!.budget.currentBudget),
 
-          containerThirdRow(),
+          containerThirdRow(
+            totalBudget: userData.budget.totalBudget,
+            currentBudget: userData.budget.currentBudget,
+            totalExpenses: userData.budget.totalExpenses,
+          ),
         ],
       ),
     );
@@ -100,7 +109,7 @@ class _CustomCircleChartState extends State<CustomCircleChart> {
    *  Circle Charts with Current Budget
    * 
    */
-  Center containerSecondRow() {
+  Center containerSecondRow(double currentBudget) {
     double _screenWidth = MediaQuery.of(context).size.width;
     double _chartSize = _screenWidth * 0.8;
 
@@ -122,7 +131,7 @@ class _CustomCircleChartState extends State<CustomCircleChart> {
                       color: LIGHT_COLOR_1),
                 ),
                 Text(
-                  "\$ 5000.00",
+                  "\₱ $currentBudget",
                   style: TextStyle(
                       fontFamily: dosis['semiBold'],
                       fontSize: 35,
@@ -148,7 +157,10 @@ class _CustomCircleChartState extends State<CustomCircleChart> {
     );
   }
 
-  Row containerThirdRow() {
+  Row containerThirdRow(
+      {required double totalBudget,
+      required double currentBudget,
+      required double totalExpenses}) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -168,7 +180,7 @@ class _CustomCircleChartState extends State<CustomCircleChart> {
                * 
                * INSERT REAL DATA ABOUT Budget Declared
                */
-              "\$ Budget Declared",
+              "\$ $totalBudget",
               style: TextStyle(
                   color: LIGHT_COLOR_1,
                   fontSize: 11,
@@ -179,7 +191,7 @@ class _CustomCircleChartState extends State<CustomCircleChart> {
                * 
                * INSERT REAL DATA ABOUT CURRENT BUDGET
                */
-                "\$ Current Budget",
+                "\$ $currentBudget",
                 style: TextStyle(
                     color: LIGHT_COLOR_1,
                     fontSize: 11,
@@ -189,7 +201,7 @@ class _CustomCircleChartState extends State<CustomCircleChart> {
                * 
                * INSERT REAL DATA ABOUT Remaining BUDGET
                */
-                "\$ Remaining Buget",
+                "\$ $totalExpenses",
                 style: TextStyle(
                     color: LIGHT_COLOR_1,
                     fontSize: 11,
