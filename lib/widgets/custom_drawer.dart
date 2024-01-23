@@ -22,9 +22,10 @@ import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:budgex/pages/home/user_budgeting.dart';
 import 'package:budgex/pages/home/user_expense.dart';
 import 'package:budgex/pages/home/user_home_verify.dart';
-import 'package:budgex/pages/home/user_scanner.dart';
-import 'package:budgex/pages/home/user_settings.dart';
 
+import 'package:budgex/pages/home/user_home_verify.dart';
+
+import 'package:budgex/pages/home/user_settings.dart';
 import 'package:budgex/pages/constants/constants.dart';
 import 'package:budgex/services/firebase_auth_service.dart';
 import 'package:flutter/material.dart';
@@ -45,11 +46,6 @@ List<Map<String, dynamic>> menuItems() {
       'iconText': 'Budgeting',
       'iconData': 0xe0b2,
       'toPage': UserBudgeting(),
-    },
-    {
-      'iconText': 'Scan Receipt',
-      'iconData': 0xe12f,
-      'toPage': UserScanReceipt(),
     },
     {
       'iconText': 'Settings',

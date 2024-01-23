@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 
 // ignore: must_be_immutable
 class UserExpense extends StatefulWidget {
-  UserExpense({super.key});
+  const UserExpense({super.key});
 
   @override
   State<UserExpense> createState() => _UserExpenseState();
@@ -21,18 +21,37 @@ class _UserExpenseState extends State<UserExpense> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: customAppBar(context: context),
-      drawer: CustomDrawer(),
+      drawer: const CustomDrawer(),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10.0),
           child: ListView.builder(
             itemCount: expenseEntries.length,
             itemBuilder: (context, index) {
-              String? reportDate = expenseEntries[index]['report_date'] ?? "";
-              String? expenseTitle = expenseEntries[index]['title'] ?? "";
-              String? amount = expenseEntries[index]['amount'] ?? "";
-              return expenseBox(
-                  dateExpend: reportDate, title: expenseTitle, amount: amount);
+              return Dismissible(
+                key: UniqueKey(),
+                direction: DismissDirection.endToStart,
+                background: Container(
+                  color: Colors.red,
+                  alignment: Alignment.centerRight,
+                  padding: const EdgeInsets.only(right: 20),
+                  child: const Icon(
+                    Icons.delete,
+                    color: Colors.white,
+                  ),
+                ),
+                onDismissed: (direction) {
+                  setState(() {
+                    expenseEntries.removeAt(index);
+                  });
+                  ScaffoldMessenger.of(context)
+                      .showSnackBar(const SnackBar(content: Text('Expense deleted')));
+                },
+                child: expenseBox(
+                    dateExpend: expenseEntries[index]['report_date'] ?? "",
+                    title: expenseEntries[index]['title'] ?? "",
+                    amount: expenseEntries[index]['amount'] ?? ""),
+              );
             },
           ),
         ),

@@ -1,4 +1,3 @@
-import 'package:budgex/widgets/custom_drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
@@ -15,9 +14,9 @@ class _UserScanReceiptState extends State<UserScanReceipt> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Scanner Receipt"),
+        title: const Text("QR Scan"),
+        centerTitle: true,
       ),
-      drawer: CustomDrawer(),
     );
   }
 }
@@ -68,7 +67,7 @@ class _QRCodeWidgetState extends State<QRCodeWidget> {
             child: Center(
               child: Text(
                 "Scan Result:  $result",
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 18,
                 ),
               ),

@@ -1,11 +1,18 @@
+// <<<<<<< HEAD:lib/pages/home/user_dashboard.dart
+// =======
+import 'package:budgex/model/category_model_dummy.dart';
+// >>>>>>> 5c2d12a272339c0e5e37ceab90782f70e4e96021:lib/pages/home/main_home.dart
 import 'package:budgex/model/userModel.dart';
 import 'package:budgex/pages/constants/constants.dart';
 import 'package:budgex/services/firebase_auth_service.dart';
 import 'package:budgex/services/firebase_firestore_service.dart';
 import 'package:budgex/shared/loading.dart';
 import 'package:budgex/widgets/customDetectorCategory.dart';
+// <<<<<<< HEAD:lib/pages/home/user_dashboard.dart
 import 'package:budgex/widgets/custom_appbar.dart';
 import 'package:budgex/widgets/custom_buttom.dart';
+// =======
+// >>>>>>> 5c2d12a272339c0e5e37ceab90782f70e4e96021:lib/pages/home/main_home.dart
 import 'package:budgex/widgets/custom_circle_chart.dart';
 import 'package:budgex/widgets/custom_drawer.dart';
 import 'package:flutter/material.dart';
@@ -98,10 +105,6 @@ class _UserDashBoardState extends State<UserDashBoard> {
 
           const SizedBox(
             height: 15,
-          ),
-          CustomButtom(buttonText: "Add Expense", onPressed: () {}),
-          const SizedBox(
-            height: 10,
           ),
           CustomCircleChart(),
           const SizedBox(
