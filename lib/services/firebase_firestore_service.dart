@@ -1,4 +1,6 @@
+import 'package:budgex/data/categoryData.dart';
 import 'package:budgex/model/userBudgetModel.dart';
+import 'package:budgex/model/userCategoryModel.dart';
 import 'package:budgex/model/userModel.dart';
 import 'package:budgex/model/userModel.dart';
 import 'package:budgex/model/userModel.dart';
@@ -48,8 +50,97 @@ class FirebaseFirestoreService {
     }
   }
 
-  // Function to update user categories in Firestore
-  Future updateUserCategories({required String uuid}) async {}
+  // A method that stores the category of the user to the Firestore
+  Future<void> updateCategoryUser(
+      {required String uuid,
+      required List<UserCategoryModel> categories}) async {
+    // Empty Map for storing Categories
+    Map categoriesMap = {};
+
+    // Default Category Expense
+    double categoryExpense = 0;
+    print("To the FireStore");
+    print("USER UUID: $uuid");
+    for (UserCategoryModel category in categories) {
+      print(category.categoryName);
+      print(category.iconData);
+      print(category.leftLimit);
+      print(categoryExpense);
+      print('------------------');
+
+      categoriesMap[category.categoryName] = {
+        'categoryExpense': categoryExpense,
+        'leftLimit': category.leftLimit,
+        'iconData': category.iconData,
+      };
+    }
+
+    /*  return await _firestoreDatabase.collection("users").doc(uuid).update({
+      'budget': budget,
+      'firstTimer': firstTimer,
+    }); */
+
+    return await _firestoreDatabase.collection("users").doc(uuid).set({
+      'budget': {
+        'categories': categoriesMap,
+      }
+    }, SetOptions(merge: true));
+  }
+
+  // Method for storing new budget of the user to the FireStore
+  Future<void> updateBudgetUser(
+      {required double budgetDeclared,
+      required String uuid,
+      required List<CategoryData> categories}) async {
+    // Gets the Current Date and Time base on Device Time
+    DateTime dateTime = DateTime.now();
+
+    // Formats the Date and Time
+    String dateRegistered =
+        DateFormat('d MMMM y "at" HH:mm:ss "UTC"Z').format(dateTime);
+
+    // Default Budget Expense
+    double totalBudget = budgetDeclared;
+    double totalExpense = 0;
+    double currentBudget = totalBudget;
+
+    // Default Category Expense
+    double categoryExpense = 0;
+
+    // Sets the firstTimer to true;
+    bool firstTimer = false;
+
+    // Empty Category Map
+    // User to store categories
+    Map categoriesMap = {};
+
+    for (CategoryData category in categories) {
+      print(category.categoryName);
+      print(category.iconData);
+      print(category.leftLimit);
+      print(categoryExpense);
+      print('------------------');
+
+      categoriesMap[category.categoryName] = {
+        'categoryExpense': categoryExpense,
+        'leftLimit': category.leftLimit,
+        'iconData': category.iconData,
+      };
+    }
+
+    Map budget = {
+      'currentBudget': currentBudget,
+      'totalExpenses': totalExpense,
+      'totalBudget': totalBudget,
+      'budgetCreated': dateRegistered,
+      'categories': categoriesMap
+    };
+
+    return await _firestoreDatabase.collection("users").doc(uuid).update({
+      'budget': budget,
+      'firstTimer': firstTimer,
+    });
+  }
 
   // A method for adding a new Data to the user collection
   // Data added are:

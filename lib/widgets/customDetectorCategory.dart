@@ -9,7 +9,7 @@ import 'package:flutter/material.dart';
 /// The financial details include the total expenses and the remaining amount, presented with appropriate styles.
 class CustomCategoryDetector extends StatefulWidget {
   final String categoryName;
-  // final int categoryIconData;
+  final int iconData;
 
   double leftLimit;
   double categoryExpense;
@@ -23,6 +23,7 @@ class CustomCategoryDetector extends StatefulWidget {
     required this.categoryName,
     required this.categoryExpense,
     required this.leftLimit,
+    required this.iconData,
   });
 
   @override
@@ -58,7 +59,7 @@ class _CustomCategoryDetectorState extends State<CustomCategoryDetector> {
                     color: Theme.of(context).colorScheme.primary,
                   ),
                   child: Icon(
-                    Icons.access_alarm,
+                    IconData(widget.iconData, fontFamily: 'MaterialIcons'),
                     color: Theme.of(context).colorScheme.background,
                     size: 30,
                   ),

@@ -1,20 +1,15 @@
-// <<<<<<< HEAD:lib/pages/home/user_dashboard.dart
-// =======
-import 'package:budgex/model/category_model_dummy.dart';
-// >>>>>>> 5c2d12a272339c0e5e37ceab90782f70e4e96021:lib/pages/home/main_home.dart
 import 'package:budgex/model/userModel.dart';
 import 'package:budgex/pages/constants/constants.dart';
 import 'package:budgex/services/firebase_auth_service.dart';
 import 'package:budgex/services/firebase_firestore_service.dart';
 import 'package:budgex/shared/loading.dart';
 import 'package:budgex/widgets/customDetectorCategory.dart';
-// <<<<<<< HEAD:lib/pages/home/user_dashboard.dart
+
 import 'package:budgex/widgets/custom_appbar.dart';
-import 'package:budgex/widgets/custom_buttom.dart';
-// =======
-// >>>>>>> 5c2d12a272339c0e5e37ceab90782f70e4e96021:lib/pages/home/main_home.dart
+
 import 'package:budgex/widgets/custom_circle_chart.dart';
 import 'package:budgex/widgets/custom_drawer.dart';
+import 'package:budgex/widgets/custom_text.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -49,8 +44,8 @@ class _UserDashBoardState extends State<UserDashBoard> {
             return Loading();
           } else if (snapshot.hasError) {
             // Error state
-            //print("HERRSIDAIDJASIDj");
-            return Text(" HERRSIDAIDJASIDjError: ${snapshot.error}");
+
+            return Text("Error: ${snapshot.error}");
           } else {
             // Data loaded successfully
             UserData userData = snapshot.data!;
@@ -112,24 +107,22 @@ class _UserDashBoardState extends State<UserDashBoard> {
           ),
 
           // Expense Category Expenses
-          // Only displays 3 (Starts from higher expenses)
-
           Column(
             children: [
-              Text(
-                "Most Expenses",
-                style: TextStyle(
-                  fontFamily: poppins['semiBold'],
-                  fontSize: fontSize['h4'],
-                ),
-              ),
+              CustomText(
+                  title: "Most Expenses",
+                  fontSize: fontSize['h4']!,
+                  fontFamily: poppins['semiBold']!),
+
               const SizedBox(
                 height: 10,
               ),
 
               // Use userCategories from userData
               ...userData?.budget.userCategories.map((category) {
+                    print("Category Limit: ${category.leftLimit}");
                     return CustomCategoryDetector(
+                      iconData: int.parse(category.iconData),
                       categoryName: category.categoryName,
                       leftLimit: category.leftLimit,
                       categoryExpense: category.categoryExpense,

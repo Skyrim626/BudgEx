@@ -31,6 +31,7 @@ class BudgetModel {
           'categoryName': categoryName,
           'categoryExpense': categoryData['categoryExpense'],
           'leftLimit': categoryData['leftLimit'],
+          'iconData': categoryData['iconData'],
         });
       }).toList();
     }

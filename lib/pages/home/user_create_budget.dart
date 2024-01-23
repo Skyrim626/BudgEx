@@ -22,8 +22,13 @@ class _UserCreateBudgetState extends State<UserCreateBudget> {
   // Create an instance of the FirebaseAuthService to manage authentication.
   final FirebaseAuthService _authService = FirebaseAuthService();
 
-  List<CategoryData> categories =
-      sampleCategories.take(3).toList(); // Limit to 3 categories initially
+  // Create an instance of the FirebaseFirestoreService to add budget data.
+  final FirebaseFirestoreService _firestoreService = FirebaseFirestoreService();
+
+  List<CategoryData> categories = sampleCategories;
+  double budgetDeclared = 0;
+
+  TextEditingController budgetDeclaredController = TextEditingController();
 
   late Stream<UserData?> userStream;
   @override
@@ -67,8 +72,6 @@ class _UserCreateBudgetState extends State<UserCreateBudget> {
     // not a GlobalKey<MyCustomFormState>.
     final _formKey = GlobalKey<FormState>();
 
-    TextEditingController budgetDeclaredController = TextEditingController();
-
     final userData = data;
 
     return Scaffold(
@@ -104,6 +107,7 @@ class _UserCreateBudgetState extends State<UserCreateBudget> {
                       style: TextStyle(
                         fontFamily: poppins['regular'],
                       ),
+
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return "Please enter a budget amount";
@@ -151,13 +155,28 @@ class _UserCreateBudgetState extends State<UserCreateBudget> {
                         return GestureDetector(
                           onTap: () {
                             _editCategory(context, userData!, category);
-
-                            print(category.iconData);
                           },
                           child: ListTile(
-                            title: Text(category.categoryName),
-                            leading: Icon(IconData(category.iconData,
-                                fontFamily: 'MaterialIcons')),
+                            title: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                // Text(category.categoryName),
+                                CustomText(
+                                    title: category.categoryName,
+                                    fontSize: fontSize['h5']!,
+                                    fontFamily: poppins['regular']!),
+
+                                CustomText(
+                                    title: category.leftLimit.toString(),
+                                    fontSize: fontSize['h5']!,
+                                    fontFamily: poppins['regular']!),
+                              ],
+                            ),
+                            leading: Icon(
+                              IconData(int.parse(category.iconData),
+                                  fontFamily: 'MaterialIcons'),
+                              color: LIGHT_COLOR_5,
+                            ),
                             trailing: IconButton(
                               icon: const Icon(
                                 Icons.delete,
@@ -196,7 +215,23 @@ class _UserCreateBudgetState extends State<UserCreateBudget> {
                         ),
                         // Confirm Budget
                         ElevatedButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            double totalCategoriesLimit = 0;
+                            for (CategoryData category in categories) {
+                              totalCategoriesLimit += category.leftLimit;
+                            }
+
+                            // Checks if the Declared Budget is greater than the total limits of the categories
+                            if (double.parse(budgetDeclaredController.text) >=
+                                totalCategoriesLimit) {
+                              // TBD
+                              _firestoreService.updateBudgetUser(
+                                  budgetDeclared: double.parse(
+                                      budgetDeclaredController.text),
+                                  uuid: _authService.getCurrentUser().uid,
+                                  categories: categories);
+                            }
+                          },
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Text(
@@ -266,6 +301,8 @@ class _UserCreateBudgetState extends State<UserCreateBudget> {
                   setState(() {
                     category.categoryName = editedCategoryName;
                     category.leftLimit = editedBudgetLimit;
+
+                    budgetDeclared = double.parse(budgetLimitController.text);
                     // _updateUserCategories(context, userData, categories);
                   });
                 }
@@ -279,7 +316,7 @@ class _UserCreateBudgetState extends State<UserCreateBudget> {
     );
   }
 
-  // Functioon to add a new category
+  // Function to add a new category
   void _addCategory(BuildContext context, UserData? data) {
     final userData = data;
 
@@ -339,7 +376,7 @@ class _UserCreateBudgetState extends State<UserCreateBudget> {
 
                   if (newCategoryName.isNotEmpty) {
                     // Category IconData
-                    int newIconData = 0xe148;
+                    String newIconData = "0xe148";
                     double newCategoryExpense = 0.0;
 
                     CategoryData newCategory = CategoryData(

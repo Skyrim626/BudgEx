@@ -1,17 +1,24 @@
 import 'package:budgex/model/category_model_dummy.dart';
+import 'package:budgex/model/userModel.dart';
 import 'package:budgex/pages/constants/constants.dart';
+import 'package:budgex/pages/home/user_category_edit.dart';
 import 'package:budgex/pages/home/user_scannerMain.dart';
 import 'package:budgex/services/firebase_auth_service.dart';
+import 'package:budgex/services/firebase_firestore_service.dart';
+import 'package:budgex/shared/loading.dart';
 import 'package:budgex/widgets/customDetectorCategory.dart';
 import 'package:budgex/widgets/custom_appbar.dart';
 import 'package:budgex/widgets/custom_buttom.dart';
+import 'package:budgex/widgets/custom_button.dart';
 import 'package:budgex/widgets/custom_circle_chart.dart';
 import 'package:budgex/widgets/custom_drawer.dart';
 import 'package:budgex/widgets/custom_dropdown_button.dart';
+import 'package:budgex/widgets/custom_text.dart';
 import 'package:budgex/widgets/custom_textfield.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 // ignore: must_be_immutable
 class UserBudgeting extends StatefulWidget {
@@ -23,20 +30,27 @@ class UserBudgeting extends StatefulWidget {
 
 class _UserBudgetingState extends State<UserBudgeting> {
   // Create an instance of the FirebaseAuthService to manage authentication.
-  final FirebaseAuthService _auth = FirebaseAuthService();
+  final FirebaseAuthService _authService = FirebaseAuthService();
 
-  // Declare User
-  late User user;
-
+  late Stream<UserData?> userStream;
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    userStream =
+        FirebaseFirestoreService(uid: _authService.getCurrentUser().uid)
+            .userDocumentStream;
+  }
+
+  /* @override
   void initState() {
     // TODO: implement initState
     super.initState();
 
     // Initialize User
-    user = _auth.getCurrentUser();
+    // user = _auth.getCurrentUser();
   }
-
+ */
   // Controllers
   TextEditingController amountController = TextEditingController();
   TextEditingController nameController = TextEditingController();
@@ -85,10 +99,14 @@ class _UserBudgetingState extends State<UserBudgeting> {
                             height: 20,
                           ),
                           CustomButtom(
-                              buttonText: "Scan Receipt", onPressed: () {
-                                Navigator.push(context, MaterialPageRoute(
-                                    builder: (context) => const MainScanner()));
-                          }),
+                              buttonText: "Scan Receipt",
+                              onPressed: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            const MainScanner()));
+                              }),
                           const SizedBox(
                             height: 30,
                           ),
@@ -158,79 +176,112 @@ class _UserBudgetingState extends State<UserBudgeting> {
 
   @override
   Widget build(BuildContext context) {
+    return StreamBuilder<UserData?>(
+        stream: userStream,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            // Loading state
+            return Loading();
+          } else if (snapshot.hasError) {
+            // Error state
+
+            return Text("Error: ${snapshot.error}");
+          } else {
+            // Data loaded successfully
+            UserData userData = snapshot.data!;
+            return StreamProvider<UserData?>.value(
+                value: FirebaseFirestoreService(uid: userData.uid)
+                    .userMainDocumentStream,
+                initialData: userData,
+                child: _buildBudgetingUI(context, userData));
+          }
+        });
+  }
+
+  // Builds Budgeting Widgets
+  Scaffold _buildBudgetingUI(BuildContext context, UserData? data) {
+    final userData = data;
+
     return Scaffold(
       appBar: customAppBar(context: context),
       drawer: CustomDrawer(),
-      bottomNavigationBar: CustomButtom(
+      bottomNavigationBar: CustomButton(
           buttonText: "Add Expense",
           onPressed: () {
-            _displayBottomSheet(context);
-          }),
+            print("Test Add Expense");
+          },
+          paddingHorizontal: 80,
+          paddingVertical: 15,
+          buttonColor: LIGHT_COLOR_3,
+          fontSize: fontSize['h4']!,
+          fontFamily: dosis['bold']!,
+          textColor: Colors.white),
       body: SafeArea(
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 15.0),
-            child: Column(
-              children: [
-                // Date Selection
-                // First Row
-                firstRow(),
+          child: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 15),
+          child: Column(
+            children: [
+              CustomCircleChart(),
+              const SizedBox(
+                height: 20,
+              ),
 
-                // Main Budget Container
-                // Call a class
-                CustomCircleChart(),
+              // Category Section
+              Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      CustomText(
+                          title: "Most Expenses",
+                          fontSize: fontSize['h5']!,
+                          fontFamily: poppins['semiBold']!),
 
-                const SizedBox(
-                  height: 20,
-                ),
-                // Category Section
+                      // Will add a button for this widget
+                      TextButton(
+                        onPressed: () async {
+                          final route = MaterialPageRoute(
+                              builder: (context) => UserCategoryEdit());
 
-                Column(
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Text(
-                          "Most Expenses",
-                          style: TextStyle(
-                              fontFamily: poppins['semiBold'],
-                              fontSize: fontSize['h4']),
+                          // Use Navigator.pushAndRemoveUntil to navigate to the UserCategoryEdit page and remove all previous routes
+                          // ignore: use_build_context_synchronously
+                          Navigator.pushAndRemoveUntil(
+                              context, route, (route) => false);
+                        },
+                        child: CustomText(
+                          title: "Edit Category",
+                          fontSize: fontSize['h5']!,
+                          fontFamily: poppins['semiBold']!,
+                          titleColor: LIGHT_COLOR_3,
                         ),
-                        Text(
-                          "Edit Category",
-                          style: TextStyle(
-                              fontFamily: poppins['regular'],
-                              fontSize: fontSize['h5'],
-                              color: LIGHT_COLOR_3),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    /* ...dummyCategories
-                        .asMap()
-                        .map((index, category) => MapEntry(
-                              index,
-                              CustomCategoryDetector(
-                                categoryName: category["categoryName"],
-                                leftLimit: category["leftLimit"],
-                                expenses: category["expenses"],
-                                categoryIconData: category["categoryIconData"],
-                                // Other properties...
-                                test: index, // You can now access the index
-                              ),
-                            ))
-                        .values
-                        .toList() */
-                  ],
-                )
-              ],
-            ),
+                      )
+                    ],
+                  ),
+
+                  const SizedBox(
+                    height: 15,
+                  ),
+
+                  // Use userCategories from userData
+                  ...userData?.budget.userCategories.map((category) {
+                        print("Category Limit: ${category.leftLimit}");
+                        return CustomCategoryDetector(
+                          iconData: int.parse(category.iconData),
+                          categoryName: category.categoryName,
+                          leftLimit: category.leftLimit,
+                          categoryExpense: category.categoryExpense,
+                          // You can add other properties based on your needs
+                        );
+                      }).toList() ??
+                      [],
+                ],
+              )
+            ],
           ),
         ),
-      ),
+      )),
     );
   }
 
