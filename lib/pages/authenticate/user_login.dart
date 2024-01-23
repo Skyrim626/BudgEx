@@ -28,7 +28,9 @@ import 'package:budgex/pages/authenticate/user_signup.dart';
 import 'package:budgex/pages/constants/constants.dart';
 import 'package:budgex/services/firebase_auth_service.dart';
 import 'package:budgex/shared/loading.dart';
+import 'package:budgex/widgets/custom_buttom.dart';
 import 'package:budgex/widgets/custom_button.dart';
+import 'package:budgex/widgets/custom_text.dart';
 import 'package:budgex/widgets/custom_textfield.dart';
 
 import 'package:flutter/material.dart';
@@ -57,6 +59,11 @@ class _UserLoginState extends State<UserLogin> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
 
+  // boolean variable
+  // Initially, set to true to obscure the text
+  // for checking if the password is shown/hidden
+  bool isObscure = true;
+
   String error = '';
   bool isLoading = false;
 
@@ -84,23 +91,21 @@ class _UserLoginState extends State<UserLogin> {
                             children: [
                               Row(
                                 children: [
-                                  Text(
-                                    "Welcome",
-                                    style: TextStyle(
-                                        fontFamily: dosis["semiBold"],
-                                        fontSize: fontSize["h1"],
-                                        letterSpacing: 2),
+                                  CustomText(
+                                    title: "Welcome",
+                                    fontSize: fontSize['h1']!,
+                                    fontFamily: dosis['semiBold']!,
+                                    letterSpacing: 2,
                                   ),
                                 ],
                               ),
                               Row(
                                 children: [
-                                  Text(
-                                    "Sign In",
-                                    style: TextStyle(
-                                        fontFamily: dosis["regular"],
-                                        fontSize: fontSize['h4'],
-                                        color: LIGHT_COLOR_2),
+                                  CustomText(
+                                    title: 'Sign In',
+                                    fontSize: fontSize['h4']!,
+                                    fontFamily: dosis['regular']!,
+                                    titleColor: LIGHT_COLOR_2,
                                   ),
                                 ],
                               ),
@@ -110,12 +115,26 @@ class _UserLoginState extends State<UserLogin> {
                               ),
 
                               // Email TextField
-                              CustomTextField(
+                              TextFormField(
                                 controller: emailController,
-                                hintText: 'Enter your email',
-                                labelText: 'Email',
-                                obscureText: false,
-                                validatorText: 'Please Enter your Email',
+                                style: TextStyle(
+                                  fontFamily: poppins['regular'],
+                                ),
+                                decoration: const InputDecoration(
+                                  hintText: 'Enter your email',
+                                  labelText: 'Email',
+                                ),
+                                validator: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return "Please enter your email";
+                                  }
+
+                                  if (!value.contains('@')) {
+                                    return "Please enter a valid email address";
+                                  }
+
+                                  return null;
+                                },
                               ),
 
                               const SizedBox(
@@ -123,41 +142,71 @@ class _UserLoginState extends State<UserLogin> {
                               ),
 
                               // Password textfield
-                              CustomTextField(
+                              TextFormField(
                                 controller: passwordController,
-                                hintText: 'Enter your password',
-                                labelText: 'Password',
-                                obscureText: true,
-                                validatorText: 'Please Enter your Password',
+                                style: TextStyle(
+                                  fontFamily: poppins['regular'],
+                                ),
+                                decoration: InputDecoration(
+                                  hintText: 'Enter your password',
+                                  labelText: 'Password',
+                                  suffixIcon: IconButton(
+                                      onPressed: () {
+                                        setState(() {
+                                          if (isObscure) {
+                                            isObscure = false;
+                                          } else {
+                                            isObscure = true;
+                                          }
+                                        });
+                                      },
+                                      icon: Icon(isObscure
+                                          ? Icons.visibility_off
+                                          : Icons.visibility)),
+                                ),
+                                obscureText: isObscure,
+                                validator: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return "Please enter your email";
+                                  }
+
+                                  return null;
+                                },
                               ),
 
                               const SizedBox(
                                 height: 15,
                               ),
 
-                              CustomButtom(
-                                  buttonText: "Sign In",
-                                  onPressed: () async {
-                                    if (_formKey.currentState!.validate()) {
-                                      // Loads Loading Screen
-                                      setState(() => isLoading = true);
+                              CustomButton(
+                                buttonText: "Sign In",
+                                onPressed: () async {
+                                  if (_formKey.currentState!.validate()) {
+                                    // Loads Loading Screen
+                                    setState(() => isLoading = true);
 
-                                      // 2 OUTPUTS RETURNED:
-                                      // null and object type
-                                      dynamic result =
-                                          await _authService.signIn(
-                                              email: emailController.text,
-                                              password:
-                                                  passwordController.text);
-                                      if (result == null) {
-                                        setState(() {
-                                          error =
-                                              'Could not sign in with credentials';
-                                          isLoading = false;
-                                        });
-                                      }
+                                    // 2 OUTPUTS RETURNED:
+                                    // null and object type
+                                    dynamic result = await _authService.signIn(
+                                        email: emailController.text,
+                                        password: passwordController.text);
+                                    if (result == null) {
+                                      setState(() {
+                                        error =
+                                            'Could not sign in with credentials';
+                                        isLoading = false;
+                                      });
                                     }
-                                  }),
+                                  }
+                                },
+                                paddingHorizontal: 80,
+                                paddingVertical: 15,
+                                buttonColor: LIGHT_COLOR_3,
+                                fontSize: fontSize['h4']!,
+                                fontFamily: dosis['bold']!,
+                                textColor: Colors.white,
+                              ),
+
                               const SizedBox(
                                 height: 15,
                               ),
@@ -191,7 +240,10 @@ class _UserLoginState extends State<UserLogin> {
               style: TextStyle(
                   color: LIGHT_COLOR_3, fontFamily: poppins['poppins']),
             )),
-        TextButton(
+
+        // TO BE TESTED
+        // ADD FORGOT
+        /* TextButton(
             onPressed: () async {
               // Loads a Loading Screen
               setState(() => isLoading = true);
@@ -216,7 +268,7 @@ class _UserLoginState extends State<UserLogin> {
               "Sign Anonymously?",
               style: TextStyle(
                   color: LIGHT_COLOR_5, fontFamily: poppins['poppins']),
-            )),
+            )), */
       ],
     );
   }

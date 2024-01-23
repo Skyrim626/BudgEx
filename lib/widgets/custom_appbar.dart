@@ -56,11 +56,17 @@ AppBar customAppBar({required BuildContext context}) {
       context.widget.toString() != "UserSettings"
           ? IconButton(
               onPressed: () {
-                Navigator.push(
+                final route = MaterialPageRoute(
+                  builder: (context) => UserSettings(),
+                );
+
+                Navigator.pushAndRemoveUntil(context, route, (route) => false);
+
+                /* Navigator.push(
                     context,
                     MaterialPageRoute(
                       builder: (context) => UserSettings(),
-                    ));
+                    )); */
               },
               icon: Container(
                   child: Icon(Icons.person_rounded),

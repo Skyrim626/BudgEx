@@ -3,7 +3,7 @@ import 'package:budgex/pages/constants/constants.dart';
 import 'package:budgex/services/firebase_auth_service.dart';
 import 'package:budgex/widgets/customDetectorCategory.dart';
 import 'package:budgex/widgets/custom_appbar.dart';
-import 'package:budgex/widgets/custom_button.dart';
+import 'package:budgex/widgets/custom_buttom.dart';
 import 'package:budgex/widgets/custom_circle_chart.dart';
 import 'package:budgex/widgets/custom_drawer.dart';
 import 'package:budgex/widgets/custom_dropdown_button.dart';
@@ -205,7 +205,7 @@ class _UserBudgetingState extends State<UserBudgeting> {
                     const SizedBox(
                       height: 10,
                     ),
-                    ...dummyCategories
+                    /* ...dummyCategories
                         .asMap()
                         .map((index, category) => MapEntry(
                               index,
@@ -219,7 +219,7 @@ class _UserBudgetingState extends State<UserBudgeting> {
                               ),
                             ))
                         .values
-                        .toList()
+                        .toList() */
                   ],
                 )
               ],

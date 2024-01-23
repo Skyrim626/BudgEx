@@ -1,7 +1,7 @@
 import 'package:budgex/pages/home/user_budgeting.dart';
 
 import 'package:budgex/pages/constants/constants.dart';
-import 'package:budgex/widgets/custom_button.dart';
+import 'package:budgex/widgets/custom_buttom.dart';
 import 'package:flutter/material.dart';
 
 // ignore: must_be_immutable

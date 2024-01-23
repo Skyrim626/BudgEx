@@ -1,39 +1,67 @@
-import 'package:budgex/model/category_model_dummy.dart';
-import 'package:budgex/model/userBudgetModel.dart';
 import 'package:budgex/model/userModel.dart';
 import 'package:budgex/pages/constants/constants.dart';
 import 'package:budgex/services/firebase_auth_service.dart';
+import 'package:budgex/services/firebase_firestore_service.dart';
+import 'package:budgex/shared/loading.dart';
 import 'package:budgex/widgets/customDetectorCategory.dart';
-import 'package:budgex/widgets/custom_button.dart';
+import 'package:budgex/widgets/custom_appbar.dart';
+import 'package:budgex/widgets/custom_buttom.dart';
 import 'package:budgex/widgets/custom_circle_chart.dart';
 import 'package:budgex/widgets/custom_drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class HomeFeature extends StatefulWidget {
-  const HomeFeature({super.key});
+class UserDashBoard extends StatefulWidget {
+  const UserDashBoard({super.key});
 
   @override
-  State<HomeFeature> createState() => _HomeFeatureState();
+  State<UserDashBoard> createState() => _UserDashBoardState();
 }
 
-class _HomeFeatureState extends State<HomeFeature> {
-  // Open Firebase Auth Service
+class _UserDashBoardState extends State<UserDashBoard> {
+  // Create an instance of the FirebaseAuthService to manage authentication.
   final FirebaseAuthService _authService = FirebaseAuthService();
+
+  late Stream<UserData?> userStream;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    userStream =
+        FirebaseFirestoreService(uid: _authService.getCurrentUser().uid)
+            .userDocumentStream;
+  }
 
   @override
   Widget build(BuildContext context) {
-    final userData = Provider.of<UserData?>(context);
+    return StreamBuilder<UserData?>(
+        stream: userStream,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            // Loading state
+            return Loading();
+          } else if (snapshot.hasError) {
+            // Error state
+            //print("HERRSIDAIDJASIDj");
+            return Text(" HERRSIDAIDJASIDjError: ${snapshot.error}");
+          } else {
+            // Data loaded successfully
+            UserData userData = snapshot.data!;
+            return StreamProvider<UserData?>.value(
+                value: FirebaseFirestoreService(uid: userData.uid)
+                    .userMainDocumentStream,
+                initialData: userData,
+                child: _buildDashboardUI(context, userData));
+          }
+        });
+  }
+
+  // Builds the Dashboard Widgets
+  Scaffold _buildDashboardUI(BuildContext context, UserData? data) {
+    final userData = data;
+
     return Scaffold(
-      appBar: AppBar(
-        actions: [
-          IconButton(
-              onPressed: () async {
-                await _authService.signUserOut();
-              },
-              icon: Icon(Icons.logout))
-        ],
-      ) /* appBar: customAppBar(context: context) */,
+      appBar: customAppBar(context: context),
       backgroundColor: Theme.of(context).colorScheme.background,
       drawer: CustomDrawer(),
       body: SingleChildScrollView(
@@ -95,21 +123,17 @@ class _HomeFeatureState extends State<HomeFeature> {
               const SizedBox(
                 height: 10,
               ),
-              ...dummyCategories
-                  .asMap()
-                  .map((index, category) => MapEntry(
-                        index,
-                        CustomCategoryDetector(
-                          categoryName: category["categoryName"],
-                          leftLimit: category["leftLimit"],
-                          expenses: category["expenses"],
-                          categoryIconData: category["categoryIconData"],
-                          // Other properties...
-                          test: index, // You can now access the index
-                        ),
-                      ))
-                  .values
-                  .toList()
+
+              // Use userCategories from userData
+              ...userData?.budget.userCategories.map((category) {
+                    return CustomCategoryDetector(
+                      categoryName: category.categoryName,
+                      leftLimit: category.leftLimit,
+                      categoryExpense: category.categoryExpense,
+                      // You can add other properties based on your needs
+                    );
+                  }).toList() ??
+                  [],
             ],
           )
         ],

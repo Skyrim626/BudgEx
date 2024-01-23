@@ -9,22 +9,21 @@ import 'package:flutter/material.dart';
 /// The financial details include the total expenses and the remaining amount, presented with appropriate styles.
 class CustomCategoryDetector extends StatefulWidget {
   final String categoryName;
-  final int categoryIconData;
+  // final int categoryIconData;
 
   double leftLimit;
-  double expenses;
+  double categoryExpense;
 
   // This is for testing only
   // Purpose: Creates a screen that provides: category name, expense, left limit, and test
-  final int test;
+  // final int test;
 
-  CustomCategoryDetector(
-      {super.key,
-      required this.categoryName,
-      required this.categoryIconData,
-      required this.expenses,
-      required this.leftLimit,
-      required this.test});
+  CustomCategoryDetector({
+    super.key,
+    required this.categoryName,
+    required this.categoryExpense,
+    required this.leftLimit,
+  });
 
   @override
   State<CustomCategoryDetector> createState() => _CustomCategoryDetectorState();
@@ -36,7 +35,7 @@ class _CustomCategoryDetectorState extends State<CustomCategoryDetector> {
     return GestureDetector(
       onTap: () {
         // Prints the index
-        print("Index: ${widget.test}");
+        // print("Index: ${widget.test}");
       },
       child: Container(
         padding: const EdgeInsets.only(left: 20, right: 20),
@@ -59,8 +58,7 @@ class _CustomCategoryDetectorState extends State<CustomCategoryDetector> {
                     color: Theme.of(context).colorScheme.primary,
                   ),
                   child: Icon(
-                    IconData(widget.categoryIconData,
-                        fontFamily: "MaterialIcons"),
+                    Icons.access_alarm,
                     color: Theme.of(context).colorScheme.background,
                     size: 30,
                   ),
@@ -81,7 +79,7 @@ class _CustomCategoryDetectorState extends State<CustomCategoryDetector> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  "₱ ${widget.expenses}",
+                  "₱ ${widget.categoryExpense}",
                   style: TextStyle(
                       fontFamily: poppins['semiBold'],
                       fontSize: fontSize['h4']),

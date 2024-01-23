@@ -21,7 +21,7 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:budgex/pages/home/user_budgeting.dart';
 import 'package:budgex/pages/home/user_expense.dart';
-import 'package:budgex/pages/home/user_home.dart';
+import 'package:budgex/pages/home/user_home_verify.dart';
 import 'package:budgex/pages/home/user_scanner.dart';
 import 'package:budgex/pages/home/user_settings.dart';
 
@@ -34,7 +34,7 @@ List<Map<String, dynamic>> menuItems() {
     {
       'iconText': 'Home',
       'iconData': 0xe318,
-      'toPage': UserHomepage(),
+      'toPage': UserHomeVerify(),
     },
     {
       'iconText': 'Expenses',
@@ -181,13 +181,18 @@ class _CustomDrawerState extends State<CustomDrawer> {
               // Logs out
               // Allows the user to return to the log in screen
               _auth.signOut();
-              Navigator.of(context)
-                  .push(MaterialPageRoute(builder: (context) => toPage()));
+              /* Navigator.of(context)
+                  .push(MaterialPageRoute(builder: (context) => toPage())); */
             },
           ).show();
         } else {
-          Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => toPage)); // Redirects to the page
+          final route = MaterialPageRoute(builder: (context) => toPage);
+
+          // Use Navigator.pushAndRemoveUntil to navigate to the Wrapper page and remove all previous routes
+          Navigator.pushAndRemoveUntil(context, route, (route) => false);
+
+          /* Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => toPage));  */ // Redirects to the page
         }
       },
     );

@@ -19,16 +19,15 @@
   the core features of BudgEx!
 */
 
-import 'package:budgex/pages/home/intro_page.dart';
+import 'package:budgex/widgets/custom_intro_page.dart';
 import 'package:budgex/pages/authenticate/user_login.dart';
 import 'package:budgex/pages/constants/constants.dart';
+import 'package:budgex/wrapper.dart';
 import 'package:flutter/material.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class OnBoardingScreen extends StatefulWidget {
-  final Function toggleView;
-
-  const OnBoardingScreen({super.key, required this.toggleView});
+  const OnBoardingScreen({super.key});
 
   @override
   State<OnBoardingScreen> createState() => _OnBoardingScreenState();
@@ -41,15 +40,12 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
   // Keep Track of if we are on the last page or not
   bool onLastPage = false;
 
-  // Function to navigate the user to the Login page.
+  // Function to navigate the user to the Login page(Part from Wrapper).
   void toLoginPage() {
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => UserLogin(
-            toggleView: widget.toggleView,
-          ),
-        ));
+    final route = MaterialPageRoute(builder: (context) => const Wrapper());
+
+    // Use Navigator.pushAndRemoveUntil to navigate to the Wrapper page and remove all previous routes
+    Navigator.pushAndRemoveUntil(context, route, (route) => false);
   }
 
   @override

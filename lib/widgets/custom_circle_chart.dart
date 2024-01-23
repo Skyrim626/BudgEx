@@ -32,7 +32,11 @@ class _CustomCircleChartState extends State<CustomCircleChart> {
            */
           containerFirstRow(),
 
-          containerSecondRow(userData!.budget.currentBudget),
+          containerSecondRow(
+            totalBudget: userData!.budget.totalBudget,
+            currentBudget: userData.budget.currentBudget,
+            totalExpenses: userData.budget.totalExpenses,
+          ),
 
           containerThirdRow(
             totalBudget: userData.budget.totalBudget,
@@ -109,7 +113,10 @@ class _CustomCircleChartState extends State<CustomCircleChart> {
    *  Circle Charts with Current Budget
    * 
    */
-  Center containerSecondRow(double currentBudget) {
+  Center containerSecondRow(
+      {required double currentBudget,
+      required double totalBudget,
+      required double totalExpenses}) {
     double _screenWidth = MediaQuery.of(context).size.width;
     double _chartSize = _screenWidth * 0.8;
 
@@ -140,14 +147,13 @@ class _CustomCircleChartState extends State<CustomCircleChart> {
               ],
             ),
             PieChart(
-              PieChartData(sections: [
-                PieChartSectionData(
-                    value: 50, color: LIGHT_COLOR_1, showTitle: false),
-                PieChartSectionData(
-                    value: 20, color: LIGHT_COLOR_2, showTitle: false),
-                PieChartSectionData(
-                    value: 20, color: LIGHT_COLOR_4, showTitle: false),
-              ]),
+              PieChartData(
+                sections: generatePieChartSections(
+                  totalBudget,
+                  currentBudget,
+                  totalExpenses,
+                ),
+              ),
               swapAnimationDuration: const Duration(milliseconds: 750),
               swapAnimationCurve: Curves.easeInOutQuint,
             )
@@ -155,6 +161,35 @@ class _CustomCircleChartState extends State<CustomCircleChart> {
         ),
       ),
     );
+  }
+
+  List<PieChartSectionData> generatePieChartSections(
+    double totalBudget,
+    double currentBudget,
+    double totalExpenses,
+  ) {
+    double remainingBudget = totalBudget - totalExpenses;
+    double currentBudgetPercentage = (currentBudget / totalBudget) * 100;
+    double remainingBudgetPercentage = (remainingBudget / totalBudget) * 100;
+    double expensesPercentage = (totalExpenses / totalBudget) * 100;
+
+    return [
+      PieChartSectionData(
+        value: currentBudgetPercentage,
+        color: LIGHT_COLOR_1,
+        showTitle: false,
+      ),
+      PieChartSectionData(
+        value: remainingBudgetPercentage,
+        color: LIGHT_COLOR_2,
+        showTitle: false,
+      ),
+      PieChartSectionData(
+        value: expensesPercentage,
+        color: LIGHT_COLOR_4,
+        showTitle: false,
+      ),
+    ];
   }
 
   Row containerThirdRow(

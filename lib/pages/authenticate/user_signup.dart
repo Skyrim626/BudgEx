@@ -1,33 +1,12 @@
-/*
-  Flutter Developer Notes:
+import 'package:awesome_dialog/awesome_dialog.dart';
 
-  This Dart class is responsible for the User Sign Up screen in our Flutter application.
-  It allows new users to provide their information and register for an account.
-
-  Key Components:
-  - Text fields for entering full name, email, username, password, and confirming password.
-  - Functions for crucial actions:
-    - `toLoginPage`: Navigates the user back to the Login page.
-    - `toUserRegisteredPage`: Redirects the user to a 'User Signed Up' page upon successful 
-      form submission.
-  - Rich UI elements including a logo and a button to initiate the sign-up process.
-  - Dependencies include the user login page and a page for confirming successful registration.
-
-  Note: Ensure that the password fields are working as expected, including the visibility toggle.
-
-  Keep up the excellent work!
-*/
-
-// [Rest of the code remains unchanged]
-
-import 'package:budgex/pages/authenticate/user_login.dart';
 import 'package:budgex/pages/constants/constants.dart';
 import 'package:budgex/services/firebase_auth_service.dart';
-import 'package:budgex/services/firebase_firestore_service.dart';
+
 import 'package:budgex/shared/loading.dart';
+
 import 'package:budgex/widgets/custom_button.dart';
-import 'package:budgex/widgets/custom_textfield.dart';
-import 'package:budgex/wrapper.dart';
+
 import 'package:flutter/material.dart';
 
 class UserSignUp extends StatefulWidget {
@@ -35,7 +14,7 @@ class UserSignUp extends StatefulWidget {
   // Variable will be assigned to the button widget for toggling functionality
   final Function toggleView;
 
-  UserSignUp({super.key, required this.toggleView});
+  const UserSignUp({super.key, required this.toggleView});
 
   @override
   State<UserSignUp> createState() => _UserSignUpState();
@@ -62,35 +41,6 @@ class _UserSignUpState extends State<UserSignUp> {
   // Loading Screen Checker
   bool isLoading = false;
 
-  // A function that checks the credentials
-  // Checks the if the password are matched
-  // User redirects to the home screen if the credentials are valid
-  /* Future<void> toUserRegisteredPage() async {
-    // Validate returns true if the form is valid, or false otherwise.
-    if (_formKey.currentState!.validate()) {
-      //authenticate user
-      if (passwordConfirmed()) {
-        // Create New User
-        _auth.createUserEmailAndPassword(
-            email: _emailController.text.trim(),
-            password: _passwordController.text.trim());
-      }
-
-      // Add user details
-      _firestoreDatabase.addUser(
-          fullName: _fullNameController.text.trim(),
-          age: int.parse(_ageController.text.trim()),
-          email: _emailController.text.trim());
-      print("Added");
-
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => Wrapper(),
-          ));
-    }
-  } */
-
   // A function that checks if the password is matched
   bool passwordConfirmed() {
     if (_passwordController.text.trim() ==
@@ -101,7 +51,13 @@ class _UserSignUpState extends State<UserSignUp> {
     }
   }
 
-  // A function that dispose the all the inputted text in the text fields
+  // boolean variable
+  // Initially, set to true to obscure the text
+  // for checking if the password is shown/hidden
+  bool isObscureForPassword = true;
+  bool isObscureForConfirmPassword = true;
+
+  // A function that disposes all the inputted text in the text fields
   @override
   void dispose() {
     super.dispose();
@@ -115,7 +71,7 @@ class _UserSignUpState extends State<UserSignUp> {
   @override
   Widget build(BuildContext context) {
     return isLoading
-        ? const Loading()
+        ? const Loading() // Show loading screen when isLoading is true
         : Scaffold(
             appBar: AppBar(
               leading: IconButton(
@@ -131,11 +87,11 @@ class _UserSignUpState extends State<UserSignUp> {
             ),
             body: SafeArea(
               child: Form(
-                key: _formKey,
+                key: _formKey, // Form key for form validation
                 child: SingleChildScrollView(
                   child: Column(
                     children: [
-                      //logo
+                      // Logo
                       const Image(
                         image: AssetImage("assets/images/logo_light.png"),
                         height: 200,
@@ -145,78 +101,203 @@ class _UserSignUpState extends State<UserSignUp> {
                         child: Column(
                           children: [
                             // Full name textfield
-                            CustomTextField(
+                            TextFormField(
                               controller: _fullNameController,
-                              hintText: "Enter your full name",
-                              labelText: "Full Name",
-                              obscureText: false,
-                              validatorText: "Please enter your full name",
+                              style: TextStyle(
+                                fontFamily: poppins['regular'],
+                              ),
+                              decoration: const InputDecoration(
+                                hintText: 'Enter your full name',
+                                labelText: 'Full Name',
+                              ),
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return "Please enter your full name";
+                                }
+
+                                if (value.length >= 20) {
+                                  return "Your name is too long!";
+                                }
+
+                                // Use a regex to check if the value contains only letters and spaces
+                                if (!RegExp(r'^[a-zA-Z\s]+$').hasMatch(value)) {
+                                  return "Special characters and numbers are not allowed";
+                                }
+
+                                return null;
+                              },
                             ),
+
                             const SizedBox(
                               height: 10,
                             ),
 
                             // Age textfield
-                            CustomTextField(
+                            TextFormField(
                               controller: _ageController,
-                              hintText: "Enter your age",
-                              labelText: "Age",
-                              obscureText: false,
-                              validatorText: "Please enter your age",
+                              style: TextStyle(
+                                fontFamily: poppins['regular'],
+                              ),
+                              keyboardType: TextInputType
+                                  .number, // Set the keyboard to accept only numbers
+                              decoration: const InputDecoration(
+                                hintText: 'Enter your age',
+                                labelText: 'Age',
+                              ),
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return "Please enter your age";
+                                }
+
+                                // Use a regex to check if the value contains only digits
+                                if (!RegExp(r'^[0-9]+$').hasMatch(value)) {
+                                  return "Please enter a valid age (numbers only)";
+                                }
+
+                                int? age = int.tryParse(value);
+                                if (age == null || age <= 0) {
+                                  return "Please enter a valid age above 0";
+                                }
+
+                                if (age < 18) {
+                                  return "You must be 18 or older";
+                                }
+
+                                return null;
+                              },
                             ),
+
                             const SizedBox(
                               height: 10,
                             ),
 
-                            // Email textfield
-                            CustomTextField(
+                            // Email Text Field
+                            TextFormField(
                               controller: _emailController,
-                              hintText: "Enter your email",
-                              labelText: "Email",
-                              obscureText: false,
-                              validatorText: "Please enter your email",
+                              style: TextStyle(
+                                fontFamily: poppins['regular'],
+                              ),
+                              keyboardType: TextInputType
+                                  .emailAddress, // Set keyboard type to accept email addresses
+                              decoration: const InputDecoration(
+                                hintText: 'Enter your email',
+                                labelText: 'Email',
+                              ),
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return "Please enter your email";
+                                }
+
+                                // Use a regex to check if the value is a valid email address
+                                if (!RegExp(
+                                        r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$')
+                                    .hasMatch(value)) {
+                                  return "Please enter a valid email address";
+                                }
+
+                                if (value.length > 20) {
+                                  return "Email address should not exceed 20 characters";
+                                }
+
+                                return null;
+                              },
                             ),
+
                             const SizedBox(
                               height: 10,
                             ),
 
-                            // Password textfield,
-                            CustomTextField(
-                                controller: _passwordController,
-                                hintText: "Enter your new password",
-                                labelText: "Password",
-                                obscureText: true,
-                                validatorText: "Please enter your password"),
+                            // Password textfield
+                            TextFormField(
+                              controller: _passwordController,
+                              style: TextStyle(
+                                fontFamily: poppins['regular'],
+                              ),
+                              decoration: InputDecoration(
+                                hintText: 'Enter your password',
+                                labelText: 'Password',
+                                suffixIcon: IconButton(
+                                  onPressed: () {
+                                    setState(() {
+                                      isObscureForPassword =
+                                          !isObscureForPassword;
+                                    });
+                                  },
+                                  icon: Icon(isObscureForPassword
+                                      ? Icons.visibility_off
+                                      : Icons.visibility),
+                                ),
+                              ),
+                              obscureText: isObscureForPassword,
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return "Please enter your password";
+                                }
+
+                                // Password strength criteria
+                                if (value.length < 8) {
+                                  return "Password must be at least 8 characters long";
+                                }
+
+                                if (!RegExp(
+                                        r'(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+{}|:<>?~,-.]).{8,}')
+                                    .hasMatch(value)) {
+                                  return "Password must contain at least one uppercase letter, one lowercase letter, one digit, and one special character";
+                                }
+
+                                return null;
+                              },
+                            ),
 
                             const SizedBox(
                               height: 10,
                             ),
                             // Confirm Password textfield
-                            CustomTextField(
-                                controller: _confirmPasswordController,
-                                hintText: "Enter your confirm password",
-                                labelText: "Confirm Password",
-                                obscureText: true,
-                                validatorText:
-                                    "Please enter your confirm password"),
+                            TextFormField(
+                              controller: _confirmPasswordController,
+                              style: TextStyle(
+                                fontFamily: poppins['regular'],
+                              ),
+                              decoration: InputDecoration(
+                                hintText: 'Enter your confirm password',
+                                labelText: 'Confirm Password',
+                                suffixIcon: IconButton(
+                                  onPressed: () {
+                                    setState(() {
+                                      isObscureForConfirmPassword =
+                                          !isObscureForConfirmPassword;
+                                    });
+                                  },
+                                  icon: Icon(isObscureForConfirmPassword
+                                      ? Icons.visibility_off
+                                      : Icons.visibility),
+                                ),
+                              ),
+                              obscureText: isObscureForConfirmPassword,
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return "Please enter your confirm password";
+                                }
+                                return null;
+                              },
+                            ),
 
                             const SizedBox(
                               height: 10,
                             ),
 
-                            CustomButtom(
-                                buttonText: "Sign Up",
-                                onPressed: () async {
-                                  // Conditional Statement
-                                  // This will evaluate into true or false
-                                  // It used for form validation
-                                  // If validation is false, then the form is invalid
-                                  // Form that is true will be registered
-                                  if (_formKey.currentState!.validate()) {
-                                    // Loads a Loading Screen
-                                    setState(() => isLoading = true);
-                                    // 2 TYPES OF DATA TYPE will be returned
-                                    // Either null or object type
+                            CustomButton(
+                              buttonText: "Sign Up",
+                              onPressed: () async {
+                                // Form that is true will be registered
+                                if (_formKey.currentState!.validate()) {
+                                  // Loads a Loading Screen
+                                  setState(() => isLoading = true);
+                                  // 2 TYPES OF DATA TYPE will be returned
+                                  // Either null or object type
+
+                                  if (_passwordController.text ==
+                                      _confirmPasswordController.text) {
                                     dynamic result = await _auth
                                         .registerWithEmailAndPassword(
                                             _emailController.text,
@@ -228,13 +309,33 @@ class _UserSignUpState extends State<UserSignUp> {
 
                                     if (result == null) {
                                       setState(() {
-                                        print(
-                                            'Could not sign up with credentials');
+                                        // print('Could not sign up with credentials');
                                         isLoading = false;
                                       });
                                     }
+                                  } else {
+                                    setState(() {
+                                      isLoading = false;
+                                    });
+
+                                    // Show an error dialog if passwords do not match
+                                    AwesomeDialog(
+                                            context: context,
+                                            dialogType: DialogType.error,
+                                            animType: AnimType.scale,
+                                            title: "Password not matched!",
+                                            btnOkOnPress: () {})
+                                        .show();
                                   }
-                                }),
+                                }
+                              },
+                              paddingHorizontal: 80,
+                              paddingVertical: 15,
+                              buttonColor: LIGHT_COLOR_3,
+                              fontSize: fontSize['h4']!,
+                              fontFamily: dosis['bold']!,
+                              textColor: Colors.white,
+                            ),
                           ],
                         ),
                       )
