@@ -28,7 +28,7 @@ class _UserCategoryEditState extends State<UserCategoryEdit> {
   final FirebaseFirestoreService _firestoreService = FirebaseFirestoreService();
 
   late Stream<UserData?> userStream;
-  // late List<UserCategoryModel?> userCategories;
+
   @override
   void initState() {
     // TODO: implement initState

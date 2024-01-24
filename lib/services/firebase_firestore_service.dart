@@ -51,6 +51,34 @@ class FirebaseFirestoreService {
     }
   }
 
+  // Deletes an expense entry to the firestore
+  Future<void> deleteExpense({
+    required String uuid,
+    required String expenseUUID,
+    required String categoryType,
+  }) async {
+    print("DELETED");
+    print("Exepense ID : $expenseUUID");
+    try {
+      /* await _firestoreDatabase.collection('users').doc(uuid).update({
+        'budget': {
+          'categories': {
+            categoryType: {
+              'expenses': {expenseUUID: FieldValue.delete()}
+            }
+          }
+        }
+      }); */
+
+      await _firestoreDatabase.collection('users').doc(uuid).update({
+        'budget.categories.$categoryType.expenses.$expenseUUID':
+            FieldValue.delete(),
+      });
+    } catch (e) {
+      print("Error deleting expse $e");
+    }
+  }
+
   // A method that deletes the category of the user to the Firestore
   Future<void> deleteCategoryUser(
       {required String uuid,
@@ -91,11 +119,13 @@ class FirebaseFirestoreService {
           'budget': {
             'categories': {
               categoryName: {
-                expenseEntry.uuid: {
-                  'amount': expenseEntry.amount,
-                  'description': expenseEntry.description,
-                  'expenseName': expenseEntry.expenseName,
-                  'transactionDate': expenseEntry.transactionDate,
+                'expenses': {
+                  expenseEntry.uuid: {
+                    'amount': expenseEntry.amount,
+                    'description': expenseEntry.description,
+                    'expenseName': expenseEntry.expenseName,
+                    'transactionDate': expenseEntry.transactionDate,
+                  }
                 }
               }
             }

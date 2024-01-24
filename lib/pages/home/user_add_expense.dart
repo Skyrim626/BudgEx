@@ -92,7 +92,7 @@ class _UserAddExpenseState extends State<UserAddExpense> {
           return Text("Error: ${snapshot.error}");
         } else {
           // Data Loaded Successfully
-          // Data loaded successfully
+
           UserData userData = snapshot.data!;
 
           return StreamProvider<UserData?>.value(
@@ -319,7 +319,7 @@ class _UserAddExpenseState extends State<UserAddExpense> {
                                 UserExpenseModel expenseEntry =
                                     UserExpenseModel(
                                         uuid: newUuid,
-                                        expenseName: selectedCategory,
+                                        expenseName: nameController.text,
                                         amount:
                                             double.parse(amountController.text),
                                         description: descriptionController.text,
@@ -330,6 +330,14 @@ class _UserAddExpenseState extends State<UserAddExpense> {
                                     uuid: _authService.getCurrentUser().uid,
                                     categoryName: selectedCategory,
                                     expenseEntry: expenseEntry);
+
+                                final route = MaterialPageRoute(
+                                    builder: (context) => UserBudgeting());
+
+                                // Use Navigator.pushAndRemoveUntil to navigate to the UserBudgeting page and remove all previous routes
+                                // ignore: use_build_context_synchronously
+                                Navigator.pushAndRemoveUntil(
+                                    context, route, (route) => false);
                               } else {
                                 AwesomeDialog(
                                         context: context,

@@ -41,21 +41,6 @@ class _UserSettingsState extends State<UserSettings> {
             .userDocumentStream;
   }
 
-  // Function to navigate the user to the Login page.
-  void logOut() {
-    AwesomeDialog(
-      context: context,
-      btnOkColor: LIGHT_COLOR_3,
-      dialogType: DialogType.warning,
-      animType: AnimType.rightSlide,
-      desc: 'Are You Sure You Want to Log Out?',
-      btnCancelOnPress: () {},
-      btnOkOnPress: () async {
-        await _authService.signOut();
-      },
-    ).show();
-  }
-
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<UserData?>(
