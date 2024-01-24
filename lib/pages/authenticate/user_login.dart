@@ -195,6 +195,15 @@ class _UserLoginState extends State<UserLogin> {
                                         error =
                                             'Could not sign in with credentials';
                                         isLoading = false;
+
+                                        // Display Awesome Dialog for Invalid Credetials or could not sign in
+                                        AwesomeDialog(
+                                          context: context,
+                                          dialogType: DialogType.warning,
+                                          animType: AnimType.rightSlide,
+                                          title: error,
+                                          btnOkOnPress: () {},
+                                        ).show();
                                       });
                                     }
                                   }

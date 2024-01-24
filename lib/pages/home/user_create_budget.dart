@@ -1,3 +1,4 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:budgex/data/categoryData.dart';
 import 'package:budgex/model/userModel.dart';
 import 'package:budgex/pages/constants/constants.dart';
@@ -31,6 +32,13 @@ class _UserCreateBudgetState extends State<UserCreateBudget> {
   TextEditingController budgetDeclaredController = TextEditingController();
 
   late Stream<UserData?> userStream;
+
+  // Create a global key that uniquely identifies the Form widget
+  // and allows validation of the form.
+  //
+  // Note: This is a `GlobalKey<FormState>`,
+  // not a GlobalKey<MyCustomFormState>.
+  final _formKey = GlobalKey<FormState>();
   @override
   void initState() {
     // TODO: implement initState
@@ -65,13 +73,6 @@ class _UserCreateBudgetState extends State<UserCreateBudget> {
 
   // Builds the Create Budget
   Scaffold _buildCreateBudgetUI(BuildContext context, UserData? data) {
-    // Create a global key that uniquely identifies the Form widget
-    // and allows validation of the form.
-    //
-    // Note: This is a `GlobalKey<FormState>`,
-    // not a GlobalKey<MyCustomFormState>.
-    final _formKey = GlobalKey<FormState>();
-
     final userData = data;
 
     return Scaffold(
@@ -109,12 +110,16 @@ class _UserCreateBudgetState extends State<UserCreateBudget> {
                       ),
 
                       validator: (value) {
-                        if (value == null || value.isEmpty) {
+                        if (value == null || value.isEmpty || value == "") {
                           return "Please enter a budget amount";
                         }
 
                         // Check if the entered value is a number
-                        if (double.tryParse(value) == null) {
+                        try {
+                          if (double.tryParse(value) == null) {
+                            return "Please enter a valid number";
+                          }
+                        } catch (e) {
                           return "Please enter a valid number";
                         }
 
@@ -216,21 +221,61 @@ class _UserCreateBudgetState extends State<UserCreateBudget> {
                         // Confirm Budget
                         ElevatedButton(
                           onPressed: () {
-                            double totalCategoriesLimit = 0;
-                            for (CategoryData category in categories) {
-                              totalCategoriesLimit += category.leftLimit;
+                            // Form that is true will be registered
+                            if (_formKey.currentState!.validate()) {
+                              if ((categories.isNotEmpty)) {
+                                double totalCategoriesLimit = 0;
+                                for (CategoryData category in categories) {
+                                  totalCategoriesLimit += category.leftLimit;
+                                }
+
+                                // Checks if the Declared Budget is greater than the total limits of the categories
+                                if (double.parse(
+                                        budgetDeclaredController.text) >
+                                    totalCategoriesLimit) {
+                                  // TBD
+
+                                  // Throws an error if the account is already used
+                                  try {
+                                    _firestoreService.updateBudgetUser(
+                                        budgetDeclared: double.parse(
+                                            budgetDeclaredController.text),
+                                        uuid: _authService.getCurrentUser().uid,
+                                        categories: categories);
+                                  } catch (e) {
+                                    print(
+                                        "[firebase_auth/email-already-in-use] The email address is already in use by another account.");
+                                  }
+                                } else {
+                                  AwesomeDialog(
+                                    context: context,
+                                    dialogType: DialogType.warning,
+                                    animType: AnimType.rightSlide,
+                                    title:
+                                        'Limit Exceed to the Budget Declared',
+                                    desc:
+                                        'Make sure your budget limit is greater than all your total limits to your categories.',
+                                    btnOkOnPress: () {},
+                                  ).show();
+                                }
+                              }
+
+                              // Displays Awesome Dialog if the catgory is empty
+                              else {
+                                AwesomeDialog(
+                                  context: context,
+                                  dialogType: DialogType.warning,
+                                  animType: AnimType.rightSlide,
+                                  title: 'No categories added',
+                                  desc:
+                                      'You need at least 1 category for your budgeting.',
+                                  btnOkOnPress: () {},
+                                ).show();
+                              }
                             }
 
-                            // Checks if the Declared Budget is greater than the total limits of the categories
-                            if (double.parse(budgetDeclaredController.text) >=
-                                totalCategoriesLimit) {
-                              // TBD
-                              _firestoreService.updateBudgetUser(
-                                  budgetDeclared: double.parse(
-                                      budgetDeclaredController.text),
-                                  uuid: _authService.getCurrentUser().uid,
-                                  categories: categories);
-                            }
+                            // Checks if the category list is empty
+                            // If category is not empty then send the data to the Firestore Service
                           },
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),

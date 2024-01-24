@@ -9,6 +9,7 @@ import 'package:budgex/model/userModel.dart';
 
 import 'package:budgex/services/firebase_auth_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
@@ -49,6 +50,15 @@ class FirebaseFirestoreService {
     } catch (e) {
       print("Error updating age $e");
     }
+  }
+
+  // Deletes the document of the user permanently
+  Future<void> deleteAccountDocument({
+    required String uuid,
+    required User user,
+  }) async {
+    // Deletes the document of the firestore
+    await _firestoreDatabase.collection("users").doc(uuid).delete();
   }
 
   // Deletes an expense entry to the firestore

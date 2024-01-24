@@ -239,6 +239,10 @@ class _UserSignUpState extends State<UserSignUp> {
                                   return "Password must be at least 8 characters long";
                                 }
 
+                                if (value.length >= 100) {
+                                  return "That is not the right age limit";
+                                }
+
                                 if (!RegExp(
                                         r'(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+{}|:<>?~,-.]).{8,}')
                                     .hasMatch(value)) {

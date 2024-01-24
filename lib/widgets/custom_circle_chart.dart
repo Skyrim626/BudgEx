@@ -1,5 +1,6 @@
 import 'package:budgex/model/userModel.dart';
 import 'package:budgex/pages/constants/constants.dart';
+import 'package:budgex/widgets/custom_text.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
@@ -97,9 +98,7 @@ class _CustomCircleChartState extends State<CustomCircleChart> {
           ],
         ),
         IconButton(
-          onPressed: () {
-
-          },
+          onPressed: () {},
           icon: Icon(Icons.edit),
           color: LIGHT_COLOR_1,
         ),
@@ -272,6 +271,51 @@ class _CustomCircleChartState extends State<CustomCircleChart> {
               color: LIGHT_COLOR_1),
         ),
       ],
+    );
+  }
+
+  // A method that displays the edit dialog
+  void showEditDialog({
+    required String labelText,
+    required TextEditingController textController,
+  }) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Center(
+          child: AlertDialog(
+            title: CustomText(
+              title: labelText,
+              fontFamily: poppins['regular']!,
+              fontSize: fontSize['h3']!,
+              titleColor: LIGHT_COLOR_3,
+            ),
+            content: SingleChildScrollView(
+              child: ListBody(
+                children: <Widget>[
+                  // Text('Enter new budget:'),
+                  TextField(
+                    controller: textController,
+                  ),
+                ],
+              ),
+            ),
+            actions: <Widget>[
+              TextButton(
+                child: const Text('Cancel'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+              TextButton(
+                  child: const Text('Save'),
+                  onPressed: () {
+                    // INSERT LOGIC HERE
+                  })
+            ],
+          ),
+        );
+      },
     );
   }
 }

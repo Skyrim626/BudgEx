@@ -27,7 +27,7 @@ List<CategoryData> sampleCategories = [
     leftLimit: 0,
     categoryExpense: 0,
   ),
-  /* CategoryData(
+  CategoryData(
     iconData: "0xe25a",
     categoryName: 'Fast Food',
     leftLimit: 0,
@@ -68,6 +68,6 @@ List<CategoryData> sampleCategories = [
     categoryName: 'Education',
     leftLimit: 0,
     categoryExpense: 0,
-  ), */
+  ),
   // Add more categories as needed
 ];

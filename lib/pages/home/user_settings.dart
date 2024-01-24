@@ -6,10 +6,10 @@ import 'package:budgex/services/firebase_firestore_service.dart';
 import 'package:budgex/shared/loading.dart';
 import 'package:budgex/widgets/custom_appbar.dart';
 import 'package:budgex/widgets/custom_buttom.dart';
+import 'package:budgex/widgets/custom_button.dart';
 import 'package:budgex/widgets/custom_drawer.dart';
 import 'package:budgex/wrapper.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -285,21 +285,84 @@ class _UserSettingsState extends State<UserSettings> {
 
                       // Sign Out
                       Center(
-                          child: CustomButtom(
-                              buttonText: "Sign Out",
+                          child: Column(
+                        children: [
+                          CustomButton(
+                              buttonText: "       Sign Out        ",
                               onPressed: () async {
                                 /* logOut(); */
-                                print("Logged Out");
-                                await _authService.signOut();
 
-                                final route = MaterialPageRoute(
-                                    builder: (context) => Wrapper());
+                                AwesomeDialog(
+                                  context: context,
+                                  dialogType: DialogType.warning,
+                                  animType: AnimType.rightSlide,
+                                  title: 'Are you sure you want to Logout?',
+                                  btnCancelOnPress: () {},
+                                  btnOkOnPress: () async {
+                                    print("Logged Out");
+                                    await _authService.signOut();
 
-                                // Use Navigator.pushAndRemoveUntil to navigate to the Wrapper page and remove all previous routes
-                                // ignore: use_build_context_synchronously
-                                Navigator.pushAndRemoveUntil(
-                                    context, route, (route) => false);
-                              })),
+                                    final route = MaterialPageRoute(
+                                        builder: (context) => Wrapper());
+
+                                    // Use Navigator.pushAndRemoveUntil to navigate to the Wrapper page and remove all previous routes
+                                    // ignore: use_build_context_synchronously
+                                    Navigator.pushAndRemoveUntil(
+                                        context, route, (route) => false);
+                                  },
+                                ).show();
+                              },
+                              paddingHorizontal: 80,
+                              paddingVertical: 15,
+                              buttonColor: LIGHT_COLOR_3,
+                              fontFamily: dosis['bold']!,
+                              fontSize: fontSize['h4']!,
+                              textColor: Colors.white),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          CustomButton(
+                              buttonText: "Delete Account",
+                              onPressed: () async {
+                                AwesomeDialog(
+                                    context: context,
+                                    dialogType: DialogType.error,
+                                    animType: AnimType.rightSlide,
+                                    title:
+                                        'Are you sure you want to delete your account?',
+                                    desc:
+                                        "Deleting your account will lose all your buget records.",
+                                    btnCancelOnPress: () {},
+                                    btnOkOnPress: () async {
+                                      // Signs out the user
+                                      _authService.signOut();
+
+                                      // Deletes user auth account
+                                      _authService.getCurrentUser().delete();
+
+                                      // Deletes the user document
+                                      _firestoreService.deleteAccountDocument(
+                                          uuid:
+                                              _authService.getCurrentUser().uid,
+                                          user: _authService.getCurrentUser());
+
+                                      final route = MaterialPageRoute(
+                                          builder: (context) => Wrapper());
+
+                                      // Use Navigator.pushAndRemoveUntil to navigate to the Wrapper page and remove all previous routes
+                                      // ignore: use_build_context_synchronously
+                                      Navigator.pushAndRemoveUntil(
+                                          context, route, (route) => false);
+                                    }).show();
+                              },
+                              paddingHorizontal: 80,
+                              paddingVertical: 15,
+                              buttonColor: Colors.red,
+                              fontFamily: dosis['bold']!,
+                              fontSize: fontSize['h4']!,
+                              textColor: Colors.white)
+                        ],
+                      )),
                       const SizedBox(
                         height: 15,
                       ),
