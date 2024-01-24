@@ -24,14 +24,13 @@ class BudgetModel {
 
     // If categoriesMap is not null, transform it into UserCategoryModel instances
 
-    print("SRUPIRSE!!!!!!!!1");
     if (categoriesMap != null) {
       userCategories = categoriesMap.entries.map((entry) {
         String categoryName = entry.key;
         Map<String, dynamic> categoryData = entry.value;
 
-        print('IDEAD DATA{}');
-        print(categoryData['expenses']);
+        //print('SAMPLE DATA{}');
+        // print(categoryData['expenses']);
         return UserCategoryModel.fromMap({
           'categoryName': categoryName,
           'categoryExpense': categoryData['categoryExpense'],

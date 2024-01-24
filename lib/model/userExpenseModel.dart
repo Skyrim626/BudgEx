@@ -13,7 +13,6 @@ class UserExpenseModel {
       required this.transactionDate});
 
   factory UserExpenseModel.fromMap(Map<String, dynamic> map) {
-    print("SRUPIRSE!!!!!!!!1EXPENSE");
     return UserExpenseModel(
         uuid: map['uuid'],
         expenseName: map['expenseName'],

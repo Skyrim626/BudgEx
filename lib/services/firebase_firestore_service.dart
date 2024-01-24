@@ -85,6 +85,25 @@ class FirebaseFirestoreService {
     print(expenseEntry.description);
     print(expenseEntry.expenseName);
     print(expenseEntry.transactionDate);
+
+    return await _firestoreDatabase.collection('users').doc(uuid).set(
+        {
+          'budget': {
+            'categories': {
+              categoryName: {
+                expenseEntry.uuid: {
+                  'amount': expenseEntry.amount,
+                  'description': expenseEntry.description,
+                  'expenseName': expenseEntry.expenseName,
+                  'transactionDate': expenseEntry.transactionDate,
+                }
+              }
+            }
+          }
+        },
+        SetOptions(
+          merge: true,
+        ));
   }
 
   // A method that stores the category of the user to the Firestore
