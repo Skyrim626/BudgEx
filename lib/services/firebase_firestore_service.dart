@@ -1,6 +1,7 @@
 import 'package:budgex/data/categoryData.dart';
 import 'package:budgex/model/userBudgetModel.dart';
 import 'package:budgex/model/userCategoryModel.dart';
+import 'package:budgex/model/userExpenseModel.dart';
 import 'package:budgex/model/userModel.dart';
 import 'package:budgex/model/userModel.dart';
 import 'package:budgex/model/userModel.dart';
@@ -50,6 +51,42 @@ class FirebaseFirestoreService {
     }
   }
 
+  // A method that deletes the category of the user to the Firestore
+  Future<void> deleteCategoryUser(
+      {required String uuid,
+      required List<UserCategoryModel> categories}) async {
+    /* return await _firestoreDatabase.collection("users").doc(uuid).set({
+      'budget': {
+        'categories': categoriesMap,
+      }
+    }, SetOptions(merge: true));  */
+
+    // Empty Map for storing Categories
+    Map categoriesMap = {};
+
+    print(
+        "-------------------------------------------deleteCategoryUser AREA-------------------------------------------");
+    print("To the FireStore");
+    print("USER UUID: $uuid");
+  }
+
+  // A method to store new expense transaction in the specific category
+  Future<void> addNewExpense({
+    required String uuid,
+    required String categoryName,
+    required UserExpenseModel expenseEntry,
+  }) async {
+    print(
+        "------------------------------------------- addNewExpense AREA-------------------------------------------");
+    print("To the FireStore");
+    print("USER UUID: $uuid");
+    print("EXPENSE UUID: ${expenseEntry.uuid}");
+    print(expenseEntry.amount);
+    print(expenseEntry.description);
+    print(expenseEntry.expenseName);
+    print(expenseEntry.transactionDate);
+  }
+
   // A method that stores the category of the user to the Firestore
   Future<void> updateCategoryUser(
       {required String uuid,
@@ -59,6 +96,8 @@ class FirebaseFirestoreService {
 
     // Default Category Expense
     double categoryExpense = 0;
+    print(
+        "------------------------------------------- updateCategoryUser AREA-------------------------------------------");
     print("To the FireStore");
     print("USER UUID: $uuid");
     for (UserCategoryModel category in categories) {

@@ -91,40 +91,34 @@ class _UserCategoryEditState extends State<UserCategoryEdit> {
             // Display Existing Categories
             children: [
               ...userData?.budget.userCategories.map((category) {
-                    return GestureDetector(
-                      onTap: () {
-                        // _editCategory(context, userData!, category)
-                        // _addCategory(context, data);
-                      },
-                      child: ListTile(
-                          title: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              CustomText(
-                                  title: category.categoryName,
-                                  fontSize: fontSize['h5']!,
-                                  fontFamily: poppins['regular']!),
-                              CustomText(
-                                  title: category.leftLimit.toString(),
-                                  fontSize: fontSize['h5']!,
-                                  fontFamily: poppins['regular']!)
-                            ],
+                    return ListTile(
+                        title: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            CustomText(
+                                title: category.categoryName,
+                                fontSize: fontSize['h5']!,
+                                fontFamily: poppins['regular']!),
+                            CustomText(
+                                title: category.leftLimit.toString(),
+                                fontSize: fontSize['h5']!,
+                                fontFamily: poppins['regular']!)
+                          ],
+                        ),
+                        leading: Icon(
+                          IconData(int.parse(category.iconData),
+                              fontFamily: 'MaterialIcons'),
+                          color: LIGHT_COLOR_5,
+                        ),
+                        trailing: IconButton(
+                          icon: const Icon(
+                            Icons.delete,
+                            color: Colors.red,
                           ),
-                          leading: Icon(
-                            IconData(int.parse(category.iconData),
-                                fontFamily: 'MaterialIcons'),
-                            color: LIGHT_COLOR_5,
-                          ),
-                          trailing: IconButton(
-                            icon: const Icon(
-                              Icons.delete,
-                              color: Colors.red,
-                            ),
-                            onPressed: () {
-                              // _removeCategory(category, userData!);
-                            },
-                          )),
-                    );
+                          onPressed: () {
+                            _removeCategory(category, userData);
+                          },
+                        ));
                   }).toList() ??
                   [],
               const SizedBox(
@@ -263,7 +257,8 @@ class _UserCategoryEditState extends State<UserCategoryEdit> {
                           iconData: newIconData,
                           categoryName: newCategoryName,
                           leftLimit: newBudgetLimit,
-                          categoryExpense: newCategoryExpense);
+                          categoryExpense: newCategoryExpense,
+                          expenseEntry: []);
                       setState(() {
                         userData?.budget.userCategories.add(newCategory);
                         for (UserCategoryModel category
@@ -285,6 +280,45 @@ class _UserCategoryEditState extends State<UserCategoryEdit> {
         });
   }
 
-  // Function to edit category
-  void _editCategory() {}
+  // Function to remove a category
+  void _removeCategory(UserCategoryModel category, UserData data) {
+    final userData = data;
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Remove Category'),
+          content:
+              Text('Are you sure you want to remove ${category.categoryName}?'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: Text('Cancel'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                setState(() {
+                  userData.budget.userCategories.remove(category);
+
+                  // _updateUserCategories(context, userData, categories);
+                  for (UserCategoryModel category
+                      in userData.budget.userCategories) {
+                    print(category.categoryName);
+                  }
+
+                  _firestoreService.deleteCategoryUser(
+                      uuid: _authService.getCurrentUser().uid,
+                      categories: userData.budget.userCategories);
+                });
+                Navigator.pop(context);
+              },
+              child: Text('Remove'),
+            ),
+          ],
+        );
+      },
+    );
+  }
 }
