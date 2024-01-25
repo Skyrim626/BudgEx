@@ -8,6 +8,7 @@ import 'package:budgex/widgets/custom_appbar.dart';
 import 'package:budgex/widgets/custom_buttom.dart';
 import 'package:budgex/widgets/custom_button.dart';
 import 'package:budgex/widgets/custom_drawer.dart';
+import 'package:budgex/widgets/custom_text.dart';
 import 'package:budgex/wrapper.dart';
 
 import 'package:flutter/material.dart';
@@ -30,6 +31,9 @@ class _UserSettingsState extends State<UserSettings> {
 
   // Create an instance of the FirestoreFirebaseService for updating data in the Setting Screen
   final FirebaseFirestoreService _firestoreService = FirebaseFirestoreService();
+
+  // Global key for form validation
+  final _formKey = GlobalKey<FormState>();
 
   late Stream<UserData?> userStream;
   @override
@@ -162,7 +166,7 @@ class _UserSettingsState extends State<UserSettings> {
               child: Column(
                 children: [
                   // Profile
-                  Stack(alignment: Alignment.center, children: [
+                  /* Stack(alignment: Alignment.center, children: [
                     Container(
                         margin: const EdgeInsets.only(top: 10, bottom: 10),
                         height: 150,
@@ -200,23 +204,24 @@ class _UserSettingsState extends State<UserSettings> {
                         ),
                       ),
                     ),
-                  ]),
+                  ]), */
+
+                  const SizedBox(
+                    height: 60,
+                  ),
 
                   // Name & Email
-                  Text(
-                    userData!.fullName,
-                    style: TextStyle(
-                      fontFamily: poppins['regular'],
-                      letterSpacing: 3,
-                      fontSize: fontSize["h2"],
-                    ),
+                  CustomText(
+                    title: userData!.fullName,
+                    fontFamily: poppins['regular']!,
+                    fontSize: fontSize["h2"]!,
+                    letterSpacing: 3,
                   ),
-                  Text(
-                    userData.email,
-                    style: TextStyle(
-                      fontFamily: dosis['regular'],
-                      fontSize: fontSize["h5"],
-                    ),
+
+                  CustomText(
+                    title: userData.email,
+                    fontFamily: poppins['regular']!,
+                    fontSize: fontSize["h5"]!,
                   ),
 
                   const SizedBox(
@@ -263,7 +268,7 @@ class _UserSettingsState extends State<UserSettings> {
 
                       /* Privacy
                 - Change Password */
-                      customOption(title: "Privacy"),
+                      /* customOption(title: "Privacy"),
                       const Divider(),
                       Center(
                         child: CustomButtom(
@@ -271,17 +276,17 @@ class _UserSettingsState extends State<UserSettings> {
                       ),
                       const SizedBox(
                         height: 15,
-                      ),
+                      ), */
 
                       /* Manage Notifications
                 - Notifications */
-                      customOption(title: "Notification"),
+                      /* customOption(title: "Notification"),
                       const Divider(),
                       customListTile(
                           formatLeading: "Notifications", isEditIcon: false),
                       const SizedBox(
                         height: 50,
-                      ),
+                      ), */
 
                       // Sign Out
                       Center(
@@ -331,7 +336,7 @@ class _UserSettingsState extends State<UserSettings> {
                                     title:
                                         'Are you sure you want to delete your account?',
                                     desc:
-                                        "Deleting your account will lose all your buget records.",
+                                        "Deleting your account will lose all your budget records.",
                                     btnCancelOnPress: () {},
                                     btnOkOnPress: () async {
                                       // Signs out the user

@@ -1,26 +1,52 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:budgex/model/userCategoryModel.dart';
 import 'package:budgex/model/userModel.dart';
 import 'package:budgex/pages/constants/constants.dart';
+import 'package:budgex/pages/home/user_dashboard.dart';
+import 'package:budgex/services/firebase_auth_service.dart';
+import 'package:budgex/services/firebase_firestore_service.dart';
 import 'package:budgex/widgets/custom_text.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+import 'package:intl/intl.dart';
+
 import 'package:provider/provider.dart';
 
 class CustomCircleChart extends StatefulWidget {
-  CustomCircleChart({super.key});
+  const CustomCircleChart({super.key});
 
   @override
   State<CustomCircleChart> createState() => _CustomCircleChartState();
 }
 
 class _CustomCircleChartState extends State<CustomCircleChart> {
+  // Generate Current Time
+  DateTime? now;
+
+  // Define the desired date format
+  String? formattedDate;
+
+  // Define the desired time format with AM/PM
+  String? formattedTime;
+
+  TextEditingController _editController = TextEditingController();
+
+  // Global key to uniquely identify the Form widget for validation
+  final _formKey = GlobalKey<FormState>();
+
+  // Create an instance of the FirebaseAuthService to manage authentication.
+  final FirebaseAuthService _authService = FirebaseAuthService();
+
+  // Create an instance of the FirebaseFirestoreService to add expense data.
+  final FirebaseFirestoreService _firestoreService = FirebaseFirestoreService();
+
   @override
   Widget build(BuildContext context) {
     final userData = Provider.of<UserData?>(context);
 
     return Container(
-      padding: EdgeInsets.all(10),
+      padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10), color: LIGHT_COLOR_5),
       child: Column(
@@ -31,7 +57,7 @@ class _CustomCircleChartState extends State<CustomCircleChart> {
            * - Display Budget Period:
            *  - (Daily, Weekly, Monthly, Yearly)
            */
-          containerFirstRow(),
+          containerFirstRow(data: userData),
 
           containerSecondRow(
             totalBudget: userData!.budget.totalBudget,
@@ -50,56 +76,50 @@ class _CustomCircleChartState extends State<CustomCircleChart> {
   }
 
   /**
-   * 
    * A method that displays the first row batch for the circle chart
-   * 
+   *
    * Displays:
    *  Budget Period
-   * 
    */
-  Row containerFirstRow() {
+  Row containerFirstRow({required UserData? data}) {
+    final userData = data;
+
+    now = DateTime.now();
+    formattedDate = DateFormat('MMMM dd, yyyy').format(now!);
+    formattedTime = DateFormat('h:mm a').format(now!);
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              "Weekly",
-              style: TextStyle(
-                color: LIGHT_COLOR_1,
-                fontFamily: poppins['regular'],
-                fontSize: fontSize['h6'],
-              ),
+            CustomText(
+              title: "Current Date:",
+              fontFamily: poppins['regular']!,
+              fontSize: fontSize['h6']!,
+              titleColor: LIGHT_COLOR_1,
             ),
-            Text(
-              "Current Budget Period",
-              style: TextStyle(
-                color: LIGHT_COLOR_1,
-                fontFamily: poppins['regular'],
-                fontSize: fontSize['h6'],
-              ),
+            CustomText(
+              title: "$formattedDate",
+              fontFamily: poppins['regular']!,
+              fontSize: fontSize['h6']!,
+              titleColor: LIGHT_COLOR_1,
             ),
-
-            /**
-             * 
-             * Display the Date of Budget is Created
-             * 
-             * {INSERT DATA}
-             */
-            Text(
-              "October 29, 2023",
-              style: TextStyle(
-                color: LIGHT_COLOR_1,
-                fontFamily: poppins['regular'],
-                fontSize: fontSize['h6'],
-              ),
+            CustomText(
+              title: "$formattedTime",
+              fontFamily: poppins['regular']!,
+              fontSize: fontSize['h6']!,
+              titleColor: LIGHT_COLOR_1,
             ),
           ],
         ),
         IconButton(
-          onPressed: () {},
-          icon: Icon(Icons.edit),
+          onPressed: () {
+            showEditDialog(
+                budgetDeclared: userData!.budget.totalBudget, data: userData);
+          },
+          icon: Icon(Icons.add),
           color: LIGHT_COLOR_1,
         ),
       ],
@@ -107,12 +127,10 @@ class _CustomCircleChartState extends State<CustomCircleChart> {
   }
 
   /**
-   * 
    * A method that displays the second row batch for the circle chart
-   * 
+   *
    * Displays:
    *  Circle Charts with Current Budget
-   * 
    */
   Center containerSecondRow(
       {required int currentBudget,
@@ -176,11 +194,6 @@ class _CustomCircleChartState extends State<CustomCircleChart> {
 
     return [
       PieChartSectionData(
-        value: currentBudgetPercentage,
-        color: LIGHT_COLOR_1,
-        showTitle: false,
-      ),
-      PieChartSectionData(
         value: remainingBudgetPercentage,
         color: LIGHT_COLOR_2,
         showTitle: false,
@@ -193,6 +206,12 @@ class _CustomCircleChartState extends State<CustomCircleChart> {
     ];
   }
 
+  /**
+   * A method that displays the third row batch for the circle chart
+   *
+   * Displays:
+   *  - Legend with Budget Declared, Current Budget, Total Expenses
+   */
   Row containerThirdRow(
       {required int totalBudget,
       required int currentBudget,
@@ -203,7 +222,6 @@ class _CustomCircleChartState extends State<CustomCircleChart> {
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _buildRowWithCircle(LIGHT_COLOR_1, "Total Budget", 11),
             _buildRowWithCircle(LIGHT_COLOR_2, "Current Budget", 11),
             _buildRowWithCircle(LIGHT_COLOR_4, "Total Expenses", 11),
           ],
@@ -212,42 +230,28 @@ class _CustomCircleChartState extends State<CustomCircleChart> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              /**
-               * 
-               * INSERT REAL DATA ABOUT Budget Declared
-               */
-              "\$ $totalBudget",
+              "\$ $currentBudget",
               style: TextStyle(
                   color: LIGHT_COLOR_1,
                   fontSize: 11,
                   fontFamily: poppins['regular']),
             ),
             Text(
-                /**
-               * 
-               * INSERT REAL DATA ABOUT CURRENT BUDGET
-               */
-                "\$ $currentBudget",
-                style: TextStyle(
-                    color: LIGHT_COLOR_1,
-                    fontSize: 11,
-                    fontFamily: poppins['regular'])),
-            Text(
-                /**
-               * 
-               * INSERT REAL DATA ABOUT Remaining BUDGET
-               */
-                "\$ $totalExpenses",
-                style: TextStyle(
-                    color: LIGHT_COLOR_1,
-                    fontSize: 11,
-                    fontFamily: poppins['regular'])),
+              "\$ $totalExpenses",
+              style: TextStyle(
+                  color: LIGHT_COLOR_1,
+                  fontSize: 11,
+                  fontFamily: poppins['regular']),
+            ),
           ],
         )
       ],
     );
   }
 
+  /**
+   * A method to build a row with a colored circle and text
+   */
   Row _buildRowWithCircle(Color color, String text, double fontSize) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -274,30 +278,55 @@ class _CustomCircleChartState extends State<CustomCircleChart> {
     );
   }
 
-  // A method that displays the edit dialog
+  /**
+   * A method that displays the edit dialog
+   */
   void showEditDialog({
-    required String labelText,
-    required TextEditingController textController,
+    required int budgetDeclared,
+    required UserData? data,
   }) {
+    final userData = data;
+
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return Center(
           child: AlertDialog(
             title: CustomText(
-              title: labelText,
+              title: "Add Budget Amount",
               fontFamily: poppins['regular']!,
               fontSize: fontSize['h3']!,
               titleColor: LIGHT_COLOR_3,
             ),
             content: SingleChildScrollView(
-              child: ListBody(
-                children: <Widget>[
-                  // Text('Enter new budget:'),
-                  TextField(
-                    controller: textController,
-                  ),
-                ],
+              child: Form(
+                key: _formKey,
+                child: ListBody(
+                  children: <Widget>[
+                    TextFormField(
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return "Empty budget value";
+                        }
+
+                        if (!RegExp(r'^[0-9]+$').hasMatch(value)) {
+                          return "Please enter a valid age (numbers only)";
+                        }
+
+                        int? parseValue = int.tryParse(value);
+                        if (parseValue == null || parseValue <= 0) {
+                          return "Please enter a valid budget not less than 0";
+                        }
+                      },
+                      controller: _editController,
+                      keyboardType: TextInputType.number,
+                      decoration: const InputDecoration(
+                          prefixText: '\$',
+                          labelText: 'Add budget',
+                          helperText: "Edit your budget with caution"),
+                    ),
+                  ],
+                ),
               ),
             ),
             actions: <Widget>[
@@ -308,10 +337,39 @@ class _CustomCircleChartState extends State<CustomCircleChart> {
                 },
               ),
               TextButton(
-                  child: const Text('Save'),
-                  onPressed: () {
-                    // INSERT LOGIC HERE
-                  })
+                child: const Text('Add'),
+                onPressed: () async {
+                  if (_formKey.currentState!.validate()) {
+                    if (int.parse(_editController.text) >=
+                        userData!.budget.totalExpenses) {
+                      int currentBudget = userData.budget.currentBudget;
+
+                      // Get the new currentBudget
+                      currentBudget += int.parse(_editController.text);
+
+                      await _firestoreService.updateCurrentBudget(
+                          uuid: _authService.getCurrentUser().uid,
+                          newCurrentBudget: currentBudget);
+
+                      final route = MaterialPageRoute(
+                          builder: (context) => UserDashBoard());
+
+                      Navigator.pushAndRemoveUntil(
+                          context, route, (route) => false);
+                    } else {
+                      AwesomeDialog(
+                        context: context,
+                        dialogType: DialogType.error,
+                        animType: AnimType.scale,
+                        title: "Invalid budget declaration!",
+                        desc:
+                            'Your budget declared is less than the total expenses of your entries.',
+                        btnOkOnPress: () {},
+                      ).show();
+                    }
+                  }
+                },
+              )
             ],
           ),
         );

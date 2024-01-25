@@ -40,6 +40,19 @@ class FirebaseFirestoreService {
     }
   }
 
+  // A method that updates the current budget in the firestore
+  Future<void> updateCurrentBudget(
+      {required String uuid, required int newCurrentBudget}) async {
+    try {
+      await _firestoreDatabase.collection("users").doc(uuid).update({
+        'budget.currentBudget': newCurrentBudget,
+      });
+    } catch (e) {
+      print("Error updating full name: $e");
+      // Handle error as needed
+    }
+  }
+
   // Update the Age of the user in the Firestore
   Future<void> updateAge({required int age, required String uuid}) async {
     try {

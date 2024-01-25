@@ -6,7 +6,6 @@ import 'package:budgex/shared/loading.dart';
 import 'package:budgex/widgets/customDetectorCategory.dart';
 
 import 'package:budgex/widgets/custom_appbar.dart';
-
 import 'package:budgex/widgets/custom_circle_chart.dart';
 import 'package:budgex/widgets/custom_drawer.dart';
 import 'package:budgex/widgets/custom_text.dart';
@@ -25,10 +24,12 @@ class _UserDashBoardState extends State<UserDashBoard> {
   final FirebaseAuthService _authService = FirebaseAuthService();
 
   late Stream<UserData?> userStream;
+
   @override
   void initState() {
-    // TODO: implement initState
+    // Initialize the state
     super.initState();
+    // Obtain the userStream from the user document using the FirebaseAuthService
     userStream =
         FirebaseFirestoreService(uid: _authService.getCurrentUser().uid)
             .userDocumentStream;
@@ -36,18 +37,18 @@ class _UserDashBoardState extends State<UserDashBoard> {
 
   @override
   Widget build(BuildContext context) {
+    // Build the widget based on the userStream
     return StreamBuilder<UserData?>(
         stream: userStream,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            // Loading state
+            // Loading state while waiting for the data
             return Loading();
           } else if (snapshot.hasError) {
-            // Error state
-
+            // Error state if an error occurs while fetching data
             return Text("Error: ${snapshot.error}");
           } else {
-            // Data loaded successfully
+            // Data loaded successfully, build the UI with the obtained user data
             UserData userData = snapshot.data!;
             return StreamProvider<UserData?>.value(
                 value: FirebaseFirestoreService(uid: userData.uid)
@@ -65,75 +66,75 @@ class _UserDashBoardState extends State<UserDashBoard> {
     return Scaffold(
       appBar: customAppBar(context: context),
       backgroundColor: Theme.of(context).colorScheme.background,
-      drawer: CustomDrawer(),
+      drawer: const CustomDrawer(),
       body: SingleChildScrollView(
-          child: Column(
-        children: [
-          Text(
-            "Good day, ${userData?.fullName}",
-            style: TextStyle(
-                fontSize: fontSize['h3'], fontFamily: poppins['regular']),
-          ),
-          const SizedBox(
-            height: 20,
-          ),
-          Text(
-            "WELCOME TO",
-            style: TextStyle(
-              fontSize: fontSize['h1'],
-              fontFamily: poppins['semiBold'],
+        child: Column(
+          children: [
+            CustomText(
+                title: "Good day, ${userData?.fullName}",
+                fontSize: fontSize['h3']!,
+                fontFamily: poppins['regular']!),
+
+            const SizedBox(
+              height: 20,
             ),
-          ),
-          Text(
-            "BudgEx",
-            style: TextStyle(
-                fontSize: fontSize['h1'], fontFamily: poppins['bold']),
-          ),
-          const SizedBox(
-            height: 45,
-          ),
-          Text(
-            "Account No: ${userData?.uid}",
-            style: TextStyle(
-                fontFamily: poppins['regular'], fontSize: fontSize['h6']),
-          ),
 
-          const SizedBox(
-            height: 15,
-          ),
-          CustomCircleChart(),
-          const SizedBox(
-            height: 20,
-          ),
+            CustomText(
+                title: "WELCOME TO",
+                fontSize: fontSize['h1']!,
+                fontFamily: poppins['semiBold']!),
 
-          // Expense Category Expenses
-          Column(
-            children: [
-              CustomText(
-                  title: "Most Expenses",
-                  fontSize: fontSize['h4']!,
-                  fontFamily: poppins['semiBold']!),
+            CustomText(
+                title: "BudgEx",
+                fontSize: fontSize['h1']!,
+                fontFamily: poppins['bold']!),
 
-              const SizedBox(
-                height: 10,
-              ),
+            const SizedBox(
+              height: 45,
+            ),
 
-              // Use userCategories from userData
-              ...userData?.budget.userCategories.map((category) {
-                    print("Category Limit: ${category.leftLimit}");
-                    return CustomCategoryDetector(
-                      iconData: int.parse(category.iconData),
-                      categoryName: category.categoryName,
-                      leftLimit: category.leftLimit,
-                      categoryExpense: category.categoryExpense,
-                      // You can add other properties based on your needs
-                    );
-                  }).toList() ??
-                  [],
-            ],
-          )
-        ],
-      )),
+            CustomText(
+                title: "Account No: ${userData?.uid}",
+                fontSize: fontSize['h6']!,
+                fontFamily: poppins['regular']!),
+
+            const SizedBox(
+              height: 15,
+            ),
+            CustomCircleChart(),
+            const SizedBox(
+              height: 20,
+            ),
+
+            // Expense Category Expenses
+            Column(
+              children: [
+                CustomText(
+                    title: "Most Expenses",
+                    fontSize: fontSize['h4']!,
+                    fontFamily: poppins['semiBold']!),
+
+                const SizedBox(
+                  height: 10,
+                ),
+
+                // Use userCategories from userData
+                ...userData?.budget.userCategories.map((category) {
+                      print("Category Limit: ${category.leftLimit}");
+                      return CustomCategoryDetector(
+                        iconData: int.parse(category.iconData),
+                        categoryName: category.categoryName,
+                        leftLimit: category.leftLimit,
+                        categoryExpense: category.categoryExpense,
+                        // You can add other properties based on your needs
+                      );
+                    }).toList() ??
+                    [],
+              ],
+            )
+          ],
+        ),
+      ),
     );
   }
 }

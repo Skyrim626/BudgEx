@@ -1,80 +1,62 @@
-/*
-  Flutter Developer Notes:
-
-  This Dart function defines a custom AppBar widget. The AppBar is a crucial element in 
-  the application's UI, providing navigation and actions to the user.
-
-  Key Features:
-  - Transparent Background: The AppBar blends seamlessly with the rest of the UI.
-  - Custom Icons: Includes icons for toggling themes, notifications, and accessing the 
-    camera.
-  - Dynamic Profile Icon: Conditionally displays a profile icon based on the current screen.
-
-  Note: The profile icon display logic is based on the context.widget property, which may 
-  require further review and testing to ensure correct behavior across all screens.
-
-  This custom AppBar enhances the user experience and adds functionality to the application.
-
-*/
-
 import 'package:budgex/pages/home/user_settings.dart';
-
 import 'package:budgex/services/theme_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+// Custom AppBar widget for the application
 AppBar customAppBar({required BuildContext context}) {
+  // Uncomment these lines if you plan to use custom icons for light and dark mode
   /* const IconData _iconLight = Icons.sunny;
   const IconData _iconDark = Icons.nights_stay; */
 
   return AppBar(
+    // Transparent background for a clean design
     backgroundColor: Colors.transparent,
+    // Text color based on the theme's tertiary color
     foregroundColor: Theme.of(context).colorScheme.tertiary,
+    // No elevation for a flat appearance
     elevation: 0,
     actions: [
-      // NOTE: THIS ICON IS FOR TESTING PURPOSES ONLY
-      // FLUTTER ALREADY PROVIDES DARK/LIGHT MODE DURING PHONE SET THEME
+      // Dark/Light mode toggle button
+      // NOTE: This icon is for testing purposes only.
+      // Flutter already provides dark/light mode during phone set theme.
       IconButton(
-          onPressed: () {
-            Provider.of<ThemeProvider>(context, listen: false).toggleTheme();
-          },
-          icon: Icon(Icons.nights_stay)),
-      IconButton(
-        onPressed: () {},
-        icon: Icon(Icons.notifications),
+        onPressed: () {
+          // Toggle theme using the Provider
+          Provider.of<ThemeProvider>(context, listen: false).toggleTheme();
+        },
+        icon: const Icon(Icons.nights_stay),
       ),
 
+      // Placeholder for a camera icon (you can replace this with your functionality)
       IconButton(
         onPressed: () {},
-        icon: Icon(Icons.camera_alt),
+        icon: const Icon(Icons.camera_alt),
       ),
 
-      /* 
-        If the user navigates to the Setting screen(UserSettings),
-        the Profile Icon will not display to the AppBar.
-      */
+      // Display profile icon only if not on the UserSettings screen
+      // If on UserSettings screen, show an empty space
       context.widget.toString() != "UserSettings"
           ? IconButton(
               onPressed: () {
+                // Navigate to UserSettings screen and remove the current screen from the stack
                 final route = MaterialPageRoute(
                   builder: (context) => UserSettings(),
                 );
-
                 Navigator.pushAndRemoveUntil(context, route, (route) => false);
 
-                /* Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => UserSettings(),
-                    )); */
+                /* Alternative navigation without removing the current screen
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => UserSettings(),
+                  ),
+                ); */
               },
-              icon: Container(
-                  child: Icon(Icons.person_rounded),
-                  decoration: BoxDecoration(
-                      color: Theme.of(context).colorScheme.primary,
-                      borderRadius: BorderRadius.circular(50))),
+              // A profile icon
+              icon: const Icon(Icons.person_pin),
             )
-          : const Text(""), // Empty Space/Text
+          : const Text(""), // Empty space if on the UserSettings screen
     ],
   );
 }
