@@ -2,8 +2,8 @@ import 'package:budgex/model/userExpenseModel.dart';
 
 class UserCategoryModel {
   final String categoryName;
-  final double categoryExpense;
-  final double leftLimit;
+  final int categoryExpense;
+  final int leftLimit;
   final String iconData;
 
   List<UserExpenseModel> expenseEntry;
@@ -21,6 +21,9 @@ class UserCategoryModel {
     // Extract the expense entries
     Map<String, dynamic>? expensesMap = map['expenses'];
 
+    if (expensesMap == null) {
+      expensesMap = {};
+    }
     // If expensesMap is not null, transform it into UserExpenseModel instances
     print("SRUPIRSE!!!!!!!!ERORR");
     print(expensesMap);

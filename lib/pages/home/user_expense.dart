@@ -145,7 +145,7 @@ class _UserExpenseState extends State<UserExpense> {
 
   Padding _expenseBox({
     required String uuid,
-    required double amount,
+    required int amount,
     required String dateTransaction,
     required String expenseTitle,
     required String categoryName,

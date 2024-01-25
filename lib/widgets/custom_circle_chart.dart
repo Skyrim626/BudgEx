@@ -115,9 +115,9 @@ class _CustomCircleChartState extends State<CustomCircleChart> {
    * 
    */
   Center containerSecondRow(
-      {required double currentBudget,
-      required double totalBudget,
-      required double totalExpenses}) {
+      {required int currentBudget,
+      required int totalBudget,
+      required int totalExpenses}) {
     double _screenWidth = MediaQuery.of(context).size.width;
     double _chartSize = _screenWidth * 0.8;
 
@@ -165,11 +165,11 @@ class _CustomCircleChartState extends State<CustomCircleChart> {
   }
 
   List<PieChartSectionData> generatePieChartSections(
-    double totalBudget,
-    double currentBudget,
-    double totalExpenses,
+    int totalBudget,
+    int currentBudget,
+    int totalExpenses,
   ) {
-    double remainingBudget = totalBudget - totalExpenses;
+    int remainingBudget = totalBudget - totalExpenses;
     double currentBudgetPercentage = (currentBudget / totalBudget) * 100;
     double remainingBudgetPercentage = (remainingBudget / totalBudget) * 100;
     double expensesPercentage = (totalExpenses / totalBudget) * 100;
@@ -194,9 +194,9 @@ class _CustomCircleChartState extends State<CustomCircleChart> {
   }
 
   Row containerThirdRow(
-      {required double totalBudget,
-      required double currentBudget,
-      required double totalExpenses}) {
+      {required int totalBudget,
+      required int currentBudget,
+      required int totalExpenses}) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [

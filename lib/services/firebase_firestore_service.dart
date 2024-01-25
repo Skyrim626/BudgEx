@@ -113,10 +113,10 @@ class FirebaseFirestoreService {
     required String uuid,
     required String categoryName,
     required UserExpenseModel expenseEntry,
-    required double currentBudget,
-    required double totalExpenses,
-    required double categoryExpense,
-    required double leftLimit,
+    required int currentBudget,
+    required int totalExpenses,
+    required int categoryExpense,
+    required int leftLimit,
   }) async {
     print(
         "------------------------------------------- addNewExpense AREA-------------------------------------------");
@@ -168,7 +168,7 @@ class FirebaseFirestoreService {
     Map categoriesMap = {};
 
     // Default Category Expense
-    double categoryExpense = 0;
+    int categoryExpense = 0;
     print(
         "------------------------------------------- updateCategoryUser AREA-------------------------------------------");
     print("To the FireStore");
@@ -201,7 +201,7 @@ class FirebaseFirestoreService {
 
   // Method for storing new budget of the user to the FireStore
   Future<void> updateBudgetUser(
-      {required double budgetDeclared,
+      {required int budgetDeclared,
       required String uuid,
       required List<CategoryData> categories}) async {
     // Gets the Current Date and Time base on Device Time
@@ -212,12 +212,12 @@ class FirebaseFirestoreService {
         DateFormat('d MMMM y "at" HH:mm:ss "UTC"Z').format(dateTime);
 
     // Default Budget Expense
-    double totalBudget = budgetDeclared;
-    double totalExpense = 0;
-    double currentBudget = totalBudget;
+    int totalBudget = budgetDeclared;
+    int totalExpense = 0;
+    int currentBudget = totalBudget;
 
     // Default Category Expense
-    double categoryExpense = 0;
+    int categoryExpense = 0;
 
     // Sets the firstTimer to true;
     bool firstTimer = false;

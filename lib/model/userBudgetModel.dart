@@ -3,9 +3,9 @@ import 'package:flutter/foundation.dart';
 
 class BudgetModel {
   final String dateCreated;
-  final double totalBudget;
-  final double currentBudget;
-  final double totalExpenses;
+  final int totalBudget;
+  final int currentBudget;
+  final int totalExpenses;
 
   List<UserCategoryModel> userCategories;
 
@@ -53,8 +53,8 @@ class BudgetModel {
         String categoryName = entry.key;
         Map<String, dynamic> categoryData = entry.value;
 
-        //print('SAMPLE DATA{}');
-        // print(categoryData['expenses']);
+        print('SAMPLE DATA{}');
+        print(categoryData['expenses']);
         return UserCategoryModel.fromMap({
           'categoryName': categoryName,
           'categoryExpense': categoryData['categoryExpense'],

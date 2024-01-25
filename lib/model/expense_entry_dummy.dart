@@ -9,7 +9,7 @@ class ExpenseEntry {
 
   // TO BE ANAYZE
   String? currency;
-  double? amount;
+  int? amount;
   String? description;
   Image? image;
   Category? category;

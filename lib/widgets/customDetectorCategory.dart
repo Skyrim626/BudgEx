@@ -11,8 +11,8 @@ class CustomCategoryDetector extends StatefulWidget {
   final String categoryName;
   final int iconData;
 
-  double leftLimit;
-  double categoryExpense;
+  int leftLimit;
+  int categoryExpense;
 
   // This is for testing only
   // Purpose: Creates a screen that provides: category name, expense, left limit, and test

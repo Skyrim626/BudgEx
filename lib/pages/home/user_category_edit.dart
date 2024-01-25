@@ -144,10 +144,10 @@ class _UserCategoryEditState extends State<UserCategoryEdit> {
                   CustomButton(
                       buttonText: "Confirm Edit",
                       onPressed: () {
-                        double totalBudgetDeclared =
+                        int totalBudgetDeclared =
                             userData!.budget.totalBudget;
 
-                        double totalCategoriesLimit = 0;
+                        int totalCategoriesLimit = 0;
                         for (UserCategoryModel category
                             in userData.budget.userCategories) {
                           totalCategoriesLimit += category.leftLimit;
@@ -245,13 +245,13 @@ class _UserCategoryEditState extends State<UserCategoryEdit> {
               ElevatedButton(
                   onPressed: () {
                     String newCategoryName = categoryNameController.text.trim();
-                    double newBudgetLimit =
-                        double.parse(budgetLimitController.text.trim());
+                    int newBudgetLimit =
+                        int.parse(budgetLimitController.text.trim());
 
                     if (newCategoryName.isNotEmpty) {
                       // Category Icon Data
                       String newIconData = "0xe148";
-                      double newCategoryExpense = 0.0;
+                      int newCategoryExpense = 0;
 
                       UserCategoryModel newCategory = UserCategoryModel(
                           iconData: newIconData,

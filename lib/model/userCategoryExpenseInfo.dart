@@ -6,7 +6,7 @@ class UserCategoryExpenseInfo {
   final String expenseTitle;
   final String categoryType;
   final String transactionDate;
-  final double amount;
+  final int amount;
   final UserExpenseModel userExpenseInfo;
 
   UserCategoryExpenseInfo({

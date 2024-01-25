@@ -27,7 +27,7 @@ class _UserCreateBudgetState extends State<UserCreateBudget> {
   final FirebaseFirestoreService _firestoreService = FirebaseFirestoreService();
 
   List<CategoryData> categories = sampleCategories;
-  double budgetDeclared = 0;
+  int budgetDeclared = 0;
 
   TextEditingController budgetDeclaredController = TextEditingController();
 
@@ -116,11 +116,11 @@ class _UserCreateBudgetState extends State<UserCreateBudget> {
 
                         // Check if the entered value is a number
                         try {
-                          if (double.tryParse(value) == null) {
+                          if (int.tryParse(value) == null) {
                             return "Please enter a valid number";
                           }
 
-                          if (double.parse(value) <= 0) {
+                          if (int.parse(value) <= 0) {
                             return "Please enter the budget amount not less than 0";
                           }
                         } catch (e) {
@@ -230,13 +230,13 @@ class _UserCreateBudgetState extends State<UserCreateBudget> {
                               if ((categories.isNotEmpty)) {
                                 // Checks if the category names are unique
                                 if (areCategoryNamesUnique(categories)) {
-                                  double totalCategoriesLimit = 0;
+                                  int totalCategoriesLimit = 0;
                                   for (CategoryData category in categories) {
                                     totalCategoriesLimit += category.leftLimit;
                                   }
 
                                   // Checks if the Declared Budget is greater than the total limits of the categories
-                                  if (double.parse(
+                                  if (int.parse(
                                           budgetDeclaredController.text) >
                                       totalCategoriesLimit) {
                                     // TBD
@@ -244,7 +244,7 @@ class _UserCreateBudgetState extends State<UserCreateBudget> {
                                     // Throws an error if the account is already used
                                     try {
                                       _firestoreService.updateBudgetUser(
-                                          budgetDeclared: double.parse(
+                                          budgetDeclared: int.parse(
                                               budgetDeclaredController.text),
                                           uuid:
                                               _authService.getCurrentUser().uid,
@@ -347,15 +347,15 @@ class _UserCreateBudgetState extends State<UserCreateBudget> {
             ElevatedButton(
               onPressed: () {
                 String editedCategoryName = categoryNameController.text.trim();
-                double editedBudgetLimit =
-                    double.parse(budgetLimitController.text.trim());
+                int editedBudgetLimit =
+                    int.parse(budgetLimitController.text.trim());
 
                 if (editedCategoryName.isNotEmpty) {
                   setState(() {
                     category.categoryName = editedCategoryName;
                     category.leftLimit = editedBudgetLimit;
 
-                    budgetDeclared = double.parse(budgetLimitController.text);
+                    budgetDeclared = int.parse(budgetLimitController.text);
                     // _updateUserCategories(context, userData, categories);
                   });
                 }
@@ -424,13 +424,13 @@ class _UserCreateBudgetState extends State<UserCreateBudget> {
               ElevatedButton(
                 onPressed: () {
                   String newCategoryName = categoryNameController.text.trim();
-                  double newBudgetLimit =
-                      double.parse(budgetLimitController.text.trim());
+                  int newBudgetLimit =
+                      int.parse(budgetLimitController.text.trim());
 
                   if (newCategoryName.isNotEmpty) {
                     // Category IconData
                     String newIconData = "0xe148";
-                    double newCategoryExpense = 0.0;
+                    int newCategoryExpense = 0;
 
                     CategoryData newCategory = CategoryData(
                       iconData: newIconData,

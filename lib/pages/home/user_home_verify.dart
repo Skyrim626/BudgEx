@@ -17,7 +17,7 @@ import 'package:provider/provider.dart';
 import 'package:budgex/model/userModel.dart';
 
 class UserHomeVerify extends StatefulWidget {
-  const UserHomeVerify();
+  const UserHomeVerify({super.key});
 
   @override
   State<UserHomeVerify> createState() => _UserHomeVerifyState();
@@ -45,16 +45,22 @@ class _UserHomeVerifyState extends State<UserHomeVerify> {
       builder: ((context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           // Loading state
+          print(snapshot.connectionState);
+          print(ConnectionState.waiting);
+          print(snapshot.hasError);
           return const Loading();
         } else if (snapshot.hasError) {
           // Error state
-
+          print("$snapshot.hasError");
+          print("netgame");
           // Data Loads Successfully
+          print("GOTCHA Error: ${snapshot.error}");
           UserData userData = snapshot.data!;
           return Text("GOTCHA Error: ${snapshot.error}");
         } else {
           // Data Loads Successfully
           UserData userData = snapshot.data!;
+          print("hehehehehe");
           print("NOT NULL ${userData.dateRegistered}");
           if (userData.firstTimer) {
             return UserCreateBudget();

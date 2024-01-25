@@ -305,8 +305,8 @@ class _UserAddExpenseState extends State<UserAddExpense> {
                                 if (userData!.budget.currentBudget >=
                                     userData.budget.totalExpenses) {
                                   // The current amount the user declared
-                                  double currentExpenseAmountDeclared =
-                                      double.parse(amountController.text);
+                                  int currentExpenseAmountDeclared =
+                                      int.parse(amountController.text);
 
                                   // Get the data of the specific category that was selected
                                   UserCategoryModel? categoryInfo =
@@ -317,7 +317,7 @@ class _UserAddExpenseState extends State<UserAddExpense> {
                                   if (currentExpenseAmountDeclared <=
                                       categoryInfo!.leftLimit) {
                                     // Declare category expense for getting all the expenses in the specific category
-                                    double categoryTotalExpense = 0;
+                                    int categoryTotalExpense = 0;
 
                                     for (UserExpenseModel entry
                                         in categoryInfo.expenseEntry) {
@@ -330,7 +330,7 @@ class _UserAddExpenseState extends State<UserAddExpense> {
                                         currentExpenseAmountDeclared;
 
                                     // Gets the left limit of the specifc category
-                                    double categoryLeftLimit =
+                                    int categoryLeftLimit =
                                         categoryInfo.leftLimit;
 
                                     // Checks if the left limit is greater or equal to the expense entry of the specific catgegory combined
@@ -341,7 +341,7 @@ class _UserAddExpenseState extends State<UserAddExpense> {
                                       if (categoryLeftLimit >= 0) {
                                         // print("CHECK HERE $categoryLeftLimit");
                                         // Gets the curent amount of the budget
-                                        double currentLeftBudget =
+                                        int currentLeftBudget =
                                             userData.budget.currentBudget;
 
                                         // Gets all the info of the category except the selected one
@@ -352,7 +352,7 @@ class _UserAddExpenseState extends State<UserAddExpense> {
                                                         selectedCategory);
 
                                         // Declate a total expense of that budget
-                                        double totalBudgetExpense = 0;
+                                        int totalBudgetExpense = 0;
 
                                         // Add all values to the list
                                         for (var category
@@ -384,7 +384,7 @@ class _UserAddExpenseState extends State<UserAddExpense> {
                                                   uuid: newUuid,
                                                   expenseName:
                                                       nameController.text,
-                                                  amount: double.parse(
+                                                  amount: int.parse(
                                                       amountController.text),
                                                   description:
                                                       descriptionController

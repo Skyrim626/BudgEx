@@ -29,7 +29,7 @@ const Color DARK_COLOR_4 = Color(0xFF292F3D);
 const Color DARK_COLOR_5 = Color(0xFF94949E);
 
 // Font Size Map
-const Map<String, double> fontSize = {
+const Map<String, double?> fontSize = {
   "h1": 28,
   "h2": 24,
   "h3": 20,

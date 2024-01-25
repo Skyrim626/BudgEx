@@ -33,6 +33,7 @@ class _CustomButtonState extends State<CustomButton> {
   Widget build(BuildContext context) {
     return TextButton(
       onPressed: widget.onPressed,
+      style: TextButton.styleFrom(backgroundColor: widget.buttonColor),
       child: Padding(
         padding: EdgeInsets.symmetric(
             horizontal: widget.paddingHorizontal,
@@ -44,7 +45,6 @@ class _CustomButtonState extends State<CustomButton> {
           titleColor: widget.textColor,
         ),
       ),
-      style: TextButton.styleFrom(backgroundColor: widget.buttonColor),
     );
   }
 }

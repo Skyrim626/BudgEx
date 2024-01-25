@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 class CategoryData {
   String iconData;
   String categoryName;
-  double leftLimit;
-  double categoryExpense;
+  int leftLimit;
+  int categoryExpense;
 
   CategoryData({
     required this.iconData,

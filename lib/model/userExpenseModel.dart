@@ -1,7 +1,7 @@
 class UserExpenseModel {
   final String uuid;
   final String expenseName;
-  final double amount;
+  final int amount;
   final String description;
   final String transactionDate;
 
@@ -22,7 +22,7 @@ class UserExpenseModel {
   }
 
   // A method that gets the amount of the expense entry
-  double get getAmount {
+  int get getAmount {
     return amount;
   }
 }
