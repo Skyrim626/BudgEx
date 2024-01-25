@@ -17,14 +17,16 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
 
-class UserAddExpense extends StatefulWidget {
-  UserAddExpense({super.key});
+class UserResultScreen extends StatefulWidget {
+  String recognizedText;
+
+  UserResultScreen({super.key, required this.recognizedText});
 
   @override
-  State<UserAddExpense> createState() => _UserAddExpenseState();
+  State<UserResultScreen> createState() => _UserResultScreenState();
 }
 
-class _UserAddExpenseState extends State<UserAddExpense> {
+class _UserResultScreenState extends State<UserResultScreen> {
   // Create an instance of the FirebaseAuthService to manage authentication.
   final FirebaseAuthService _authService = FirebaseAuthService();
 
@@ -36,8 +38,9 @@ class _UserAddExpenseState extends State<UserAddExpense> {
   // Controllers
   TextEditingController amountController = TextEditingController();
   TextEditingController nameController = TextEditingController();
-  //TextEditingController descriptionController = TextEditingController();
-  TextEditingController descriptionController = TextEditingController();
+
+  // TextEditingController descriptionController = TextEditingController();
+  late TextEditingController descriptionController;
   ScrollController _scrollController = ScrollController();
 
   late String selectedCategory = '';
@@ -62,6 +65,7 @@ class _UserAddExpenseState extends State<UserAddExpense> {
     now = DateTime.now();
     formattedDate = DateFormat('MMMM dd, yyyy').format(now!);
     formattedTime = DateFormat('h:mm a').format(now!);
+    descriptionController = TextEditingController(text: widget.recognizedText);
   }
 
   // Create a global key that uniquely identifies the Form widget

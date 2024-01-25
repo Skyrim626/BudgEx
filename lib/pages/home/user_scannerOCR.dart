@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:budgex/pages/home/user_add_expense.dart';
 import 'package:budgex/pages/home/user_expense.dart';
 import 'package:budgex/pages/home/user_home_verify.dart';
+import 'package:budgex/pages/home/user_result_screen.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
@@ -236,7 +237,7 @@ class _OCRScreenState extends State<OCRScreen> with WidgetsBindingObserver {
       ); */
 
       final route = MaterialPageRoute(
-        builder: (context) => UserAddExpense(
+        builder: (context) => UserResultScreen(
           recognizedText: recognizedText.text,
         ),
       );
