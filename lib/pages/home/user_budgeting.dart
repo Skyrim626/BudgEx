@@ -3,7 +3,6 @@ import 'package:budgex/model/userModel.dart';
 import 'package:budgex/pages/constants/constants.dart';
 import 'package:budgex/pages/home/user_add_expense.dart';
 import 'package:budgex/pages/home/user_category_edit.dart';
-import 'package:budgex/pages/home/user_scannerMain.dart';
 import 'package:budgex/services/firebase_auth_service.dart';
 import 'package:budgex/services/firebase_firestore_service.dart';
 import 'package:budgex/shared/loading.dart';
@@ -318,7 +317,7 @@ class _UserBudgetingState extends State<UserBudgeting> {
                           const SizedBox(
                             height: 20,
                           ),
-                          CustomButtom(
+                          /*   CustomButtom(
                               buttonText: "Scan Receipt",
                               onPressed: () {
                                 Navigator.push(
@@ -326,7 +325,7 @@ class _UserBudgetingState extends State<UserBudgeting> {
                                     MaterialPageRoute(
                                         builder: (context) =>
                                             const MainScanner()));
-                              }),
+                              }), */
                           const SizedBox(
                             height: 30,
                           ),
