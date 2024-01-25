@@ -79,6 +79,10 @@ class FirebaseFirestoreService {
     required String uuid,
     required String expenseUUID,
     required String categoryType,
+    required int categoryExpense,
+    required int categoryLeftLimit,
+    required int currentBudget,
+    required int totalBudgetExpense,
   }) async {
     print("DELETED");
     print("Exepense ID : $expenseUUID");
@@ -93,6 +97,28 @@ class FirebaseFirestoreService {
         }
       }); */
 
+      // Updates the budget
+      // Returns the amount of the expense entry before deletion
+      await _firestoreDatabase.collection('users').doc(uuid).update({
+        'budget.currentBudget': currentBudget,
+        'budget.totalExpenses': totalBudgetExpense,
+        'budget.categories.$categoryType.categoryExpense': categoryExpense,
+        'budget.categories.$categoryType.leftLimit': categoryLeftLimit,
+      });
+      /* await _firestoreDatabase.collection('users').doc(uuid).update({
+        'budget': {
+          'currentBudget': currentBudget,
+          'totalExpenses': totalBudgetExpense,
+          'categories': {
+            categoryType: {
+              'categoryExpense': categoryExpense,
+              'leftLimit': categoryLeftLimit,
+            }
+          }
+        }
+      });
+ */
+      // Deletes the expense entry
       await _firestoreDatabase.collection('users').doc(uuid).update({
         'budget.categories.$categoryType.expenses.$expenseUUID':
             FieldValue.delete(),

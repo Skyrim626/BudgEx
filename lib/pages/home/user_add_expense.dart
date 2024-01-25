@@ -140,18 +140,7 @@ class _UserAddExpenseState extends State<UserAddExpense> {
                           title: "Add Expense",
                           fontFamily: dosis['semiBold']!,
                           fontSize: fontSize['h3']!),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      CustomButton(
-                          buttonText: "Scan Receipt",
-                          onPressed: () {},
-                          paddingHorizontal: 80,
-                          paddingVertical: 15,
-                          buttonColor: LIGHT_COLOR_3,
-                          fontFamily: dosis['bold']!,
-                          fontSize: fontSize['h4']!,
-                          textColor: Colors.white),
+
                       const SizedBox(
                         height: 30,
                       ),

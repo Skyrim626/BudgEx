@@ -1,4 +1,5 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:budgex/model/userCategoryModel.dart';
 import 'package:budgex/model/userExpenseModel.dart';
 import 'package:budgex/model/userModel.dart';
 import 'package:budgex/pages/constants/constants.dart';
@@ -69,6 +70,9 @@ class _UserExpenseEntryScreenState extends State<UserExpenseEntryScreen> {
 
   Scaffold _buildExpenseEntryUI(BuildContext context, UserData? data) {
     print(widget.uuid);
+
+    final userData = data;
+
     return Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.transparent,
@@ -99,10 +103,33 @@ class _UserExpenseEntryScreenState extends State<UserExpenseEntryScreen> {
                     desc: 'Are You Sure You Want to Delete the Expense Entry?',
                     btnCancelOnPress: () {},
                     btnOkOnPress: () async {
+                      // An algorithm that returns the amount
+                      // Returned the amount
+                      String expenseEntryUUID = widget.expenseEntry.uuid;
+                      int amountReturned = widget.expenseEntry.amount;
+
+                      UserCategoryModel? categoryInfo = userData!.budget
+                          .getUserCategoryByName(name: widget.categoryName);
+
+                      int categoryExpense =
+                          categoryInfo!.categoryExpense - amountReturned;
+                      int categoryLeftLimit =
+                          categoryInfo.leftLimit + amountReturned;
+
+                      int currentBudget =
+                          userData.budget.currentBudget + amountReturned;
+                      int totalBudgetExpense =
+                          userData.budget.totalExpenses - amountReturned;
+
                       _firestoreService.deleteExpense(
-                          uuid: _authService.getCurrentUser().uid,
-                          expenseUUID: widget.uuid,
-                          categoryType: widget.categoryName);
+                        uuid: _authService.getCurrentUser().uid,
+                        expenseUUID: widget.uuid,
+                        categoryType: widget.categoryName,
+                        categoryExpense: categoryExpense,
+                        categoryLeftLimit: categoryLeftLimit,
+                        currentBudget: currentBudget,
+                        totalBudgetExpense: totalBudgetExpense,
+                      );
 
                       final route = MaterialPageRoute(
                           builder: (context) => UserExpense());
@@ -181,7 +208,7 @@ class _UserExpenseEntryScreenState extends State<UserExpenseEntryScreen> {
                           padding:
                               const EdgeInsets.only(left: 8, right: 8, top: 10),
                           child: CustomText(
-                            title: widget.expenseEntry.amount.toString(),
+                            title: '\$${widget.expenseEntry.amount}',
                             fontSize: fontSize['h5']!,
                             fontFamily: poppins['semiBold']!,
                           ),
