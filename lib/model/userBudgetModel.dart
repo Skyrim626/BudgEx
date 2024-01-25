@@ -16,6 +16,30 @@ class BudgetModel {
       required this.totalExpenses,
       required this.userCategories});
 
+  // Gets the user category by name
+  UserCategoryModel? getUserCategoryByName({required String name}) {
+    for (UserCategoryModel category in userCategories) {
+      if (name == category.categoryName) {
+        return category;
+      }
+    }
+
+    return null;
+  }
+
+  // Get all the categories except the selected one
+  List<UserCategoryModel?> getAllCategoryInfoExceptTheSelected(
+      {required String categoryExceptName}) {
+    List<UserCategoryModel> categoryList = [];
+    for (UserCategoryModel category in userCategories) {
+      if (categoryExceptName != category.categoryName) {
+        categoryList.add(category);
+      }
+    }
+
+    return categoryList;
+  }
+
   factory BudgetModel.fromMap(Map<String, dynamic> map) {
     List<UserCategoryModel> userCategories = [];
 

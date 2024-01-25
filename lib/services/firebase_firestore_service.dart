@@ -113,22 +113,36 @@ class FirebaseFirestoreService {
     required String uuid,
     required String categoryName,
     required UserExpenseModel expenseEntry,
+    required double currentBudget,
+    required double totalExpenses,
+    required double categoryExpense,
+    required double leftLimit,
   }) async {
     print(
         "------------------------------------------- addNewExpense AREA-------------------------------------------");
     print("To the FireStore");
     print("USER UUID: $uuid");
-    print("EXPENSE UUID: ${expenseEntry.uuid}");
+    print("EXPENSE UUID321321: ${expenseEntry.uuid}");
     print(expenseEntry.amount);
     print(expenseEntry.description);
     print(expenseEntry.expenseName);
     print(expenseEntry.transactionDate);
 
+    print("INFO");
+    print("Current budget: $currentBudget");
+    print("Total Expense: $totalExpenses");
+    print("CategoryExpense: $categoryExpense");
+    print("Left Limit: $leftLimit");
+
     return await _firestoreDatabase.collection('users').doc(uuid).set(
         {
           'budget': {
+            'totalExpenses': totalExpenses,
+            'currentBudget': currentBudget,
             'categories': {
               categoryName: {
+                'leftLimit': leftLimit,
+                'categoryExpense': categoryExpense,
                 'expenses': {
                   expenseEntry.uuid: {
                     'amount': expenseEntry.amount,

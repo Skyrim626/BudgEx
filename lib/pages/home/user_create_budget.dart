@@ -119,6 +119,10 @@ class _UserCreateBudgetState extends State<UserCreateBudget> {
                           if (double.tryParse(value) == null) {
                             return "Please enter a valid number";
                           }
+
+                          if (double.parse(value) <= 0) {
+                            return "Please enter the budget amount not less than 0";
+                          }
                         } catch (e) {
                           return "Please enter a valid number";
                         }
@@ -224,39 +228,43 @@ class _UserCreateBudgetState extends State<UserCreateBudget> {
                             // Form that is true will be registered
                             if (_formKey.currentState!.validate()) {
                               if ((categories.isNotEmpty)) {
-                                double totalCategoriesLimit = 0;
-                                for (CategoryData category in categories) {
-                                  totalCategoriesLimit += category.leftLimit;
-                                }
-
-                                // Checks if the Declared Budget is greater than the total limits of the categories
-                                if (double.parse(
-                                        budgetDeclaredController.text) >
-                                    totalCategoriesLimit) {
-                                  // TBD
-
-                                  // Throws an error if the account is already used
-                                  try {
-                                    _firestoreService.updateBudgetUser(
-                                        budgetDeclared: double.parse(
-                                            budgetDeclaredController.text),
-                                        uuid: _authService.getCurrentUser().uid,
-                                        categories: categories);
-                                  } catch (e) {
-                                    print(
-                                        "[firebase_auth/email-already-in-use] The email address is already in use by another account.");
+                                // Checks if the category names are unique
+                                if (areCategoryNamesUnique(categories)) {
+                                  double totalCategoriesLimit = 0;
+                                  for (CategoryData category in categories) {
+                                    totalCategoriesLimit += category.leftLimit;
                                   }
-                                } else {
-                                  AwesomeDialog(
-                                    context: context,
-                                    dialogType: DialogType.warning,
-                                    animType: AnimType.rightSlide,
-                                    title:
-                                        'Limit Exceed to the Budget Declared',
-                                    desc:
-                                        'Make sure your budget limit is greater than all your total limits to your categories.',
-                                    btnOkOnPress: () {},
-                                  ).show();
+
+                                  // Checks if the Declared Budget is greater than the total limits of the categories
+                                  if (double.parse(
+                                          budgetDeclaredController.text) >
+                                      totalCategoriesLimit) {
+                                    // TBD
+
+                                    // Throws an error if the account is already used
+                                    try {
+                                      _firestoreService.updateBudgetUser(
+                                          budgetDeclared: double.parse(
+                                              budgetDeclaredController.text),
+                                          uuid:
+                                              _authService.getCurrentUser().uid,
+                                          categories: categories);
+                                    } catch (e) {
+                                      print(
+                                          "[firebase_auth/email-already-in-use] The email address is already in use by another account.");
+                                    }
+                                  } else {
+                                    AwesomeDialog(
+                                      context: context,
+                                      dialogType: DialogType.warning,
+                                      animType: AnimType.rightSlide,
+                                      title:
+                                          'Limit Exceed to the Budget Declared',
+                                      desc:
+                                          'Make sure your budget limit is greater than all your total limits to your categories.',
+                                      btnOkOnPress: () {},
+                                    ).show();
+                                  }
                                 }
                               }
 
@@ -488,5 +496,12 @@ class _UserCreateBudgetState extends State<UserCreateBudget> {
         );
       },
     );
+  }
+
+  // Checks if the category names are unique
+  bool areCategoryNamesUnique(List<CategoryData> catagories) {
+    Set<String> categoryNames =
+        categories.map((category) => category.categoryName).toSet();
+    return categoryNames.length == categories.length;
   }
 }

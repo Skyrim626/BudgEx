@@ -1,4 +1,5 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:budgex/model/userCategoryModel.dart';
 import 'package:budgex/model/userExpenseModel.dart';
 import 'package:budgex/model/userModel.dart';
 import 'package:budgex/pages/constants/constants.dart';
@@ -10,6 +11,7 @@ import 'package:budgex/shared/loading.dart';
 import 'package:budgex/widgets/custom_button.dart';
 import 'package:budgex/widgets/custom_text.dart';
 import 'package:budgex/widgets/custom_textfield.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -298,46 +300,176 @@ class _UserAddExpenseState extends State<UserAddExpense> {
                           onPressed: () {
                             if (_formKey.currentState!.validate()) {
                               if (selectedCategory != '') {
-                                String formattedDateTime =
-                                    DateFormat('MMMM dd, yyyy h:mm a')
-                                        .format(now!);
-                                print("DATA RECEIVED");
+                                // Calculation
 
-                                print(selectedCategory);
-                                print(amountController.text);
-                                print(nameController.text);
-                                print(descriptionController.text);
-                                print(formattedDateTime);
+                                if (userData!.budget.currentBudget >=
+                                    userData.budget.totalExpenses) {
+                                  // The current amount the user declared
+                                  double currentExpenseAmountDeclared =
+                                      double.parse(amountController.text);
 
-                                // Generate Unique ID for the Expense Entry
-                                // Create new UUID
-                                var uuid = Uuid();
+                                  // Get the data of the specific category that was selected
+                                  UserCategoryModel? categoryInfo =
+                                      userData.budget.getUserCategoryByName(
+                                          name: selectedCategory);
 
-                                // Generate a random UUID
-                                String newUuid = uuid.v4();
+                                  // Checks if the amount declared is less than the left limit
+                                  if (currentExpenseAmountDeclared <=
+                                      categoryInfo!.leftLimit) {
+                                    // Declare category expense for getting all the expenses in the specific category
+                                    double categoryTotalExpense = 0;
 
-                                UserExpenseModel expenseEntry =
-                                    UserExpenseModel(
-                                        uuid: newUuid,
-                                        expenseName: nameController.text,
-                                        amount:
-                                            double.parse(amountController.text),
-                                        description: descriptionController.text,
-                                        transactionDate: formattedDateTime);
+                                    for (UserExpenseModel entry
+                                        in categoryInfo.expenseEntry) {
+                                      categoryTotalExpense += entry
+                                          .amount; // Adds the amount of the specific entry
+                                    }
 
-                                // Sends the expense entry to the firestore service class
-                                _firestoreService.addNewExpense(
-                                    uuid: _authService.getCurrentUser().uid,
-                                    categoryName: selectedCategory,
-                                    expenseEntry: expenseEntry);
+                                    // Adds the current amount declared to the categoryTotalExpense
+                                    categoryTotalExpense +=
+                                        currentExpenseAmountDeclared;
 
-                                final route = MaterialPageRoute(
-                                    builder: (context) => UserBudgeting());
+                                    // Gets the left limit of the specifc category
+                                    double categoryLeftLimit =
+                                        categoryInfo.leftLimit;
 
-                                // Use Navigator.pushAndRemoveUntil to navigate to the UserBudgeting page and remove all previous routes
-                                // ignore: use_build_context_synchronously
-                                Navigator.pushAndRemoveUntil(
-                                    context, route, (route) => false);
+                                    // Checks if the left limit is greater or equal to the expense entry of the specific catgegory combined
+                                    if (categoryLeftLimit >= 0) {
+                                      categoryLeftLimit -=
+                                          currentExpenseAmountDeclared; // Subtracts the left limit with the categorYTotalExpense
+
+                                      if (categoryLeftLimit >= 0) {
+                                        // print("CHECK HERE $categoryLeftLimit");
+                                        // Gets the curent amount of the budget
+                                        double currentLeftBudget =
+                                            userData.budget.currentBudget;
+
+                                        // Gets all the info of the category except the selected one
+                                        List<UserCategoryModel?>
+                                            allCategoriesInfo = userData.budget
+                                                .getAllCategoryInfoExceptTheSelected(
+                                                    categoryExceptName:
+                                                        selectedCategory);
+
+                                        // Declate a total expense of that budget
+                                        double totalBudgetExpense = 0;
+
+                                        // Add all values to the list
+                                        for (var category
+                                            in allCategoriesInfo) {
+                                          totalBudgetExpense +=
+                                              category!.categoryExpense;
+                                        }
+
+                                        totalBudgetExpense +=
+                                            categoryTotalExpense;
+
+                                        // Subtracts the current budget to the total expense
+                                        currentLeftBudget = currentLeftBudget -
+                                            totalBudgetExpense;
+                                        if (currentLeftBudget > 0) {
+                                          String formattedDateTime =
+                                              DateFormat('MMMM dd, yyyy h:mm a')
+                                                  .format(now!);
+
+                                          // Generate Unique ID for the Expense Entry
+                                          // Create new UUID
+                                          var uuid = Uuid();
+
+                                          // Generate a random UUID
+                                          String newUuid = uuid.v4();
+
+                                          UserExpenseModel expenseEntry =
+                                              UserExpenseModel(
+                                                  uuid: newUuid,
+                                                  expenseName:
+                                                      nameController.text,
+                                                  amount: double.parse(
+                                                      amountController.text),
+                                                  description:
+                                                      descriptionController
+                                                          .text,
+                                                  transactionDate:
+                                                      formattedDateTime);
+
+                                          // Sends the expense entry to the firestore service class
+
+                                          _firestoreService.addNewExpense(
+                                            uuid: _authService
+                                                .getCurrentUser()
+                                                .uid,
+                                            categoryName: selectedCategory,
+                                            expenseEntry: expenseEntry,
+                                            currentBudget: currentLeftBudget,
+                                            totalExpenses: totalBudgetExpense,
+                                            categoryExpense:
+                                                categoryTotalExpense,
+                                            leftLimit: categoryLeftLimit,
+                                          );
+
+                                          final route = MaterialPageRoute(
+                                              builder: (context) =>
+                                                  UserBudgeting());
+
+                                          // Use Navigator.pushAndRemoveUntil to navigate to the UserBudgeting page and remove all previous routes
+                                          // ignore: use_build_context_synchronously
+
+                                          Navigator.pushAndRemoveUntil(
+                                              context, route, (route) => false);
+                                        } else {
+                                          AwesomeDialog(
+                                                  context: context,
+                                                  dialogType: DialogType.error,
+                                                  animType: AnimType.scale,
+                                                  title:
+                                                      "You have reached your limit!",
+                                                  btnOkOnPress: () {})
+                                              .show();
+                                        }
+                                      } else {
+                                        AwesomeDialog(
+                                                context: context,
+                                                dialogType: DialogType.error,
+                                                animType: AnimType.scale,
+                                                title: "Category Limit Exceed!",
+                                                desc:
+                                                    'Your current budget for ${categoryInfo.categoryName} is reached it limit. Edit your budget, increase the limit, or lower the expenses!',
+                                                btnOkOnPress: () {})
+                                            .show();
+                                      }
+                                    } else {
+                                      AwesomeDialog(
+                                              context: context,
+                                              dialogType: DialogType.error,
+                                              animType: AnimType.scale,
+                                              title: "Category Limit Exceed!",
+                                              desc:
+                                                  'Your current budget for ${categoryInfo.categoryName} is reached it limit. Edit your budget, increase the limit, or lower the expenses!',
+                                              btnOkOnPress: () {})
+                                          .show();
+                                    }
+                                  } else {
+                                    AwesomeDialog(
+                                            context: context,
+                                            dialogType: DialogType.error,
+                                            animType: AnimType.scale,
+                                            title: "Category Limit Exceed!",
+                                            desc:
+                                                'Your current budget for ${categoryInfo.categoryName} is reached it limit. Edit your budget, increase the limit, or lower the expenses!',
+                                            btnOkOnPress: () {})
+                                        .show();
+                                  }
+                                } else {
+                                  AwesomeDialog(
+                                          context: context,
+                                          dialogType: DialogType.error,
+                                          animType: AnimType.scale,
+                                          title: "Budget Limit Exceed!",
+                                          desc:
+                                              'Your current budget is reached it limit. Edit your budget or lower the expenses!',
+                                          btnOkOnPress: () {})
+                                      .show();
+                                }
                               } else {
                                 AwesomeDialog(
                                         context: context,

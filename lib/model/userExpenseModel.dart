@@ -20,4 +20,9 @@ class UserExpenseModel {
         description: map['description'],
         transactionDate: map['transactionDate']);
   }
+
+  // A method that gets the amount of the expense entry
+  double get getAmount {
+    return amount;
+  }
 }
