@@ -1,4 +1,7 @@
 import 'dart:io';
+import 'package:budgex/pages/home/user_add_expense.dart';
+import 'package:budgex/pages/home/user_expense.dart';
+import 'package:budgex/pages/home/user_home_verify.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
@@ -82,66 +85,74 @@ class _OCRScreenState extends State<OCRScreen> with WidgetsBindingObserver {
                   icon: Icon(Icons.arrow_back),
                   iconSize: 20.0,
                   onPressed: () {
-                    Navigator.pop(context);
+                    final route = MaterialPageRoute(
+                        builder: (context) => UserHomeVerify());
+
+                    // Use Navigator.pushAndRemoveUntil to navigate to the UserHomeVerify page and remove all previous routes
+                    // ignore: use_build_context_synchronously
+
+                    Navigator.pushAndRemoveUntil(
+                        context, route, (route) => false);
                   },
                 ),
               ),
               backgroundColor: _isPermissionGranted ? Colors.transparent : null,
               body: _isPermissionGranted
                   ? Column(
-                children: [
-                  Expanded(
-                    child: Container(),
-                  ),
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width / 2.4,
-                    child: Padding(
-                      padding: const EdgeInsets.only(bottom: 40),
-                      child: ElevatedButton(
-                        onPressed: _scanImage,
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Theme.of(context).primaryColor,
-                          padding: const EdgeInsets.symmetric(vertical: 15),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(15),
-                          ),
+                      children: [
+                        Expanded(
+                          child: Container(),
                         ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            if (isLoading)
-                              const SizedBox(
-                                height: 21,
-                                width: 21,
-                                child: CircularProgressIndicator(
-                                  color: Colors.white,
-                                  strokeWidth: 2.57,
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width / 2.4,
+                          child: Padding(
+                            padding: const EdgeInsets.only(bottom: 40),
+                            child: ElevatedButton(
+                              onPressed: _scanImage,
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Theme.of(context).primaryColor,
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 15),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(15),
                                 ),
                               ),
-                            if (isLoading)
-                              const SizedBox(
-                                width: 20,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  if (isLoading)
+                                    const SizedBox(
+                                      height: 21,
+                                      width: 21,
+                                      child: CircularProgressIndicator(
+                                        color: Colors.white,
+                                        strokeWidth: 2.57,
+                                      ),
+                                    ),
+                                  if (isLoading)
+                                    const SizedBox(
+                                      width: 20,
+                                    ),
+                                  const Text("Scan Text",
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                      )),
+                                ],
                               ),
-                            const Text("Scan Text",
-                                style: TextStyle(
-                                  fontSize: 18,
-                                )),
-                          ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    )
+                  : Center(
+                      child: Container(
+                        padding: const EdgeInsets.only(left: 24.0, right: 24.0),
+                        child: const Text(
+                          'Camera permission denied',
+                          textAlign: TextAlign.center,
                         ),
                       ),
                     ),
-                  ),
-                ],
-              )
-                  : Center(
-                child: Container(
-                  padding: const EdgeInsets.only(left: 24.0, right: 24.0),
-                  child: const Text(
-                    'Camera permission denied',
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-              ),
             ),
           ],
         );
@@ -218,12 +229,24 @@ class _OCRScreenState extends State<OCRScreen> with WidgetsBindingObserver {
       final inputImage = InputImage.fromFile(file);
       final recognizedText = await textRecognizer.processImage(inputImage);
 
-      await navigator.push(
+      /* await navigator.push(
         MaterialPageRoute(
           builder: (BuildContext context) =>
               ResultScreen(text: recognizedText.text),
         ),
+      ); */
+
+      final route = MaterialPageRoute(
+        builder: (context) => UserAddExpense(
+          recognizedText: recognizedText.text,
+        ),
       );
+
+// Use Navigator.pushReplacement to navigate to the UserAddExpense page and replace the current route
+      await Navigator.pushReplacement(context, route);
+
+// The code following this line will only execute after the UserAddExpense page is popped
+
       setState(() {
         isLoading = false;
       });

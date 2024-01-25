@@ -18,7 +18,9 @@ import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
 
 class UserAddExpense extends StatefulWidget {
-  const UserAddExpense({super.key});
+  String? recognizedText;
+
+  UserAddExpense({super.key, this.recognizedText});
 
   @override
   State<UserAddExpense> createState() => _UserAddExpenseState();
@@ -36,7 +38,8 @@ class _UserAddExpenseState extends State<UserAddExpense> {
   // Controllers
   TextEditingController amountController = TextEditingController();
   TextEditingController nameController = TextEditingController();
-  TextEditingController descriptionController = TextEditingController();
+  //TextEditingController descriptionController = TextEditingController();
+  late TextEditingController descriptionController;
   ScrollController _scrollController = ScrollController();
 
   late String selectedCategory = '';
@@ -61,6 +64,10 @@ class _UserAddExpenseState extends State<UserAddExpense> {
     now = DateTime.now();
     formattedDate = DateFormat('MMMM dd, yyyy').format(now!);
     formattedTime = DateFormat('h:mm a').format(now!);
+    descriptionController =
+        widget.recognizedText == '' || widget.recognizedText!.isEmpty
+            ? TextEditingController()
+            : TextEditingController(text: widget.recognizedText);
   }
 
   // Create a global key that uniquely identifies the Form widget
@@ -256,6 +263,7 @@ class _UserAddExpenseState extends State<UserAddExpense> {
                         style: TextStyle(
                           fontFamily: poppins['regular'],
                         ),
+                        maxLines: null,
                         decoration: const InputDecoration(
                           hintText: 'Enter description',
                           labelText: 'Description*',

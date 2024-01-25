@@ -1,3 +1,4 @@
+import 'package:budgex/pages/home/user_scannerOCR.dart';
 import 'package:budgex/pages/home/user_settings.dart';
 import 'package:budgex/services/theme_provider.dart';
 import 'package:flutter/material.dart';
@@ -30,7 +31,14 @@ AppBar customAppBar({required BuildContext context}) {
 
       // Placeholder for a camera icon (you can replace this with your functionality)
       IconButton(
-        onPressed: () {},
+        onPressed: () {
+          final route = MaterialPageRoute(builder: (context) => OCRScreen());
+
+          // Use Navigator.pushAndRemoveUntil to navigate to the UserBudgeting page and remove all previous routes
+          // ignore: use_build_context_synchronously
+
+          Navigator.pushAndRemoveUntil(context, route, (route) => false);
+        },
         icon: const Icon(Icons.camera_alt),
       ),
 
