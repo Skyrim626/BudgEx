@@ -55,4 +55,22 @@ class UserCategoryModel {
       expenseEntry: userExpenses,
     );
   }
+
+  // A method that gets the expense entry name/title by UUID
+  String? getExpenseTitleByUUID({required String entryUUID}) {
+    for (UserExpenseModel entries in expenseEntry) {
+      if (entryUUID == entries.uuid) {
+        return entries.expenseName;
+      }
+    }
+  }
+
+  // A method that gets the description the expense entry
+  String? getExpenseDescriptionByUUID({required String entryUUID}) {
+    for (UserExpenseModel entries in expenseEntry) {
+      if (entryUUID == entries.uuid) {
+        return entries.description;
+      }
+    }
+  }
 }

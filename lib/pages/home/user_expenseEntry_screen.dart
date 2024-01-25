@@ -35,6 +35,10 @@ class _UserExpenseEntryScreenState extends State<UserExpenseEntryScreen> {
 
   late Stream<UserData?> userStream;
 
+  // Controllers
+  TextEditingController expenseTitleController = TextEditingController();
+  TextEditingController expenseDescriptionController = TextEditingController();
+
   @override
   void initState() {
     // TODO: implement initState
@@ -58,17 +62,28 @@ class _UserExpenseEntryScreenState extends State<UserExpenseEntryScreen> {
         } else {
           // Data loaded successfully
           UserData userData = snapshot.data!;
+
+          String? expenseTitle = userData.budget
+              .getUserCategoryByName(name: widget.categoryName)
+              ?.getExpenseTitleByUUID(entryUUID: widget.uuid);
+
+          String? expenseDescription = userData.budget
+              .getUserCategoryByName(name: widget.categoryName)
+              ?.getExpenseDescriptionByUUID(entryUUID: widget.uuid);
+
           return StreamProvider<UserData?>.value(
               value: FirebaseFirestoreService(uid: userData.uid)
                   .userMainDocumentStream,
               initialData: userData,
-              child: _buildExpenseEntryUI(context, userData));
+              child: _buildExpenseEntryUI(
+                  context, userData, expenseTitle, expenseDescription));
         }
       },
     );
   }
 
-  Scaffold _buildExpenseEntryUI(BuildContext context, UserData? data) {
+  Scaffold _buildExpenseEntryUI(BuildContext context, UserData? data,
+      String? expenseTitle, String? expenseDescription) {
     print(widget.uuid);
 
     final userData = data;
@@ -161,13 +176,27 @@ class _UserExpenseEntryScreenState extends State<UserExpenseEntryScreen> {
                   titleColor: LIGHT_COLOR_3,
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(left: 8, right: 8, top: 10),
-                  child: CustomText(
-                    title: widget.expenseEntry.expenseName,
-                    fontSize: fontSize['h5']!,
-                    fontFamily: poppins['semiBold']!,
-                  ),
-                ),
+                    padding: const EdgeInsets.only(left: 8, right: 8, top: 10),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        CustomText(
+                          title: expenseTitle!,
+                          fontSize: fontSize['h5']!,
+                          fontFamily: poppins['semiBold']!,
+                        ),
+                        IconButton(
+                          onPressed: () {
+                            showEditDialog(
+                                labelText: "Edit Expense Title",
+                                option: "Title",
+                                textController: expenseTitleController);
+                          },
+                          icon: Icon(Icons.edit),
+                          color: LIGHT_COLOR_3,
+                        )
+                      ],
+                    )),
                 const Divider(
                   color: Colors.black,
                 ),
@@ -250,13 +279,27 @@ class _UserExpenseEntryScreenState extends State<UserExpenseEntryScreen> {
                   titleColor: LIGHT_COLOR_3,
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(left: 8, right: 8, top: 10),
-                  child: CustomText(
-                    title: widget.expenseEntry.description,
-                    fontSize: fontSize['h5']!,
-                    fontFamily: poppins['semiBold']!,
-                  ),
-                ),
+                    padding: const EdgeInsets.only(left: 8, right: 8, top: 10),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        CustomText(
+                          title: expenseDescription!,
+                          fontSize: fontSize['h5']!,
+                          fontFamily: poppins['semiBold']!,
+                        ),
+                        IconButton(
+                          onPressed: () {
+                            showEditDialog(
+                                labelText: "Edit Expense Description",
+                                option: 'Description',
+                                textController: expenseDescriptionController);
+                          },
+                          icon: Icon(Icons.edit),
+                          color: LIGHT_COLOR_3,
+                        )
+                      ],
+                    )),
                 const Divider(
                   color: Colors.black,
                 ),
@@ -264,5 +307,71 @@ class _UserExpenseEntryScreenState extends State<UserExpenseEntryScreen> {
             ),
           ),
         )));
+  }
+
+  // A method that displays the edit dialog
+  // Parameters:
+  // labelText - A String type that reperesents the label text, example "Please Enter your new name"
+  void showEditDialog({
+    required String labelText,
+    required String option,
+    required TextEditingController textController,
+  }) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Center(
+            child: AlertDialog(
+          title: Text(
+            labelText,
+            style: TextStyle(
+              color: LIGHT_COLOR_3,
+              fontFamily: poppins['regular'],
+              fontSize: fontSize['h3'],
+            ),
+          ),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                // Text('Enter new budget:'),
+                TextField(
+                  controller: textController,
+                ), // replace with your text field widget
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('Cancel'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: const Text('Save'),
+              onPressed: () async {
+                // handle save button press
+
+                if (option == 'Title') {
+                  await _firestoreService.updateExpenseTitle(
+                      userUUID: _authService.getCurrentUser().uid,
+                      expenseUUID: widget.uuid,
+                      newExpenseTitle: expenseTitleController.text,
+                      categoryName: widget.categoryName);
+                } else {
+                  await _firestoreService.updateExpenseDescription(
+                      userUUID: _authService.getCurrentUser().uid,
+                      expenseUUID: widget.uuid,
+                      newExpenseDescription: expenseDescriptionController.text,
+                      categoryName: widget.categoryName);
+                }
+
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        ));
+      },
+    );
   }
 }
