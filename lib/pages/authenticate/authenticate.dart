@@ -1,3 +1,4 @@
+// Import necessary packages and files
 import 'package:budgex/pages/authenticate/user_login.dart';
 import 'package:budgex/pages/authenticate/user_signup.dart';
 import 'package:flutter/foundation.dart';

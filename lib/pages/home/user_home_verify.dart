@@ -1,21 +1,13 @@
-import 'package:budgex/data/categoryData.dart';
-import 'package:budgex/pages/constants/constants.dart';
+// Import necessary packages and files
 import 'package:budgex/pages/home/user_create_budget.dart';
-
 import 'package:budgex/pages/home/user_dashboard.dart';
 import 'package:budgex/services/firebase_auth_service.dart';
 import 'package:budgex/services/firebase_firestore_service.dart';
 import 'package:budgex/shared/loading.dart';
-import 'package:budgex/widgets/customDetectorCategory.dart';
-import 'package:budgex/widgets/custom_appbar.dart';
-import 'package:budgex/widgets/custom_buttom.dart';
-import 'package:budgex/widgets/custom_circle_chart.dart';
-import 'package:budgex/widgets/custom_drawer.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:provider/provider.dart';
 import 'package:budgex/model/userModel.dart';
 
+// Class representing the user's home screen with verification logic
 class UserHomeVerify extends StatefulWidget {
   const UserHomeVerify({super.key});
 
@@ -27,12 +19,13 @@ class _UserHomeVerifyState extends State<UserHomeVerify> {
   // Create an instance of the FirebaseAuthService to manage authentication.
   final FirebaseAuthService _authService = FirebaseAuthService();
 
+  // Stream to listen for changes in the user's data
   late Stream<UserData?> userStream;
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
+    // Initialize the stream with the user's data from Firestore
     userStream =
         FirebaseFirestoreService(uid: _authService.getCurrentUser().uid)
             .userDocumentStream;
@@ -44,28 +37,21 @@ class _UserHomeVerifyState extends State<UserHomeVerify> {
       stream: userStream,
       builder: ((context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          // Loading state
-          print(snapshot.connectionState);
-          print(ConnectionState.waiting);
-          print(snapshot.hasError);
+          // Loading state while waiting for user data
           return const Loading();
         } else if (snapshot.hasError) {
-          // Error state
-          print("$snapshot.hasError");
-          print("netgame");
-          // Data Loads Successfully
-          print("GOTCHA Error: ${snapshot.error}");
-          UserData userData = snapshot.data!;
-          return Text("GOTCHA Error: ${snapshot.error}");
+          // Error state if there's an issue fetching user data
+          return Text("Error: ${snapshot.error}");
         } else {
-          // Data Loads Successfully
+          // User data loaded successfully
           UserData userData = snapshot.data!;
-          print("hehehehehe");
-          print("NOT NULL ${userData.dateRegistered}");
+
           if (userData.firstTimer) {
-            return UserCreateBudget();
+            // If it's the user's first time, show the budget creation screen
+            return const UserCreateBudget();
           } else {
-            return UserDashBoard();
+            // If not the first time, show the dashboard screen
+            return const UserDashBoard();
           }
         }
       }),

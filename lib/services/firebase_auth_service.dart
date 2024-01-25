@@ -50,7 +50,7 @@ class FirebaseAuthService {
       print(user);
       print("-----------------------------------------"); */
 
-      // Create a new document for the user with the uid
+      // Creates a new document for the user with the uid
       await FirebaseFirestoreService(uid: user!.uid).updateUserProfileData(
           userInformation['fullName'],
           userInformation['age'],

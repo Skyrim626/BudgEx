@@ -139,7 +139,7 @@ class _CustomCircleChartState extends State<CustomCircleChart> {
                       color: LIGHT_COLOR_1),
                 ),
                 Text(
-                  "\₱ $currentBudget",
+                  "\$ $currentBudget",
                   style: TextStyle(
                       fontFamily: dosis['semiBold'],
                       fontSize: 35,

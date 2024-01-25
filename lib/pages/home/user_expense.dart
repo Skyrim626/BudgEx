@@ -188,7 +188,7 @@ class _UserExpenseState extends State<UserExpense> {
                     fontSize: fontSize["h4"]!,
                   ),
                   CustomText(
-                    title: "₱$amount",
+                    title: "\$$amount",
                     fontFamily: poppins['regular']!,
                     fontSize: fontSize["h4"]!,
                   ),

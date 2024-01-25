@@ -1,17 +1,13 @@
+// Import necessary packages and files
 import 'package:awesome_dialog/awesome_dialog.dart';
-
 import 'package:budgex/pages/constants/constants.dart';
 import 'package:budgex/services/firebase_auth_service.dart';
-
 import 'package:budgex/shared/loading.dart';
-
 import 'package:budgex/widgets/custom_button.dart';
-
 import 'package:flutter/material.dart';
 
 class UserSignUp extends StatefulWidget {
-  // Declaring variable of function type
-  // Variable will be assigned to the button widget for toggling functionality
+  // Function type variable for toggling between Sign Up and Sign In screens
   final Function toggleView;
 
   const UserSignUp({super.key, required this.toggleView});
@@ -21,17 +17,13 @@ class UserSignUp extends StatefulWidget {
 }
 
 class _UserSignUpState extends State<UserSignUp> {
-  // Create a global key that uniquely identifies the Form widget
-  // and allows validation of the form.
-  //
-  // Note: This is a `GlobalKey<FormState>`,
-  // not a GlobalKey<MyCustomFormState>.
+  // Global key for form validation
   final _formKey = GlobalKey<FormState>();
 
-  // Open firebase authentication service
+  // Firebase Authentication Service instance
   final FirebaseAuthService _auth = FirebaseAuthService();
 
-  // Text Editing Controllers
+  // Text Editing Controllers for user input
   final _fullNameController = TextEditingController();
   final _ageController = TextEditingController();
   final _emailController = TextEditingController();
@@ -41,23 +33,17 @@ class _UserSignUpState extends State<UserSignUp> {
   // Loading Screen Checker
   bool isLoading = false;
 
-  // A function that checks if the password is matched
-  bool passwordConfirmed() {
-    if (_passwordController.text.trim() ==
-        _confirmPasswordController.text.trim()) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-
-  // boolean variable
-  // Initially, set to true to obscure the text
-  // for checking if the password is shown/hidden
+  // Flag to toggle password visibility
   bool isObscureForPassword = true;
   bool isObscureForConfirmPassword = true;
 
-  // A function that disposes all the inputted text in the text fields
+  // Function to check if the password matches the confirm password
+  bool passwordConfirmed() {
+    return _passwordController.text.trim() ==
+        _confirmPasswordController.text.trim();
+  }
+
+  // Dispose of text editing controllers when the widget is disposed
   @override
   void dispose() {
     super.dispose();
@@ -76,7 +62,7 @@ class _UserSignUpState extends State<UserSignUp> {
             appBar: AppBar(
               leading: IconButton(
                 onPressed: () {
-                  // A method toggleView is used for switching screen
+                  // Navigate back to the Sign In screen
                   widget.toggleView();
                 },
                 icon: const Icon(Icons.arrow_back),
@@ -115,7 +101,7 @@ class _UserSignUpState extends State<UserSignUp> {
                                   return "Please enter your full name";
                                 }
 
-                                if (value.length >= 20) {
+                                if (value.length >= 35) {
                                   return "Your name is too long!";
                                 }
 
@@ -256,6 +242,7 @@ class _UserSignUpState extends State<UserSignUp> {
                             const SizedBox(
                               height: 10,
                             ),
+
                             // Confirm Password textfield
                             TextFormField(
                               controller: _confirmPasswordController,
@@ -290,46 +277,48 @@ class _UserSignUpState extends State<UserSignUp> {
                               height: 10,
                             ),
 
+                            // Sign Up Button
                             CustomButton(
                               buttonText: "Sign Up",
                               onPressed: () async {
                                 // Form that is true will be registered
                                 if (_formKey.currentState!.validate()) {
-                                  // Loads a Loading Screen
+                                  // Show Loading Screen
                                   setState(() => isLoading = true);
-                                  // 2 TYPES OF DATA TYPE will be returned
-                                  // Either null or object type
 
+                                  // Attempt to register user
                                   if (_passwordController.text ==
                                       _confirmPasswordController.text) {
                                     dynamic result = await _auth
                                         .registerWithEmailAndPassword(
-                                            _emailController.text,
-                                            _passwordController.text, {
-                                      'fullName': _fullNameController.text,
-                                      'age': int.parse(_ageController.text),
-                                      'email': _emailController.text
-                                    });
+                                      _emailController.text,
+                                      _passwordController.text,
+                                      {
+                                        'fullName': _fullNameController.text,
+                                        'age': int.parse(_ageController.text),
+                                        'email': _emailController.text,
+                                      },
+                                    );
 
                                     if (result == null) {
+                                      // Handle unsuccessful registration
                                       setState(() {
-                                        // print('Could not sign up with credentials');
                                         isLoading = false;
                                       });
                                     }
                                   } else {
+                                    // Passwords do not match, show an error dialog
                                     setState(() {
                                       isLoading = false;
                                     });
 
-                                    // Show an error dialog if passwords do not match
                                     AwesomeDialog(
-                                            context: context,
-                                            dialogType: DialogType.error,
-                                            animType: AnimType.scale,
-                                            title: "Password not matched!",
-                                            btnOkOnPress: () {})
-                                        .show();
+                                      context: context,
+                                      dialogType: DialogType.error,
+                                      animType: AnimType.scale,
+                                      title: "Password not matched!",
+                                      btnOkOnPress: () {},
+                                    ).show();
                                   }
                                 }
                               },

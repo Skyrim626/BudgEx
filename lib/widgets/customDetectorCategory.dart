@@ -80,13 +80,13 @@ class _CustomCategoryDetectorState extends State<CustomCategoryDetector> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  "₱ ${widget.categoryExpense}",
+                  "\$ ${widget.categoryExpense}",
                   style: TextStyle(
                       fontFamily: poppins['semiBold'],
                       fontSize: fontSize['h4']),
                 ),
                 Text(
-                  "Left: ₱ ${widget.leftLimit}",
+                  "Left: \$ ${widget.leftLimit}",
                   style: TextStyle(
                     fontFamily: poppins['regular'],
                     fontSize: fontSize['h6'],

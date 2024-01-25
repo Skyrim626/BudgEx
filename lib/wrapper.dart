@@ -1,3 +1,4 @@
+// Import necessary packages and files
 import 'package:budgex/model/userModel.dart';
 import 'package:budgex/pages/authenticate/authenticate.dart';
 import 'package:budgex/pages/home/user_home_verify.dart';
@@ -20,7 +21,7 @@ class Wrapper extends StatelessWidget {
       return const Authenticate();
     } else {
       // Show the home page if the user model is available
-      return UserHomeVerify();
+      return const UserHomeVerify();
     }
   }
 }

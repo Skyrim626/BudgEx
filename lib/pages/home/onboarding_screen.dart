@@ -1,31 +1,12 @@
-/*
-  Flutter Developer Notes:
-
-  This Dart class represents an onboarding screen that guides users through key features of 
-  the BudgEx application using a series of introductory pages. It includes animations, titles, 
-  and subtitles to provide an engaging and informative user experience.
-
-  Key Components:
-  - A PageView displaying multiple IntroPage widgets, each representing a distinct feature.
-  - PageController to track the current page and handle page changes.
-  - A dot indicator for visualizing the current onboarding page.
-  - Navigation options such as 'Skip,' 'Next,' and 'Done' for user interaction.
-
-  Note: Ensure that the animations and content of each IntroPage are correctly specified. 
-  Verify that the navigation to the Login page is functioning as expected after completing 
-  the onboarding.
-
-  Exceptional work on creating an onboarding experience that effectively introduces users to 
-  the core features of BudgEx!
-*/
-
+// Import necessary packages and files
 import 'package:budgex/widgets/custom_intro_page.dart';
-import 'package:budgex/pages/authenticate/user_login.dart';
 import 'package:budgex/pages/constants/constants.dart';
+import 'package:budgex/widgets/custom_text.dart';
 import 'package:budgex/wrapper.dart';
 import 'package:flutter/material.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
+// A class responsible for displaying Onboarding Screen
 class OnBoardingScreen extends StatefulWidget {
   const OnBoardingScreen({super.key});
 
@@ -103,20 +84,32 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                 onLastPage
                     ? GestureDetector(
                         onTap: toLoginPage,
-                        child: Text(
+                        child: CustomText(
+                            title: "Done",
+                            fontSize: 14,
+                            fontFamily: poppins['semiBold']!),
+
+                        /* Text(
                           'Done',
                           style: TextStyle(fontFamily: poppins['semiBold']),
-                        ))
+                        ) */
+                      )
                     : GestureDetector(
                         onTap: () {
                           _controller.nextPage(
                               duration: const Duration(milliseconds: 500),
                               curve: Curves.easeIn);
                         },
-                        child: Text(
+                        child: CustomText(
+                            title: "Next",
+                            fontSize: 14,
+                            fontFamily: poppins['semiBold']!),
+
+                        /* Text(
                           'Next',
-                          style: TextStyle(fontFamily: poppins['semiBold']),
-                        )),
+                          style: TextStyle(fontFamily: poppins['semiBold'], ),
+                        ) */
+                      ),
               ],
             ),
           ),

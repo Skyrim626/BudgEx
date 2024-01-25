@@ -215,7 +215,7 @@ class _UserAddExpenseState extends State<UserAddExpense> {
                         decoration: const InputDecoration(
                             hintText: 'Enter the amount',
                             labelText: 'Amount*',
-                            prefixText: "₱"),
+                            prefixText: "\$"),
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return "Please enter the amount";
