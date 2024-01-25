@@ -6,7 +6,6 @@ import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:budgex/pages/home/user_scannerResult.dart';
 
 class OCRScreen extends StatefulWidget {
   OCRScreen({super.key});
